@@ -1,24 +1,924 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow" >
-  <property name="geometry" >
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>1008</width>
+    <height>805</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>MainWindow</string>
+  <property name="contextMenuPolicy">
+   <enum>Qt::DefaultContextMenu</enum>
   </property>
-  <widget class="QMenuBar" name="menuBar" />
-  <widget class="QToolBar" name="mainToolBar" />
-  <widget class="QWidget" name="centralWidget" />
-  <widget class="QStatusBar" name="statusBar" />
+  <property name="windowTitle">
+   <string>模拟振动平台控制站</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1008</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_File">
+    <property name="title">
+     <string>文件(F)</string>
+    </property>
+    <addaction name="action_New"/>
+    <addaction name="action_Open"/>
+    <addaction name="action_Save"/>
+    <addaction name="action_Saveasdefault"/>
+    <addaction name="separator"/>
+    <addaction name="action_Exit"/>
+   </widget>
+   <widget class="QMenu" name="menu_View">
+    <property name="title">
+     <string>视图(V)</string>
+    </property>
+    <addaction name="action_view_file"/>
+    <addaction name="action_view_set_para"/>
+    <addaction name="action_view_operate"/>
+    <addaction name="action_view_window"/>
+    <addaction name="action_view_statubar"/>
+    <addaction name="separator"/>
+    <addaction name="action_view_experiment_status"/>
+    <addaction name="action_view_experiment_message"/>
+    <addaction name="action_view_signal_window"/>
+   </widget>
+   <widget class="QMenu" name="menu_Set">
+    <property name="title">
+     <string>设置(S)</string>
+    </property>
+    <addaction name="Setting_channel_para"/>
+    <addaction name="Setting_control_para"/>
+    <addaction name="Setting_confine_para"/>
+    <addaction name="Setting_unit"/>
+    <addaction name="Setting_I/Oinput"/>
+    <addaction name="separator"/>
+    <addaction name="Setting_target"/>
+    <addaction name="Setting_plan"/>
+    <addaction name="Setting_run"/>
+    <addaction name="separator"/>
+    <addaction name="Setting_s"/>
+   </widget>
+   <widget class="QMenu" name="menu_Command">
+    <property name="title">
+     <string>命令(C)</string>
+    </property>
+    <widget class="QMenu" name="menu">
+     <property name="title">
+      <string>选择控制方式</string>
+     </property>
+     <addaction name="Control_openloop"/>
+     <addaction name="Control_close_loop"/>
+    </widget>
+    <addaction name="Command_"/>
+    <addaction name="menu"/>
+   </widget>
+   <widget class="QMenu" name="menu_Data">
+    <property name="title">
+     <string>显示(D)</string>
+    </property>
+    <addaction name="Display_1"/>
+    <addaction name="Display_2"/>
+    <addaction name="Display_3"/>
+    <addaction name="Display_4"/>
+    <addaction name="separator"/>
+    <addaction name="Display_5"/>
+    <addaction name="Dispaly_6"/>
+    <addaction name="Display_7"/>
+    <addaction name="separator"/>
+    <addaction name="Display_8"/>
+   </widget>
+   <widget class="QMenu" name="menu_Help">
+    <property name="cursor">
+     <cursorShape>UpArrowCursor</cursorShape>
+    </property>
+    <property name="title">
+     <string>帮助(H)</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu_Report">
+    <property name="title">
+     <string>报告(R)</string>
+    </property>
+    <addaction name="action_reprot_message"/>
+    <addaction name="action_reprot_content"/>
+    <addaction name="separator"/>
+    <addaction name="action_report_word"/>
+    <addaction name="action_report_PDF"/>
+    <addaction name="separator"/>
+    <addaction name="action_print"/>
+    <addaction name="action_report_overview"/>
+   </widget>
+   <widget class="QMenu" name="menu_U">
+    <property name="title">
+     <string>用户(U)</string>
+    </property>
+    <addaction name="User_1"/>
+    <addaction name="User_2"/>
+    <addaction name="separator"/>
+    <addaction name="User_3"/>
+   </widget>
+   <addaction name="menu_File"/>
+   <addaction name="menu_U"/>
+   <addaction name="menu_View"/>
+   <addaction name="menu_Set"/>
+   <addaction name="menu_Command"/>
+   <addaction name="menu_Data"/>
+   <addaction name="menu_Report"/>
+   <addaction name="menu_Help"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>LeftToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="ToolBar"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QDockWidget" name="dockWidget_4">
+   <property name="floating">
+    <bool>false</bool>
+   </property>
+   <property name="windowTitle">
+    <string>实验信息</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_4">
+    <property name="minimumSize">
+     <size>
+      <width>431</width>
+      <height>0</height>
+     </size>
+    </property>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>351</width>
+       <height>231</height>
+      </rect>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="autoFillBackground">
+      <bool>true</bool>
+     </property>
+     <property name="tabPosition">
+      <enum>QTabWidget::South</enum>
+     </property>
+     <property name="tabShape">
+      <enum>QTabWidget::Triangular</enum>
+     </property>
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Tab 1</string>
+      </attribute>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Tab 2</string>
+      </attribute>
+     </widget>
+    </widget>
+    <widget class="QPushButton" name="pushButton">
+     <property name="geometry">
+      <rect>
+       <x>350</x>
+       <y>200</y>
+       <width>92</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>PushButton</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="dockWidget_5">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(255, 255, 255);
+border-bottom-color: rgb(85, 255, 127);</string>
+   </property>
+   <property name="floating">
+    <bool>false</bool>
+   </property>
+   <property name="features">
+    <set>QDockWidget::AllDockWidgetFeatures</set>
+   </property>
+   <property name="windowTitle">
+    <string>实验状态</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_5">
+    <property name="minimumSize">
+     <size>
+      <width>431</width>
+      <height>300</height>
+     </size>
+    </property>
+    <widget class="QWidget" name="layoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>260</x>
+       <y>90</y>
+       <width>31</width>
+       <height>211</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <item>
+       <widget class="QLabel" name="label_13">
+        <property name="text">
+         <string>g</string>
+        </property>
+        <property name="scaledContents">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_14">
+        <property name="text">
+         <string>V</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_15">
+        <property name="text">
+         <string>%</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_16">
+        <property name="text">
+         <string>m/s</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_17">
+        <property name="text">
+         <string>mm</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_18">
+        <property name="text">
+         <string>Hz</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>310</y>
+       <width>381</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(161, 161, 161);</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QWidget" name="layoutWidget_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>350</y>
+       <width>81</width>
+       <height>91</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_5">
+      <item>
+       <widget class="QLabel" name="label_21">
+        <property name="text">
+         <string>总运行时间</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_23">
+        <property name="text">
+         <string>测量时间</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_24">
+        <property name="text">
+         <string>剩余时间</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="layoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>20</y>
+       <width>438</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="Button_Layout">
+      <property name="spacing">
+       <number>10</number>
+      </property>
+      <property name="leftMargin">
+       <number>20</number>
+      </property>
+      <property name="rightMargin">
+       <number>20</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="Start_btn">
+        <property name="text">
+         <string>开始</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="Stop_btn">
+        <property name="text">
+         <string>停止</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="Pause_btn">
+        <property name="text">
+         <string>暂停</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="Back_btn">
+        <property name="text">
+         <string>回退</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="layoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>90</y>
+       <width>81</width>
+       <height>211</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>加速度RMS</string>
+        </property>
+        <property name="scaledContents">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>驱动峰值</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>量级</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>速度峰值</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>位移峰值</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>采样</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="layoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>90</y>
+       <width>121</width>
+       <height>211</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QTextBrowser" name="textBrowser">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(0, 0, 0);</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTextBrowser" name="textBrowser_2">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(0, 0, 0);</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QTextBrowser" name="textBrowser_3">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(0, 0, 0);</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTextBrowser" name="textBrowser_4">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(0, 0, 0);</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTextBrowser" name="textBrowser_5">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(0, 0, 0);</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTextBrowser" name="textBrowser_6">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(0, 0, 0);</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QTextBrowser" name="textBrowser_7">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(0, 0, 0);</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTextBrowser" name="textBrowser_8">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(0, 0, 0);</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="layoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>350</y>
+       <width>171</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_6">
+      <property name="spacing">
+       <number>2</number>
+      </property>
+      <property name="sizeConstraint">
+       <enum>QLayout::SetFixedSize</enum>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_2">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(161, 161, 161);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_3">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(161, 161, 161);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_4">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(161, 161, 161);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="Line" name="line">
+     <property name="geometry">
+      <rect>
+       <x>310</x>
+       <y>100</y>
+       <width>20</width>
+       <height>201</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+    <widget class="Line" name="line_2">
+     <property name="geometry">
+      <rect>
+       <x>310</x>
+       <y>350</y>
+       <width>20</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <action name="action_New">
+   <property name="text">
+    <string>新建实验</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="action_Open">
+   <property name="text">
+    <string> 打开实验</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="action_Save">
+   <property name="text">
+    <string> 保存实验</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="action_Saveasdefault">
+   <property name="text">
+    <string>保存为默认</string>
+   </property>
+  </action>
+  <action name="action_Exit">
+   <property name="text">
+    <string>退出</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
+  </action>
+  <action name="action_reprot_message">
+   <property name="text">
+    <string>报告信息...</string>
+   </property>
+  </action>
+  <action name="action_reprot_content">
+   <property name="text">
+    <string>报告内容...</string>
+   </property>
+  </action>
+  <action name="action_report_word">
+   <property name="text">
+    <string>Word报告</string>
+   </property>
+  </action>
+  <action name="action_report_PDF">
+   <property name="text">
+    <string>PDF报告</string>
+   </property>
+  </action>
+  <action name="action_print">
+   <property name="text">
+    <string>打印报告</string>
+   </property>
+  </action>
+  <action name="action_report_overview">
+   <property name="text">
+    <string>报告预览</string>
+   </property>
+  </action>
+  <action name="action_view_file">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string> 文件管理</string>
+   </property>
+  </action>
+  <action name="action_view_set_para">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>参数设置</string>
+   </property>
+  </action>
+  <action name="action_view_operate">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>显示操作</string>
+   </property>
+  </action>
+  <action name="action_view_window">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>窗口</string>
+   </property>
+  </action>
+  <action name="action_view_statubar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>状态栏</string>
+   </property>
+  </action>
+  <action name="action_view_experiment_status">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>实验状态</string>
+   </property>
+  </action>
+  <action name="action_view_experiment_message">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>实验信息</string>
+   </property>
+  </action>
+  <action name="action_view_signal_window">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>信号窗口</string>
+   </property>
+  </action>
+  <action name="Setting_channel_para">
+   <property name="text">
+    <string>通道参数...</string>
+   </property>
+  </action>
+  <action name="Setting_control_para">
+   <property name="text">
+    <string>控制参数...</string>
+   </property>
+  </action>
+  <action name="Setting_confine_para">
+   <property name="text">
+    <string>限制参数...</string>
+   </property>
+  </action>
+  <action name="Setting_unit">
+   <property name="text">
+    <string>工程单位...</string>
+   </property>
+  </action>
+  <action name="Setting_I/Oinput">
+   <property name="text">
+    <string>数字I/O输入...</string>
+   </property>
+  </action>
+  <action name="Setting_target">
+   <property name="text">
+    <string>目标谱</string>
+   </property>
+  </action>
+  <action name="Setting_plan">
+   <property name="text">
+    <string>计划表</string>
+   </property>
+  </action>
+  <action name="Setting_run">
+   <property name="text">
+    <string>运行流程图</string>
+   </property>
+  </action>
+  <action name="Setting_s">
+   <property name="text">
+    <string>信号管理</string>
+   </property>
+  </action>
+  <action name="Command_">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>手动量级改变</string>
+   </property>
+  </action>
+  <action name="Control_openloop">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>开环控制</string>
+   </property>
+  </action>
+  <action name="Control_close_loop">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>闭环控制</string>
+   </property>
+  </action>
+  <action name="Display_1">
+   <property name="text">
+    <string>自动匹配坐标轴</string>
+   </property>
+  </action>
+  <action name="Display_2">
+   <property name="text">
+    <string>拖动</string>
+   </property>
+  </action>
+  <action name="Display_3">
+   <property name="text">
+    <string>局部放大</string>
+   </property>
+  </action>
+  <action name="Display_4">
+   <property name="text">
+    <string>恢复缩放</string>
+   </property>
+  </action>
+  <action name="Display_5">
+   <property name="text">
+    <string>添加注释</string>
+   </property>
+  </action>
+  <action name="Dispaly_6">
+   <property name="text">
+    <string>删除当前注释</string>
+   </property>
+  </action>
+  <action name="Display_7">
+   <property name="text">
+    <string>删除所有注释</string>
+   </property>
+  </action>
+  <action name="Display_8">
+   <property name="text">
+    <string>显示设置...</string>
+   </property>
+  </action>
+  <action name="User_1">
+   <property name="text">
+    <string>用户登录...</string>
+   </property>
+  </action>
+  <action name="User_2">
+   <property name="text">
+    <string>用户管理...</string>
+   </property>
+  </action>
+  <action name="User_3">
+   <property name="text">
+    <string>用户选项...</string>
+   </property>
+  </action>
+  <action name="ToolBar">
+   <property name="text">
+    <string>新建实验</string>
+   </property>
+  </action>
  </widget>
- <layoutDefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
+ <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
 </ui>
