@@ -16,6 +16,10 @@
   <property name="windowTitle">
    <string>模拟振动平台控制站</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="assets.qrc">
+    <normaloff>:/my_icon/Ressources/my_ico/popwil.png</normaloff>:/my_icon/Ressources/my_ico/popwil.png</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">#MainWindow{border-image: url(:/Image/Ressources/MainWindow.png);}
 </string>
@@ -24,7 +28,6 @@
    <property name="styleSheet">
     <string notr="true">border-image: url(:/Image/Ressources/MainWindow.png);</string>
    </property>
-   <zorder>tabWidget</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -193,8 +196,7 @@ gridline-color: rgb(0, 0, 0);</string>
       <bool>false</bool>
      </property>
      <property name="styleSheet">
-      <string notr="true">
-</string>
+      <string notr="true"/>
      </property>
      <property name="tabPosition">
       <enum>QTabWidget::South</enum>
@@ -203,7 +205,7 @@ gridline-color: rgb(0, 0, 0);</string>
       <enum>QTabWidget::Triangular</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <property name="styleSheet">
@@ -271,7 +273,7 @@ gridline-color: rgb(0, 0, 0);</string>
       </widget>
      </widget>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>280</x>
@@ -373,10 +375,8 @@ gridline-color: rgb(0, 0, 0);</string>
       </item>
      </layout>
     </widget>
+    <zorder>layoutWidget</zorder>
     <zorder>tabWidget</zorder>
-    <zorder>pushButton</zorder>
-    <zorder>pushButton_5</zorder>
-    <zorder>pushButton_6</zorder>
    </widget>
   </widget>
   <widget class="QDockWidget" name="Status_dock">
@@ -963,10 +963,21 @@ gridline-color: rgb(0, 0, 0);</string>
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>false</bool>
+    <bool>true</bool>
    </attribute>
+   <addaction name="tool_bar_open_file"/>
+   <addaction name="tool_bar_Save_File"/>
+   <addaction name="tool_bar_back"/>
+   <addaction name="separator"/>
+   <addaction name="tool_bar_amplify"/>
+   <addaction name="tool_bar_users"/>
+   <addaction name="tool_bar_version"/>
   </widget>
   <action name="action_New">
+   <property name="icon">
+    <iconset resource="assets.qrc">
+     <normaloff>:/tool_bar_icon/Ressources/pictos/doc_new.png</normaloff>:/tool_bar_icon/Ressources/pictos/doc_new.png</iconset>
+   </property>
    <property name="text">
     <string>新建实验</string>
    </property>
@@ -975,6 +986,10 @@ gridline-color: rgb(0, 0, 0);</string>
    </property>
   </action>
   <action name="action_Open">
+   <property name="icon">
+    <iconset resource="assets.qrc">
+     <normaloff>:/tool_bar_icon/Ressources/pictos/doc.png</normaloff>:/tool_bar_icon/Ressources/pictos/doc.png</iconset>
+   </property>
    <property name="text">
     <string> 打开实验</string>
    </property>
@@ -983,6 +998,10 @@ gridline-color: rgb(0, 0, 0);</string>
    </property>
   </action>
   <action name="action_Save">
+   <property name="icon">
+    <iconset resource="assets.qrc">
+     <normaloff>:/tool_bar_icon/Ressources/pictos/doc_compose1.png</normaloff>:/tool_bar_icon/Ressources/pictos/doc_compose1.png</iconset>
+   </property>
    <property name="text">
     <string> 保存实验</string>
    </property>
@@ -1234,11 +1253,19 @@ gridline-color: rgb(0, 0, 0);</string>
    </property>
   </action>
   <action name="User_1">
+   <property name="icon">
+    <iconset resource="assets.qrc">
+     <normaloff>:/tool_bar_icon/Ressources/pictos/user_add.png</normaloff>:/tool_bar_icon/Ressources/pictos/user_add.png</iconset>
+   </property>
    <property name="text">
     <string>用户登录...</string>
    </property>
   </action>
   <action name="User_2">
+   <property name="icon">
+    <iconset resource="assets.qrc">
+     <normaloff>:/tool_bar_icon/Ressources/pictos/user.png</normaloff>:/tool_bar_icon/Ressources/pictos/user.png</iconset>
+   </property>
    <property name="text">
     <string>用户管理...</string>
    </property>
@@ -1248,9 +1275,79 @@ gridline-color: rgb(0, 0, 0);</string>
     <string>用户选项...</string>
    </property>
   </action>
-  <action name="ToolBar">
+  <action name="tool_bar_Save_File">
+   <property name="icon">
+    <iconset resource="assets.qrc">
+     <normaloff>:/my_icon/Ressources/my_ico/Floppy.png</normaloff>:/my_icon/Ressources/my_ico/Floppy.png</iconset>
+   </property>
    <property name="text">
-    <string>新建实验</string>
+    <string/>
+   </property>
+   <property name="toolTip">
+    <string>保存文件</string>
+   </property>
+  </action>
+  <action name="tool_bar_open_file">
+   <property name="icon">
+    <iconset resource="assets.qrc">
+     <normaloff>:/my_icon/Ressources/my_ico/fileopen.png</normaloff>:/my_icon/Ressources/my_ico/fileopen.png</iconset>
+   </property>
+   <property name="text">
+    <string> </string>
+   </property>
+   <property name="toolTip">
+    <string>打开文件</string>
+   </property>
+  </action>
+  <action name="tool_bar_back">
+   <property name="icon">
+    <iconset resource="assets.qrc">
+     <normaloff>:/my_icon/Ressources/48/72.png</normaloff>:/my_icon/Ressources/48/72.png</iconset>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="toolTip">
+    <string>撤销本次操作</string>
+   </property>
+   <property name="statusTip">
+    <string>撤销</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="tool_bar_amplify">
+   <property name="icon">
+    <iconset resource="assets.qrc">
+     <normaloff>:/my_icon/Ressources/48/106.png</normaloff>:/my_icon/Ressources/48/106.png</iconset>
+   </property>
+   <property name="text">
+    <string> </string>
+   </property>
+   <property name="toolTip">
+    <string>放大图像</string>
+   </property>
+  </action>
+  <action name="tool_bar_users">
+   <property name="icon">
+    <iconset resource="assets.qrc">
+     <normaloff>:/my_icon/Ressources/48/54.png</normaloff>:/my_icon/Ressources/48/54.png</iconset>
+   </property>
+   <property name="text">
+    <string> </string>
+   </property>
+   <property name="toolTip">
+    <string>用户</string>
+   </property>
+  </action>
+  <action name="tool_bar_version">
+   <property name="icon">
+    <iconset resource="assets.qrc">
+     <normaloff>:/my_icon/Ressources/48/65.png</normaloff>:/my_icon/Ressources/48/65.png</iconset>
+   </property>
+   <property name="text">
+    <string> </string>
    </property>
   </action>
  </widget>
