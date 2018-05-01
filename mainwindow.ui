@@ -963,7 +963,7 @@ gridline-color: rgb(0, 0, 0);</string>
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>true</bool>
+    <bool>false</bool>
    </attribute>
    <addaction name="tool_bar_open_file"/>
    <addaction name="tool_bar_Save_File"/>
@@ -1293,7 +1293,7 @@ gridline-color: rgb(0, 0, 0);</string>
      <normaloff>:/my_icon/Ressources/my_ico/fileopen.png</normaloff>:/my_icon/Ressources/my_ico/fileopen.png</iconset>
    </property>
    <property name="text">
-    <string> </string>
+    <string/>
    </property>
    <property name="toolTip">
     <string>打开文件</string>
@@ -1323,7 +1323,7 @@ gridline-color: rgb(0, 0, 0);</string>
      <normaloff>:/my_icon/Ressources/48/106.png</normaloff>:/my_icon/Ressources/48/106.png</iconset>
    </property>
    <property name="text">
-    <string> </string>
+    <string/>
    </property>
    <property name="toolTip">
     <string>放大图像</string>
@@ -1335,7 +1335,7 @@ gridline-color: rgb(0, 0, 0);</string>
      <normaloff>:/my_icon/Ressources/48/54.png</normaloff>:/my_icon/Ressources/48/54.png</iconset>
    </property>
    <property name="text">
-    <string> </string>
+    <string/>
    </property>
    <property name="toolTip">
     <string>用户</string>
@@ -1347,7 +1347,7 @@ gridline-color: rgb(0, 0, 0);</string>
      <normaloff>:/my_icon/Ressources/48/65.png</normaloff>:/my_icon/Ressources/48/65.png</iconset>
    </property>
    <property name="text">
-    <string> </string>
+    <string/>
    </property>
   </action>
  </widget>

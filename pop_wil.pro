@@ -25,13 +25,22 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    loginscreen.cpp \
+    channel_param.cpp \
+    control_param.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    loginscreen.h \
+    channel_param.h \
+    control_param.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    loginscreen.ui \
+    channel_param.ui \
+    control_param.ui
 
 RESOURCES += \
     assets.qrc
