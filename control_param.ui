@@ -17,58 +17,651 @@
    <iconset resource="assets.qrc">
     <normaloff>:/my_icon/Ressources/48/29.png</normaloff>:/my_icon/Ressources/48/29.png</iconset>
   </property>
-  <widget class="QGroupBox" name="groupBox">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>10</y>
-     <width>691</width>
-     <height>191</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>PID设置</string>
-   </property>
-  </widget>
-  <widget class="QGroupBox" name="groupBox_2">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>270</y>
-     <width>251</width>
-     <height>181</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>控制方式</string>
-   </property>
-   <widget class="QRadioButton" name="radioButton">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>40</y>
-      <width>112</width>
-      <height>19</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>RadioButton</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="radioButton_2">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>70</y>
-      <width>112</width>
-      <height>19</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>RadioButton</string>
-    </property>
-   </widget>
-  </widget>
+  <layout class="QGridLayout" name="gridLayout_10">
+   <item row="0" column="0" colspan="3">
+    <widget class="QGroupBox" name="PIDset">
+     <property name="minimumSize">
+      <size>
+       <width>691</width>
+       <height>261</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>691</width>
+       <height>261</height>
+      </size>
+     </property>
+     <property name="title">
+      <string>PID设置</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="0" column="0">
+       <widget class="QGroupBox" name="P">
+        <property name="title">
+         <string>位移设置</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_5">
+         <item row="0" column="0">
+          <widget class="QLabel" name="pos_P">
+           <property name="text">
+            <string>P</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QSpinBox" name="pos_p_Box"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="pos_I">
+           <property name="text">
+            <string>I</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QSpinBox" name="pos_i_box"/>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="pos_D">
+           <property name="text">
+            <string>D</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QSpinBox" name="pos_d_box"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QGroupBox" name="v">
+        <property name="title">
+         <string>速度设置</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="velocity_P">
+           <property name="text">
+            <string>P</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QSpinBox" name="velocity_p_box"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="velocity_I">
+           <property name="text">
+            <string>I</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QSpinBox" name="velocity_i_box"/>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="velocity_D">
+           <property name="text">
+            <string>D</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QSpinBox" name="velocity_d_box"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QGroupBox" name="a">
+        <property name="title">
+         <string>加速度设置</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_6">
+         <item row="0" column="0">
+          <widget class="QLabel" name="acc_P">
+           <property name="text">
+            <string>P</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QSpinBox" name="acc_p_box"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="acc_I">
+           <property name="text">
+            <string>I</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QSpinBox" name="acc_i_box"/>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="acc_D">
+           <property name="text">
+            <string>D</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QSpinBox" name="acc_d_box"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="3">
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QGroupBox" name="control_set">
+     <property name="minimumSize">
+      <size>
+       <width>215</width>
+       <height>92</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>215</width>
+       <height>92</height>
+      </size>
+     </property>
+     <property name="title">
+      <string>控制策略</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QRadioButton" name="single_channel">
+        <property name="text">
+         <string>单通道</string>
+        </property>
+        <property name="icon">
+         <iconset resource="assets.qrc">
+          <normaloff>:/my_icon/Ressources/48/52.png</normaloff>:/my_icon/Ressources/48/52.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QRadioButton" name="multiple_channel_3">
+        <property name="text">
+         <string>最大值</string>
+        </property>
+        <property name="icon">
+         <iconset resource="assets.qrc">
+          <normaloff>:/my_icon/Ressources/48/51.png</normaloff>:/my_icon/Ressources/48/51.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QRadioButton" name="maximun">
+        <property name="text">
+         <string>多通道</string>
+        </property>
+        <property name="icon">
+         <iconset resource="assets.qrc">
+          <normaloff>:/my_icon/Ressources/48/105.png</normaloff>:/my_icon/Ressources/48/105.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QRadioButton" name="minimun">
+        <property name="text">
+         <string>最小值</string>
+        </property>
+        <property name="icon">
+         <iconset resource="assets.qrc">
+          <normaloff>:/my_icon/Ressources/48/103.png</normaloff>:/my_icon/Ressources/48/103.png</iconset>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QGroupBox" name="pre_exp">
+     <property name="minimumSize">
+      <size>
+       <width>313</width>
+       <height>92</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>313</width>
+       <height>92</height>
+      </size>
+     </property>
+     <property name="title">
+      <string>预实验</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_8">
+      <item row="1" column="0">
+       <widget class="QLabel" name="activate">
+        <property name="text">
+         <string>响应量级:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>74</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="activate_value">
+        <property name="minimumSize">
+         <size>
+          <width>51</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>51</width>
+          <height>16777215</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QRadioButton" name="slow">
+        <property name="text">
+         <string>慢速</string>
+        </property>
+        <property name="icon">
+         <iconset resource="assets.qrc">
+          <normaloff>:/my_icon/Ressources/48/82.png</normaloff>:/my_icon/Ressources/48/82.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QComboBox" name="order">
+        <property name="minimumSize">
+         <size>
+          <width>38</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>38</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <item>
+         <property name="text">
+          <string>%</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="start_velociy">
+        <property name="text">
+         <string>起动速率 :</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QRadioButton" name="fast">
+        <property name="text">
+         <string>快速</string>
+        </property>
+        <property name="icon">
+         <iconset resource="assets.qrc">
+          <normaloff>:/my_icon/Ressources/48/83.png</normaloff>:/my_icon/Ressources/48/83.png</iconset>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>170</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="0" colspan="3">
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="3">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QGroupBox" name="groupBox">
+       <property name="minimumSize">
+        <size>
+         <width>281</width>
+         <height>111</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>281</width>
+         <height>111</height>
+        </size>
+       </property>
+       <property name="title">
+        <string>传感器校准</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="0">
+         <widget class="QPushButton" name="pos_adjust_btn">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="assets.qrc">
+            <normaloff>:/my_beautiful_icon/Ressources/beautiful/target_64px.png</normaloff>:/my_beautiful_icon/Ressources/beautiful/target_64px.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>40</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="default">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QPushButton" name="vel_adjust_btn">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="assets.qrc">
+            <normaloff>:/my_beautiful_icon/Ressources/beautiful/trends_64px.png</normaloff>:/my_beautiful_icon/Ressources/beautiful/trends_64px.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>40</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="default">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QPushButton" name="acc_adjust_btn">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="assets.qrc">
+            <normaloff>:/my_beautiful_icon/Ressources/beautiful/meter_64px.png</normaloff>:/my_beautiful_icon/Ressources/beautiful/meter_64px.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>40</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="default">
+           <bool>false</bool>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="pos_adjust">
+          <property name="text">
+           <string>位移校准</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLabel" name="vel_adjust">
+          <property name="text">
+           <string>速度校准</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLabel" name="acc_adjust">
+          <property name="text">
+           <string>加速度校准</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <layout class="QGridLayout" name="gridLayout_9">
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_7">
+         <item row="0" column="0">
+          <widget class="QPushButton" name="upload">
+           <property name="minimumSize">
+            <size>
+             <width>81</width>
+             <height>81</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>81</width>
+             <height>81</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="assets.qrc">
+             <normaloff>:/my_beautiful_icon/Ressources/beautiful/upload_64px.png</normaloff>:/my_beautiful_icon/Ressources/beautiful/upload_64px.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>81</width>
+             <height>81</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLabel" name="load_file">
+           <property name="text">
+            <string>读取配置文件</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLabel" name="set_default_val">
+           <property name="text">
+            <string>恢复默认设置</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QPushButton" name="download">
+           <property name="minimumSize">
+            <size>
+             <width>81</width>
+             <height>81</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>81</width>
+             <height>81</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="assets.qrc">
+             <normaloff>:/my_beautiful_icon/Ressources/beautiful/download_64px.png</normaloff>:/my_beautiful_icon/Ressources/beautiful/download_64px.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>81</width>
+             <height>81</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="write_file">
+           <property name="text">
+            <string>写入配置文件</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QPushButton" name="set_default">
+           <property name="minimumSize">
+            <size>
+             <width>81</width>
+             <height>81</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>81</width>
+             <height>81</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="assets.qrc">
+             <normaloff>:/Image/Ressources/randomPlaybtn.png</normaloff>:/Image/Ressources/randomPlaybtn.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>81</width>
+             <height>81</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="1">
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>18</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="2">
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetMinAndMaxSize</enum>
+         </property>
+         <item>
+          <widget class="QPushButton" name="OK_btn">
+           <property name="minimumSize">
+            <size>
+             <width>99</width>
+             <height>28</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>99</width>
+             <height>28</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>确认</string>
+           </property>
+           <property name="icon">
+            <iconset resource="assets.qrc">
+             <normaloff>:/tool_bar_icon/Ressources/pictos/check2.png</normaloff>:/tool_bar_icon/Ressources/pictos/check2.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="Cancel_btn">
+           <property name="minimumSize">
+            <size>
+             <width>99</width>
+             <height>28</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>99</width>
+             <height>28</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>取消</string>
+           </property>
+           <property name="icon">
+            <iconset resource="assets.qrc">
+             <normaloff>:/my_icon/Ressources/48/118.png</normaloff>:/my_icon/Ressources/48/118.png</iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <resources>
   <include location="assets.qrc"/>

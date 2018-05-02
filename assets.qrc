@@ -252,4 +252,50 @@
         <file>Ressources/pictos/user_business.png</file>
         <file>Ressources/pictos/user_remote1.png</file>
     </qresource>
+    <qresource prefix="/my_beautiful_icon">
+        <file>Ressources/beautiful/bag_64px.png</file>
+        <file>Ressources/beautiful/book_64px.png</file>
+        <file>Ressources/beautiful/bookshelf_64px.png</file>
+        <file>Ressources/beautiful/browser_64px.png</file>
+        <file>Ressources/beautiful/calendar_64px.png</file>
+        <file>Ressources/beautiful/chat_64px.png</file>
+        <file>Ressources/beautiful/clipboard_64px.png</file>
+        <file>Ressources/beautiful/clock_64px.png</file>
+        <file>Ressources/beautiful/cloud_64px.png</file>
+        <file>Ressources/beautiful/compass_64px.png</file>
+        <file>Ressources/beautiful/compose_64px.png</file>
+        <file>Ressources/beautiful/creditcard_64px.png</file>
+        <file>Ressources/beautiful/denied_64px.png</file>
+        <file>Ressources/beautiful/document_64px.png</file>
+        <file>Ressources/beautiful/download_64px.png</file>
+        <file>Ressources/beautiful/folder_64px.png</file>
+        <file>Ressources/beautiful/gear_64px.png</file>
+        <file>Ressources/beautiful/global_64px.png</file>
+        <file>Ressources/beautiful/hazard_64px.png</file>
+        <file>Ressources/beautiful/layers_64px.png</file>
+        <file>Ressources/beautiful/lightbulb_64px.png</file>
+        <file>Ressources/beautiful/lock_64px.png</file>
+        <file>Ressources/beautiful/mail_64px.png</file>
+        <file>Ressources/beautiful/meter_64px.png</file>
+        <file>Ressources/beautiful/paint_64px.png</file>
+        <file>Ressources/beautiful/phone_64px.png</file>
+        <file>Ressources/beautiful/piechart_64px.png</file>
+        <file>Ressources/beautiful/pin_64px.png</file>
+        <file>Ressources/beautiful/record-sleeve_64px.png</file>
+        <file>Ressources/beautiful/ribbon_64px.png</file>
+        <file>Ressources/beautiful/scissors_64px.png</file>
+        <file>Ressources/beautiful/security_64px.png</file>
+        <file>Ressources/beautiful/settings_64px.png</file>
+        <file>Ressources/beautiful/star_64px.png</file>
+        <file>Ressources/beautiful/support_64px.png</file>
+        <file>Ressources/beautiful/tablet_64px.png</file>
+        <file>Ressources/beautiful/tag_64px.png</file>
+        <file>Ressources/beautiful/target_64px.png</file>
+        <file>Ressources/beautiful/tools_64px.png</file>
+        <file>Ressources/beautiful/trends_64px.png</file>
+        <file>Ressources/beautiful/turntable_64px.png</file>
+        <file>Ressources/beautiful/upload_64px.png</file>
+        <file>Ressources/beautiful/video_64px.png</file>
+        <file>Ressources/beautiful/wallet_64px.png</file>
+    </qresource>
 </RCC>

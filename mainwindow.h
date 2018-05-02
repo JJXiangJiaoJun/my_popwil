@@ -20,6 +20,8 @@ private slots:
 
     void on_User_1_triggered();
 
+    void on_Setting_control_para_triggered();
+
 private:
     Ui::MainWindow *ui;
 };
