@@ -24,9 +24,9 @@
    <string notr="true">#MainWindow{border-image: url(:/Image/Ressources/MainWindow.png);}
 </string>
   </property>
-  <widget class="QWidget" name="centralWidget">
+  <widget class="QWidget" name="dynamic_plot_area">
    <property name="styleSheet">
-    <string notr="true">border-image: url(:/Image/Ressources/MainWindow.png);</string>
+    <string notr="true"/>
    </property>
   </widget>
   <widget class="QMenuBar" name="menuBar">

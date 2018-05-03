@@ -18,6 +18,17 @@
     <normaloff>:/tool_bar_icon/Ressources/pictos/briefcase2.png</normaloff>:/tool_bar_icon/Ressources/pictos/briefcase2.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="5">
+    <widget class="QPushButton" name="help">
+     <property name="text">
+      <string>帮助</string>
+     </property>
+     <property name="icon">
+      <iconset resource="assets.qrc">
+       <normaloff>:/my_icon/Ressources/48/1.png</normaloff>:/my_icon/Ressources/48/1.png</iconset>
+     </property>
+    </widget>
+   </item>
    <item row="1" column="2">
     <spacer name="horizontalSpacer">
      <property name="orientation">
@@ -50,17 +61,6 @@
      <property name="icon">
       <iconset resource="assets.qrc">
        <normaloff>:/my_icon/Ressources/48/127.png</normaloff>:/my_icon/Ressources/48/127.png</iconset>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="5">
-    <widget class="QPushButton" name="help">
-     <property name="text">
-      <string>帮助</string>
-     </property>
-     <property name="icon">
-      <iconset resource="assets.qrc">
-       <normaloff>:/my_icon/Ressources/48/1.png</normaloff>:/my_icon/Ressources/48/1.png</iconset>
      </property>
     </widget>
    </item>
@@ -103,7 +103,7 @@
        <item row="0" column="0">
         <widget class="QTableWidget" name="tableWidget">
          <attribute name="horizontalHeaderVisible">
-          <bool>true</bool>
+          <bool>false</bool>
          </attribute>
          <attribute name="horizontalHeaderCascadingSectionResizes">
           <bool>false</bool>
