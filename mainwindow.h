@@ -12,7 +12,7 @@
 #include "qdoublebufferedqueue.h"
 #include "randomwalk.h"
 #include "performancetimer.h"
-
+#include "new_experiment.h"
 
 namespace Ui {
 class MainWindow;
@@ -100,6 +100,8 @@ private slots:
     void onChartUpdateTimer();                      // Update the chart.
     void onViewPortChanged();                       // Viewport has changed
     void slotFuction();                             //100ms多媒体定时器
+    void on_action_Exit_triggered();
+    void on_action_New_triggered();
 };
 
 #endif // MAINWINDOW_H

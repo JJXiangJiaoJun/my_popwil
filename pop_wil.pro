@@ -44,6 +44,7 @@ SOURCES += \
     performancetimer.cpp \
     qchartviewer.cpp \
     randomwalk.cpp \
+    new_experiment.cpp
 
 
 
@@ -55,7 +56,8 @@ HEADERS += \
     performancetimer.h \
     qchartviewer.h \
     randomwalk.h \
-    channel_param.h
+    channel_param.h \
+    new_experiment.h
 
 
 
@@ -63,7 +65,8 @@ FORMS += \
         mainwindow.ui \
     loginscreen.ui \
     channel_param.ui \
-    control_param.ui
+    control_param.ui \
+    new_experiment.ui
 
 RESOURCES += \
     assets.qrc

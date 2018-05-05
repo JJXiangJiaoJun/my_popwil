@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>new_experiment</class>
+ <widget class="QDialog" name="new_experiment">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>694</width>
+    <height>519</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>694</width>
+    <height>519</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>694</width>
+    <height>519</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>新建实验</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="assets.qrc">
+    <normaloff>:/my_beautiful_icon/Ressources/beautiful/tools_64px.png</normaloff>:/my_beautiful_icon/Ressources/beautiful/tools_64px.png</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">#new_experiment{border-image: url(:/Image/Ressources/MainWindow.png);}
+</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0" colspan="3">
+    <widget class="QTabWidget" name="select_exp">
+     <property name="minimumSize">
+      <size>
+       <width>661</width>
+       <height>451</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>661</width>
+       <height>451</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">#select_exp{border-image: url(:/Image/Ressources/metebng.png);}
+</string>
+     </property>
+     <property name="tabShape">
+      <enum>QTabWidget::Triangular</enum>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="documentMode">
+      <bool>false</bool>
+     </property>
+     <property name="tabsClosable">
+      <bool>false</bool>
+     </property>
+     <property name="movable">
+      <bool>false</bool>
+     </property>
+     <property name="tabBarAutoHide">
+      <bool>false</bool>
+     </property>
+     <widget class="QWidget" name="typical_exp">
+      <property name="styleSheet">
+       <string notr="true">#typical_exp{border-image: url(:/Image/Ressources/metebng.png);}
+</string>
+      </property>
+      <attribute name="icon">
+       <iconset resource="assets.qrc">
+        <normaloff>:/my_beautiful_icon/Ressources/beautiful/trends_64px.png</normaloff>:/my_beautiful_icon/Ressources/beautiful/trends_64px.png</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>典型试验</string>
+      </attribute>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>50</x>
+         <y>90</y>
+         <width>541</width>
+         <height>191</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QPushButton" name="Random">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>120</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>120</width>
+              <height>120</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="assets.qrc">
+              <normaloff>:/my_beautiful_icon/Ressources/beautiful/Performance Information and Tools.png</normaloff>:/my_beautiful_icon/Ressources/beautiful/Performance Information and Tools.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>100</width>
+              <height>100</height>
+             </size>
+            </property>
+            <property name="autoDefault">
+             <bool>true</bool>
+            </property>
+            <property name="default">
+             <bool>false</bool>
+            </property>
+            <property name="flat">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="typical">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>120</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>120</width>
+              <height>120</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="assets.qrc">
+              <normaloff>:/my_beautiful_icon/Ressources/beautiful/Remote Desktop.png</normaloff>:/my_beautiful_icon/Ressources/beautiful/Remote Desktop.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>100</width>
+              <height>100</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="sin">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>120</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>120</width>
+              <height>120</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="assets.qrc">
+              <normaloff>:/my_beautiful_icon/Ressources/beautiful/Task Manager alt 1.png</normaloff>:/my_beautiful_icon/Ressources/beautiful/Task Manager alt 1.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>100</width>
+              <height>100</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="seismic">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>120</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>120</width>
+              <height>120</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="assets.qrc">
+              <normaloff>:/my_beautiful_icon/Ressources/beautiful/Task Manager alt 2.png</normaloff>:/my_beautiful_icon/Ressources/beautiful/Task Manager alt 2.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>100</width>
+              <height>100</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>随机试验</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>典型冲击</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>正弦试验</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>地震波试验</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="combine_exp">
+      <attribute name="icon">
+       <iconset resource="assets.qrc">
+        <normaloff>:/my_beautiful_icon/Ressources/beautiful/layers_64px.png</normaloff>:/my_beautiful_icon/Ressources/beautiful/layers_64px.png</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>组合试验</string>
+      </attribute>
+     </widget>
+     <widget class="QWidget" name="wave_reappear">
+      <attribute name="icon">
+       <iconset resource="assets.qrc">
+        <normaloff>:/my_beautiful_icon/Ressources/beautiful/book_64px.png</normaloff>:/my_beautiful_icon/Ressources/beautiful/book_64px.png</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>波形再现</string>
+      </attribute>
+     </widget>
+     <widget class="QWidget" name="latest_open_file">
+      <attribute name="icon">
+       <iconset resource="assets.qrc">
+        <normaloff>:/my_beautiful_icon/Ressources/beautiful/clipboard_64px.png</normaloff>:/my_beautiful_icon/Ressources/beautiful/clipboard_64px.png</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>最近打开文件</string>
+      </attribute>
+     </widget>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>455</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="1">
+    <widget class="QPushButton" name="exit">
+     <property name="minimumSize">
+      <size>
+       <width>92</width>
+       <height>28</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>92</width>
+       <height>28</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>退出</string>
+     </property>
+     <property name="icon">
+      <iconset resource="assets.qrc">
+       <normaloff>:/my_icon/Ressources/48/116.png</normaloff>:/my_icon/Ressources/48/116.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QPushButton" name="advanced_Set">
+     <property name="minimumSize">
+      <size>
+       <width>108</width>
+       <height>28</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>108</width>
+       <height>28</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>高级设置..</string>
+     </property>
+     <property name="icon">
+      <iconset resource="assets.qrc">
+       <normaloff>:/my_icon/Ressources/48/11.png</normaloff>:/my_icon/Ressources/48/11.png</iconset>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="assets.qrc"/>
+ </resources>
+ <connections/>
+</ui>

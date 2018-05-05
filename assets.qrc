@@ -80,6 +80,7 @@
         <file>Ressources/rotate.png</file>
         <file>Ressources/backphoto.png</file>
         <file>Ressources/MainWindow.png</file>
+        <file>Ressources/metebng.png</file>
     </qresource>
     <qresource prefix="/my_icon">
         <file>Ressources/my_ico/popwil.png</file>
@@ -297,5 +298,16 @@
         <file>Ressources/beautiful/upload_64px.png</file>
         <file>Ressources/beautiful/video_64px.png</file>
         <file>Ressources/beautiful/wallet_64px.png</file>
+        <file>Ressources/beautiful/Backup and Restore.png</file>
+        <file>Ressources/beautiful/Performance Information and Tools.png</file>
+        <file>Ressources/beautiful/Region and Language.png</file>
+        <file>Ressources/beautiful/Remote Desktop.png</file>
+        <file>Ressources/beautiful/Run....png</file>
+        <file>Ressources/beautiful/Screen Resolution.png</file>
+        <file>Ressources/beautiful/Services.png</file>
+        <file>Ressources/beautiful/System alt.png</file>
+        <file>Ressources/beautiful/Task Manager alt 1.png</file>
+        <file>Ressources/beautiful/Task Manager alt 2.png</file>
+        <file>Ressources/beautiful/Task Manager.png</file>
     </qresource>
 </RCC>

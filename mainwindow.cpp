@@ -22,6 +22,7 @@
 #include "qmath.h"
 #include "qdebug.h"
 #include <QComboBox>
+#include <QFileDialog>
 
 using namespace std;
 #define PERFORMANCEINTERVAL 10
@@ -40,11 +41,13 @@ MainWindow::MainWindow(QWidget *parent) :
     // Zoom Out push button
     QPushButton *zoomOutPB = new QPushButton();
     //****************Save as Picture
-    //connect(ui->action_SaveAsPicture, SIGNAL(triggered(bool)), SLOT(onSave(bool)));
+
+    connect(ui->tool_bar_Save_File, SIGNAL(triggered(bool)), SLOT(onSave(bool)));
 
     pointerPB->setVisible(false);
     zoomInPB->setVisible(false);
     zoomOutPB->setVisible(false);
+
 
     // The Pointer/Zoom In/Zoom Out buttons form a button group
     QButtonGroup *mouseUsage = new QButtonGroup();
@@ -56,9 +59,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(mouseUsage, SIGNAL(buttonPressed(int)), SLOT(onMouseUsageChanged(int)));
 
-//    connect(ui->action_Pointer,SIGNAL(triggered()),pointerPB,SLOT(click()));
-//    connect(ui->action_ZoomIn,SIGNAL(triggered()),zoomInPB,SLOT(click()));
-//    connect(ui->action_ZoomOut,SIGNAL(triggered()),zoomOutPB,SLOT(click()));
+    connect(ui->tool_bar_Pointer,SIGNAL(triggered()),pointerPB,SLOT(click()));
+    connect(ui->tool_bar_ZoomIn,SIGNAL(triggered()),zoomInPB,SLOT(click()));
+    connect(ui->tool_bar_ZoomOut,SIGNAL(triggered()),zoomOutPB,SLOT(click()));
 
 
     //动态绘图区域
@@ -123,6 +126,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete m_ChartViewer->getChart();
 }
 
 void MainWindow::onViewPortChanged()
@@ -257,12 +261,17 @@ void MainWindow::slotFuction()
     msCount+=PERFORMANCEINTERVAL;
     msStartCount+=PERFORMANCEINTERVAL;
 
-   static double series0;
-   static double series1;
+    static double plot1 = 0;
+    static double plot2 = 0;
+
+    double series0;
+    double series1;
     double elapsedTime;
 
-    series0=series0+1;//real s
-    series1=series1+2;//ideal s
+    series0=sin(plot1);//real s
+    series1=cos(plot2);//ideal s
+    plot1 += 20;
+    plot2 += 20;
     //*****************************AO输出*********************************************************
 //    if (startFlag)
 //    {
@@ -625,11 +634,22 @@ void MainWindow::OnData(void *self, double elapsedTime, double series0, double s
     ((MainWindow *)self)->buffer.put(packet);*/
 }
 
-
+//******************************************保存按钮按下则将当前绘图曲线保存
 void MainWindow::onSave(bool)
 {
+    qDebug()<<"pressed onSave";
+    QString fileName = QFileDialog::getSaveFileName(this, "Save", "chartdirector_demo",
+        "PNG (*.png);;JPG (*.jpg);;GIF (*.gif);;BMP (*.bmp);;SVG (*.svg);;PDF (*.pdf)");
 
+    if (!fileName.isEmpty())
+    {
+        // Save the chart
+        BaseChart *c = m_ChartViewer->getChart();
+        if (0 != c)
+            c->makeChart(fileName.toUtf8().constData());
+    }
 }
+
 
 void MainWindow::on_Start_btn_clicked()
 {
@@ -649,4 +669,35 @@ void MainWindow::on_Setting_control_para_triggered()
 {
     control_param *control_window = new control_param;
     control_window->show();
+}
+
+
+//**************************点击菜单栏的退出按钮
+void MainWindow::on_action_Exit_triggered()
+{
+
+    int ret=QMessageBox::information(NULL,"提示信息","请确实是否退出操作界面？",
+                                     QMessageBox::Ok|QMessageBox::Cancel,QMessageBox::Ok);
+    switch(ret)
+    {
+    case QMessageBox::Ok:
+        qDebug()<<"closing window";
+        this->close();
+        break;
+    case QMessageBox::Cancel:
+        qDebug()<<"will not close";
+        break;
+    default:
+        break;
+    }
+
+}
+
+
+//******************************按下菜单栏----新建实验按钮-----
+void MainWindow::on_action_New_triggered()
+{
+    new_experiment *new_exp = new new_experiment;
+
+    new_exp->show();
 }
