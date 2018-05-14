@@ -13,6 +13,7 @@
 #include "randomwalk.h"
 #include "performancetimer.h"
 #include "new_experiment.h"
+#include "tcp_app.h"
 
 namespace Ui {
 class MainWindow;
@@ -33,6 +34,7 @@ private:
     //Qcharviewer绘图控件
     QFrame       *leftFrame;
     QChartViewer *m_ChartViewer;        // QChartViewer control
+    QViewPortControl *m_ViewPortControl;    // QViewPortControl
     //******************************************************************************
     // The random data source
     RandomWalk *dataSource;
@@ -85,6 +87,9 @@ private:
     void drawChart(QChartViewer *viewer);           // Draw chart
     void drawFullChart(QViewPortControl *vpc);      // Draw full chart
     double trackLineLabel(XYChart *c, int mouseX);  // Draw track cursor
+
+    //*********************TCP server********************
+    appTcpServer *mytcpserver;
 
 
 private slots:

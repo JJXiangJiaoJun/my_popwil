@@ -24,6 +24,8 @@
 #include <QComboBox>
 #include <QFileDialog>
 
+QString send_data = "This is Qt Tcp Server\r\n";
+
 using namespace std;
 #define PERFORMANCEINTERVAL 10
 
@@ -41,7 +43,6 @@ MainWindow::MainWindow(QWidget *parent) :
     // Zoom Out push button
     QPushButton *zoomOutPB = new QPushButton();
     //****************Save as Picture
-
     connect(ui->tool_bar_Save_File, SIGNAL(triggered(bool)), SLOT(onSave(bool)));
 
     pointerPB->setVisible(false);
@@ -67,11 +68,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //动态绘图区域
     QWidget *dynamic_polt_area = ui->dynamic_plot_area;
     QGridLayout *grid_layout = new QGridLayout(ui->dynamic_plot_area);
-    // Chart Viewer
-    //leftFrame = new QFrame(dynamic_polt_area);
-    //leftFrame->setGeometry(4, 62, 660, 500);
 
-    //leftFrame->setStyleSheet("background-color:white");
 /****************************绘制实时曲线Qcharviewer控件************************************/
     // Chart Viewer
     m_ChartViewer = new QChartViewer(dynamic_polt_area);
@@ -83,6 +80,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_ChartViewer, SIGNAL(viewPortChanged()), SLOT(onViewPortChanged()));
     connect(m_ChartViewer, SIGNAL(mouseMovePlotArea(QMouseEvent*)),
     SLOT(onMouseMovePlotArea(QMouseEvent*)));
+
+    m_ViewPortControl = new QViewPortControl(dynamic_polt_area);
+    //m_ViewPortControl->setGeometry(10, 480, 640, 80);
+    m_ViewPortControl->setViewer(m_ChartViewer);
+    grid_layout->addWidget(m_ViewPortControl);
 /****************************************************************************************/
 
 //*********************************参数初始化************************************************************
@@ -121,6 +123,8 @@ MainWindow::MainWindow(QWidget *parent) :
     timer->start(PERFORMANCEINTERVAL);  //20为毫秒
 
     msCount=0;
+ //*************************************************创建TCP服务器通信*******************
+    mytcpserver = new appTcpServer;
 }
 
 MainWindow::~MainWindow()
@@ -134,6 +138,8 @@ void MainWindow::onViewPortChanged()
     // Update the chart if necessary
     if (m_ChartViewer->needUpdateChart())
         drawChart(m_ChartViewer);
+     // Update the full chart
+    drawFullChart(m_ViewPortControl);
 }
 
 //
@@ -653,7 +659,7 @@ void MainWindow::onSave(bool)
 
 void MainWindow::on_Start_btn_clicked()
 {
-    qDebug()<<"clicked";
+    mytcpserver->sendData(send_data);
 }
 
 //点击菜单栏用户登录按钮
@@ -668,6 +674,7 @@ void MainWindow::on_User_1_triggered()
 void MainWindow::on_Setting_control_para_triggered()
 {
     control_param *control_window = new control_param;
+    //ui->Message_dock->show();
     control_window->show();
 }
 

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -44,7 +44,9 @@ SOURCES += \
     performancetimer.cpp \
     qchartviewer.cpp \
     randomwalk.cpp \
-    new_experiment.cpp
+    new_experiment.cpp \
+    tcpserver.cpp \
+    tcp_app.cpp
 
 
 
@@ -57,7 +59,9 @@ HEADERS += \
     qchartviewer.h \
     randomwalk.h \
     channel_param.h \
-    new_experiment.h
+    new_experiment.h \
+    tcpserver.h \
+    tcp_app.h
 
 
 
