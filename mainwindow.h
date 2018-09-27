@@ -17,6 +17,7 @@
 #include "restricted_para.h"
 #include "shake_table_para.h"
 
+
 namespace Ui {
 class MainWindow;
 }
@@ -95,8 +96,8 @@ private:
     double trackLineLabel(XYChart *c, int mouseX);  // Draw track cursor
 
     //*********************TCP server********************
-    appTcpServer *mytcpserver;
 
+    TcpMsgServer *m_tcpmsgserver;
 
 private slots:
     void on_Start_btn_clicked();

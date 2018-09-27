@@ -1,9 +1,12 @@
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
 
+#include <QtGlobal>
 #include <QObject>
 #include <QWidget>
-
+//////////////////////////////////////////////////////////////////////////////
+/// \brief The ProtocolSet class
+///构造数据报的协议
 class ProtocolSet
 {
 public:

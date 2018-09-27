@@ -91,7 +91,7 @@ FORMS += \
 RESOURCES += \
     assets.qrc
 
-
+include($$PWD/tcp_server/tcp_server.pri)
 
 #qcharview动态链接库
 

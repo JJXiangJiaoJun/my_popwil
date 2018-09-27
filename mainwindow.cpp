@@ -140,9 +140,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //connect(mytcpserver,SLOT(clientConnected()),this,SLOT(tcpsever_connect()));
 
-    mytcpserver = new appTcpServer(this);
-    connect(mytcpserver,SIGNAL(newconnect_client(QString,int)),this,SLOT(tcpsever_connect(QString)));
-    connect(mytcpserver,SIGNAL(disconnect_client(QString,int)),this,SLOT(tcpsever_disconnect(QString)));
+//    mytcpserver = new appTcpServer(this);
+//    connect(mytcpserver,SIGNAL(newconnect_client(QString,int)),this,SLOT(tcpsever_connect(QString)));
+//    connect(mytcpserver,SIGNAL(disconnect_client(QString,int)),this,SLOT(tcpsever_disconnect(QString)));
+     m_tcpmsgserver = new TcpMsgServer(this);
+     connect(m_tcpmsgserver,SIGNAL(newconnect_client(QString,int)),this,SLOT(tcpsever_connect(QString)));
+     connect(m_tcpmsgserver,SIGNAL(disconnect_client(QString,int)),this,SLOT(tcpsever_disconnect(QString)));
 
 }
 
@@ -694,7 +697,9 @@ void MainWindow::on_Start_btn_clicked()
 //    mytcpserver->sendData("2",ProtocolSet::COMMAND);
     //mytcpserver->sendData("3",ProtocolSet::ERR);
 //      mytcpserver->sendData("",ProtocolSet::ERR);
-    mytcpserver->sendData("Please send PID param",ProtocolSet::TEST);
+    //mytcpserver->sendData("Please send PID param",ProtocolSet::TEST);
+    QString msg("Please send PID param");
+    m_tcpmsgserver->SltMsgToClient(ProtocolSet::TEST,msg);
     //mytcpserver->sendData("test");
 }
 
