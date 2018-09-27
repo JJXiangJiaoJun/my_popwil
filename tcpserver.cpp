@@ -81,12 +81,29 @@ void TcpClient::sendData(const QString &data)
 //        buffer = data.toLatin1();
 //    }
     buffer = data.toLatin1();
+    qDebug()<<"直接发送的数据为"<<buffer;
     this->write(buffer);
     emit sendData(ip, port, data);
 }
 
+void TcpClient::sendData(const QString &data,ProtocolSet::MessageType type)
+{
+    QByteArray buffer;
+
+    ProtocolSet msg;
+    //buffer为构造好的数据包
+    buffer = msg.send_Msg(type,data);
+
+    //发送数据包
+    this->write(buffer);
+    emit sendData(ip, port, data);
+}
+
+
+
 TcpServer::TcpServer(QObject *parent) : QTcpServer(parent)
 {
+
 }
 
 
@@ -120,6 +137,8 @@ void TcpServer::incomingConnection(qintptr handle)
 }
 
 
+
+
 void TcpServer::disconnected()
 {
     //断开连接后从链表中移除
@@ -138,12 +157,11 @@ bool TcpServer::start()
 
     //************************************************设置服务器侦听端口*********************************
 
-    //bool ok = listen(QHostAddress::AnyIPv4, App::TcpListenPort);
-    bool ok = listen(QHostAddress::AnyIPv4,8087);
+    bool ok = listen(QHostAddress::AnyIPv4,ProtocolSet::COMMUNICATION_PORT);
 #else
     bool ok = listen(QHostAddress::Any, App::TcpListenPort);
 #endif
-    qDebug()<<"开始侦听端口8087";
+    qDebug()<<"开始侦听端口："<<ProtocolSet::COMMUNICATION_PORT;
     return ok;
 }
 
@@ -177,5 +195,13 @@ void TcpServer::writeData(const QString &data)
 {
     foreach (TcpClient *client, clients) {
         client->sendData(data);
+    }
+}
+
+
+void TcpServer::writeData(const QString &data,ProtocolSet::MessageType type)
+{
+    foreach (TcpClient *client, clients) {
+        client->sendData(data,type);
     }
 }

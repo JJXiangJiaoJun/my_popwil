@@ -46,7 +46,13 @@ SOURCES += \
     randomwalk.cpp \
     new_experiment.cpp \
     tcpserver.cpp \
-    tcp_app.cpp
+    tcp_app.cpp \
+    protocol.cpp \
+    set_measurement_unit.cpp \
+    loadingscreen.cpp \
+    sinewave.cpp \
+    restricted_para.cpp \
+    shake_table_para.cpp
 
 
 
@@ -61,7 +67,13 @@ HEADERS += \
     channel_param.h \
     new_experiment.h \
     tcpserver.h \
-    tcp_app.h
+    tcp_app.h \
+    protocol.h \
+    set_measurement_unit.h \
+    loadingscreen.h \
+    sinewave.h \
+    restricted_para.h \
+    shake_table_para.h
 
 
 
@@ -70,7 +82,11 @@ FORMS += \
     loginscreen.ui \
     channel_param.ui \
     control_param.ui \
-    new_experiment.ui
+    new_experiment.ui \
+    set_measurement_unit.ui \
+    sinewave.ui \
+    restricted_para.ui \
+    shake_table_para.ui
 
 RESOURCES += \
     assets.qrc

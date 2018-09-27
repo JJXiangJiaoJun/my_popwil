@@ -13,11 +13,14 @@ public:
     explicit appTcpServer(QWidget *parent = 0);
     ~appTcpServer();
 
-private:
+public:
 
     bool isOk;
     TcpServer *tcpServer;
     QTimer *timer;
+signals:
+    void newconnect_client(const QString &ip, int port);
+    void disconnect_client(const QString &ip, int port);
 
 private slots:
     void initForm();
@@ -28,7 +31,10 @@ private slots:
 public slots:
     void sendData(const QString &data);
 
+    void sendData(const QString &data,ProtocolSet::MessageType type);
+
     void sendData(const QString &ip, int port, const QString &data);
+
     void receiveData(const QString &ip, int port, const QString &data);
 
     void clientConnected(const QString &ip, int port);

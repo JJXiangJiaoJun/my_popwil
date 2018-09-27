@@ -14,6 +14,8 @@
 #include "performancetimer.h"
 #include "new_experiment.h"
 #include "tcp_app.h"
+#include "restricted_para.h"
+#include "shake_table_para.h"
 
 namespace Ui {
 class MainWindow;
@@ -68,6 +70,9 @@ private:
     long msCount;
     long msStartCount;
     PerformanceTimer *timer;
+
+    int tcpserver_count;
+    QLabel *tcpstatus;
     //******************************************************************************
 
     // If the track cursor is at the end of the data series, we will automatic move the track
@@ -75,6 +80,7 @@ private:
     double trackLineEndPos;
     bool trackLineIsAtEnd;
 
+    //三个绘图数组
     double m_timeStamps[sampleSize];        // The timestamps for the data series
     double m_dataSeriesA[sampleSize];       // The values for the data series A
     double m_dataSeriesB[sampleSize];       // The values for the data series B
@@ -107,6 +113,17 @@ private slots:
     void slotFuction();                             //100ms多媒体定时器
     void on_action_Exit_triggered();
     void on_action_New_triggered();
+
+
+
+    //服务器连接函数
+    void tcpsever_connect(const QString &ip);
+    void tcpsever_disconnect(const QString &ip);
+    void on_Setting_channel_para_triggered();
+    void on_Setting_unit_triggered();
+    void on_Setting_confine_para_triggered();
+
+    void on_Setting_target_triggered();
 };
 
 #endif // MAINWINDOW_H

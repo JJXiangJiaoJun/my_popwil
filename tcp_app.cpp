@@ -30,6 +30,9 @@ void appTcpServer::initForm()
     connect(tcpServer, SIGNAL(clientConnected(QString, int)), this, SLOT(clientConnected(QString, int)));
     connect(tcpServer, SIGNAL(clientDisconnected(QString, int)), this, SLOT(clientDisconnected(QString, int)));
 
+    connect(tcpServer, SIGNAL(clientConnected(QString, int)), this, SIGNAL(newconnect_client(QString,int)));
+    connect(tcpServer, SIGNAL(clientDisconnected(QString, int)), this, SIGNAL(disconnect_client(QString, int)));
+
 //    timer = new QTimer(this);
 //    connect(timer, SIGNAL(timeout()), this, SLOT(on_btnSend_clicked()));
 
@@ -149,6 +152,13 @@ void appTcpServer::sendData(const QString &data)
 //    }
     tcpServer->writeData(data);
     qDebug()<<"服务器发送信息";
+}
+
+
+void appTcpServer::sendData(const QString &data,ProtocolSet::MessageType type)
+{
+    tcpServer->writeData(data,type);
+     qDebug()<<"服务器发送信息"<<"类型："<<type;
 }
 
 void appTcpServer::sendData(const QString &ip, int port, const QString &data)

@@ -16,7 +16,7 @@ class QDoubleBufferedQueue
 {
 public:
     //
-    // Constructor - construct a queue with the given buffer size
+    // 构造函数-构造一个给定数组大小的双缓冲数组
     //
     QDoubleBufferedQueue(int bufferSize = 10000) :
         bufferLen(0), bufferSize(bufferSize)
@@ -26,7 +26,7 @@ public:
 	}
 
     //
-    // Destructor
+    // 析构函数
     //
     ~QDoubleBufferedQueue()
 	{
@@ -34,8 +34,8 @@ public:
 		 delete[] buffer1;
 	}
 
-    //
-    // Add an item to the queue. Returns true if successful, false if the buffer is full.
+    //队列中加入一个元素
+    // 如果成功返回True，失败则返回False
     //
 	bool put(const T& datum)
 	{
@@ -46,9 +46,7 @@ public:
 		return canWrite;
 	}
 
-    //
-    // Get all the items in the queue. The T** argument should be the address of a variable to
-    // receive the pointer to the item array. The return value is the size of the array.
+    // 从队列中获取所有元素, data指针即为二级指针，此步操作之后，*data变为数据指针,返回值为数组大小
     //
 	int get(T** data)
 	{
@@ -63,7 +61,7 @@ public:
 
 private:
 
-    // Disable copying and assignment
+    // 禁止复制
     QDoubleBufferedQueue & operator=(const QDoubleBufferedQueue&);
     QDoubleBufferedQueue(const QDoubleBufferedQueue&);
 

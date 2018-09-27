@@ -6,6 +6,7 @@
 #include <QTcpSocket>
 #include <QList>
 
+#include "protocol.h"
 //****************************************TCP多线程编程，需要重写 QTcpsocket类 和 QTcpserver类***********************************
 //****************************************incomingconnect函数需要重写，在其中获得套接字****************************************
 
@@ -35,6 +36,8 @@ public slots:
     void setIP(const QString &ip);
     void setPort(int port);
     void sendData(const QString &data);
+
+    void sendData(const QString &data,ProtocolSet::MessageType type);
 
 };
 
@@ -70,6 +73,9 @@ public slots:
     void writeData(const QString &ip, int port, const QString &data);
     //对所有连接发送数据
     void writeData(const QString &data);
+
+    void writeData(const QString &data,ProtocolSet::MessageType type);
+
 
 };
 

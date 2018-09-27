@@ -23,11 +23,16 @@
 #include "qdebug.h"
 #include <QComboBox>
 #include <QFileDialog>
+#include "channel_param.h"
+#include "set_measurement_unit.h"
 
 QString send_data = "This is Qt Tcp Server\r\n";
 
 using namespace std;
 #define PERFORMANCEINTERVAL 10
+#define PI   3.141592657
+#define PERIOD 1000
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -105,6 +110,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_ChartViewer->setMouseWheelZoomRatio(1.1);
 
     // Configure the initial viewport
+    //配置初始视野
     m_ChartViewer->setViewPortWidth(initialVisibleRange / (double)initialFullRange);
 
     // Start the random data generator
@@ -116,15 +122,28 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_ChartUpdateTimer, SIGNAL(timeout()), SLOT(onChartUpdateTimer()));
 
     // The chart update rate is set to 100ms
+    //绘图定时器，100ms绘制一次
     m_ChartUpdateTimer->start(100);
 
     timer = new PerformanceTimer(this);
     connect(timer,SIGNAL(timeout()),this,SLOT(slotFuction()));
-    timer->start(PERFORMANCEINTERVAL);  //20为毫秒
+    timer->start(PERFORMANCEINTERVAL);  //10为毫秒
 
     msCount=0;
  //*************************************************创建TCP服务器通信*******************
-    mytcpserver = new appTcpServer;
+    QStatusBar *statubar = this->statusBar();
+    tcpstatus = new QLabel(statubar);
+    statubar->addPermanentWidget(tcpstatus);
+    statubar->showMessage("已开放端口8087,等待连接",3000);
+    tcpstatus->setText("未连接到控制器");
+    tcpserver_count = 0;
+
+    //connect(mytcpserver,SLOT(clientConnected()),this,SLOT(tcpsever_connect()));
+
+    mytcpserver = new appTcpServer(this);
+    connect(mytcpserver,SIGNAL(newconnect_client(QString,int)),this,SLOT(tcpsever_connect(QString)));
+    connect(mytcpserver,SIGNAL(disconnect_client(QString,int)),this,SLOT(tcpsever_disconnect(QString)));
+
 }
 
 MainWindow::~MainWindow()
@@ -153,18 +172,21 @@ void MainWindow::onChartUpdateTimer()
     bool autoScroll = (m_currentIndex > 0) && (0.001 + viewer->getValueAtViewPort("x",
         viewer->getViewPortLeft() + viewer->getViewPortWidth()) >= m_timeStamps[m_currentIndex - 1]);
 
-    //
+
+    //从队列中获取数据，并把他们加入到 data arrays中（绘图的数组)
     // Get new data from the queue and append them to the data arrays
     //
     int count;
     DataPacket *packets;
+
+    //通过此步操作 ， 读取缓冲区和存储缓冲器交换
     if ((count = buffer.get(&packets)) <= 0)
         return;
     //qDebug()<<"双缓冲队列中数据个数:"<<count;
     //上边这步非常有意思，利用二级指针作为函数的参数
     //经过上边这个操作之后，buffer里面的数据就转到了packets指针中，长度为count
 
-
+    //m_currentIndex为绘图数组当前存取索引 , 如果空间不足，将删除旧数据
     // if data arrays have insufficient space, we need to remove some old data.
     if (m_currentIndex + count >= sampleSize)
     {
@@ -178,8 +200,14 @@ void MainWindow::onChartUpdateTimer()
 
         // Remove oldest data to leave space for new data. To avoid frequent removal, we ensure at
         // least 5% empty space available after removal.
+
+        //至少移动 5%的空间，防止频繁移动
+        //保存当前索引
         int originalIndex = m_currentIndex;
+
+        //获取95%的索引
         m_currentIndex = sampleSize * 95 / 100 - 1;
+        //还是大于，则往前减小索引
         if (m_currentIndex > sampleSize - count)
             m_currentIndex = sampleSize - count;
         //将所有数据往前移动一段距离，大概是5%
@@ -267,6 +295,7 @@ void MainWindow::slotFuction()
     msCount+=PERFORMANCEINTERVAL;
     msStartCount+=PERFORMANCEINTERVAL;
 
+    static double time=0;
     static double plot1 = 0;
     static double plot2 = 0;
 
@@ -274,10 +303,12 @@ void MainWindow::slotFuction()
     double series1;
     double elapsedTime;
 
+    plot1 = time/PERIOD*PI;
+    plot2 = time/(PERIOD*2)*PI;
     series0=sin(plot1);//real s
-    series1=cos(plot2);//ideal s
-    plot1 += 20;
-    plot2 += 20;
+    series1=2*cos(plot2);//ideal s
+    time += 10;
+
     //*****************************AO输出*********************************************************
 //    if (startFlag)
 //    {
@@ -659,7 +690,12 @@ void MainWindow::onSave(bool)
 
 void MainWindow::on_Start_btn_clicked()
 {
-    mytcpserver->sendData(send_data);
+//    mytcpserver->sendData("1",ProtocolSet::DATA);
+//    mytcpserver->sendData("2",ProtocolSet::COMMAND);
+    //mytcpserver->sendData("3",ProtocolSet::ERR);
+//      mytcpserver->sendData("",ProtocolSet::ERR);
+    mytcpserver->sendData("Please send PID param",ProtocolSet::TEST);
+    //mytcpserver->sendData("test");
 }
 
 //点击菜单栏用户登录按钮
@@ -679,11 +715,11 @@ void MainWindow::on_Setting_control_para_triggered()
 }
 
 
-//**************************点击菜单栏的退出按钮
+//**************************点击菜单栏的退出按钮*****************************
 void MainWindow::on_action_Exit_triggered()
 {
 
-    int ret=QMessageBox::information(NULL,"提示信息","请确实是否退出操作界面？",
+    int ret=QMessageBox::information(this,"提示信息","请确实是否退出操作界面？",
                                      QMessageBox::Ok|QMessageBox::Cancel,QMessageBox::Ok);
     switch(ret)
     {
@@ -707,4 +743,57 @@ void MainWindow::on_action_New_triggered()
     new_experiment *new_exp = new new_experiment;
 
     new_exp->show();
+}
+
+
+void MainWindow::tcpsever_connect(const QString &ip)
+{
+    QStatusBar *statubar = this->statusBar();
+    statubar->showMessage("新的控制器连接 IP:"+ip,3000);
+    tcpserver_count++;
+    QString sta = QString("当前控制器连接个数: %1").arg(tcpserver_count);
+    tcpstatus->setText(sta);
+
+    qDebug()<<"回调tcpsever_connect";
+
+}
+
+void MainWindow::tcpsever_disconnect(const QString &ip)
+{
+    QStatusBar *statubar = this->statusBar();
+    //若出现错误
+    tcpserver_count--;
+    statubar->showMessage("控制器断开连接",3000);
+    QString sta;
+    if(tcpserver_count==0)
+        sta.sprintf("未连接到控制器");
+    else
+        sta.sprintf("当前控制器连接个数: %d",tcpserver_count);
+    tcpstatus->setText(sta);
+    qDebug()<<"回调tcpsever_disconnect";
+}
+
+void MainWindow::on_Setting_channel_para_triggered()
+{
+    channel_param *new_channel =new channel_param;
+    new_channel->show();
+}
+//按下了菜单栏“工程单位”
+void MainWindow::on_Setting_unit_triggered()
+{
+    set_measurement_unit *measure_unit = new set_measurement_unit;
+    measure_unit->show();
+}
+
+
+void MainWindow::on_Setting_confine_para_triggered()
+{
+    restricted_para *restrict_unit = new restricted_para;
+    restrict_unit->show();
+}
+
+void MainWindow::on_Setting_target_triggered()
+{
+    shake_table_para *shake_table_unit = new shake_table_para;
+    shake_table_unit->show();
 }
