@@ -36,21 +36,26 @@ public:
 
     int GetUserId() const;
     void Close();
-
+    void Disconnect();
 signals:
-    void signalConnected();
-    void signalDisConnected();
+    void signalConnected(QString ip,int port);
+    void signalDisConnected(QString ip,int port);
     void signalMsgToClient(ProtocolSet::MessageType &type,const int &id);
 public slots:
 
 public:
     TcpSocket *m_tcpSocket;
+
+private:
     int m_nId;
     QString ip;
     int port;
 public:
     void setIP(QString ip);
     void setPort(int port);
+    QString getIP();
+    int getPort();
+    int getId();
 public slots:
     //消息回发
     void SltSendMessage(ProtocolSet::MessageType &type,QString &data);

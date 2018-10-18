@@ -13,9 +13,9 @@
 #include "randomwalk.h"
 #include "performancetimer.h"
 #include "new_experiment.h"
-#include "tcp_app.h"
 #include "restricted_para.h"
 #include "shake_table_para.h"
+#include "tcpserver.h"
 
 
 namespace Ui {

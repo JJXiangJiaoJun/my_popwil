@@ -138,11 +138,8 @@ MainWindow::MainWindow(QWidget *parent) :
     tcpstatus->setText("未连接到控制器");
     tcpserver_count = 0;
 
-    //connect(mytcpserver,SLOT(clientConnected()),this,SLOT(tcpsever_connect()));
 
-//    mytcpserver = new appTcpServer(this);
-//    connect(mytcpserver,SIGNAL(newconnect_client(QString,int)),this,SLOT(tcpsever_connect(QString)));
-//    connect(mytcpserver,SIGNAL(disconnect_client(QString,int)),this,SLOT(tcpsever_disconnect(QString)));
+
      m_tcpmsgserver = new TcpMsgServer(this);
      connect(m_tcpmsgserver,SIGNAL(newconnect_client(QString,int)),this,SLOT(tcpsever_connect(QString)));
      connect(m_tcpmsgserver,SIGNAL(disconnect_client(QString,int)),this,SLOT(tcpsever_disconnect(QString)));

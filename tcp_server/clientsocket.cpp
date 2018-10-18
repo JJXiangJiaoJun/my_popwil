@@ -8,7 +8,7 @@ TcpSocket::TcpSocket(QObject *parent) :  QTcpSocket(parent)
 {
     connect(this, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(deleteLater()));
     connect(this, SIGNAL(disconnected()), this, SLOT(deleteLater()));
-    connect(this, SIGNAL(disconnected()), this, SLOT(disconnected()));
+
 
 }
 
@@ -21,16 +21,36 @@ TcpSocket::TcpSocket(QObject *parent) :  QTcpSocket(parent)
 ClientSocket::ClientSocket(QObject *parent, qintptr socketDescriptor)
 {
     m_nId = -1;
+    m_tcpSocket  = new TcpSocket(this);
     //设置套接字
-    m_tcpSocket->setSocketDescriptor(socketDescriptor);
+
     //连接信号槽
+    ///套接字读取数据绑定到 读取数据槽函数
     connect(m_tcpSocket,SIGNAL(readyRead()),this,SLOT(SltReadyRead()));
+    ///套接字连接信号绑定到
     connect(m_tcpSocket,SIGNAL(connected()),this,SLOT(SltConnected()));
     connect(m_tcpSocket,SIGNAL(disconnected()),this,SLOT(SltDisconnected()));
 
-    connect(m_tcpSocket,SIGNAL(connected()),this,SIGNAL(signalConnected()));
-    connect(m_tcpSocket,SIGNAL(disconnected()),this,SIGNAL(signalDisConnected()));
 
+    if(!m_tcpSocket->setSocketDescriptor(socketDescriptor))
+    {
+         qDebug()<<"绑定套接字失败!!!";
+         return;
+    }
+//    if(m_tcpSocket->waitForConnected())
+//    {
+//        qDebug()<<"连接成功!";
+//    }
+//    else
+//    {
+//        qDebug()<<"连接失败!";
+//        return;
+//    }
+    //下面获取其ip地址与端口号
+    this->ip = m_tcpSocket->peerAddress().toString();
+    this->port = m_tcpSocket->peerPort();
+
+    emit signalConnected(this->ip,this->port);
 }
 
 ClientSocket::~ClientSocket()
@@ -42,16 +62,25 @@ int ClientSocket::GetUserId() const
 {
     return m_nId;
 }
-
+/**
+ * @brief ClientSocket::Close
+ */
 void ClientSocket::Close()
 {
-    m_tcpSocket->abort();
+    m_tcpSocket->close();
+}
+/**
+ * @brief ClientSocket::Disconnect
+ */
+void ClientSocket::Disconnect()
+{
+    m_tcpSocket->disconnect();
 }
 
 void ClientSocket::SltConnected()
 {
-    qDebug()<<"connected";
-    emit signalConnected();
+    qDebug()<<"ClientSocket::SltConnected";
+    emit signalConnected(this->ip,this->port);
 }
 
 ////////////
@@ -59,8 +88,8 @@ void ClientSocket::SltConnected()
 ///
 void ClientSocket::SltDisconnected()
 {
-    qDebug()<<"disconnected";
-    emit signalDisConnected();
+    qDebug()<<"ClientSocket::SltDisconnected";
+    emit signalDisConnected(this->ip,this->port);
 }
 
 /**
@@ -98,13 +127,44 @@ void ClientSocket::SltSendMessage(ProtocolSet::MessageType &type, QString &data)
     sendbuf = msg.send_Msg(type,data);
     m_tcpSocket->write(sendbuf);
 }
-
+/**
+ * @brief ClientSocket::setIP
+ * @param ip
+ */
 void ClientSocket::setIP(QString ip)
 {
     this->ip= ip;
 }
-
+/**
+ * @brief ClientSocket::setPort
+ * @param port
+ */
 void ClientSocket::setPort(int port)
 {
     this->port = port;
 }
+/**
+ * @brief ClientSocket::getIP
+ * @return 当前连接的ip
+ */
+QString ClientSocket::getIP()
+{
+    return this->ip;
+}
+/**
+ * @brief ClientSocket::getPort
+ * @return 当前连接的端口号
+ */
+int ClientSocket::getPort()
+{
+    return this->port;
+}
+/**
+ * @brief ClientSocket::getId
+ * @return  获得当前连接的Id
+ */
+int ClientSocket::getId()
+{
+    return this->getId();
+}
+

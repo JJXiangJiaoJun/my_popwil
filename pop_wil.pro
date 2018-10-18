@@ -45,9 +45,6 @@ SOURCES += \
     qchartviewer.cpp \
     randomwalk.cpp \
     new_experiment.cpp \
-    tcpserver.cpp \
-    tcp_app.cpp \
-    protocol.cpp \
     set_measurement_unit.cpp \
     loadingscreen.cpp \
     sinewave.cpp \
@@ -66,9 +63,6 @@ HEADERS += \
     randomwalk.h \
     channel_param.h \
     new_experiment.h \
-    tcpserver.h \
-    tcp_app.h \
-    protocol.h \
     set_measurement_unit.h \
     loadingscreen.h \
     sinewave.h \
@@ -92,6 +86,7 @@ RESOURCES += \
     assets.qrc
 
 include($$PWD/tcp_server/tcp_server.pri)
+include($$PWD/protocol/protocol.pri)
 
 #qcharview动态链接库
 
