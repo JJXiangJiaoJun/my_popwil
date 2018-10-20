@@ -75,19 +75,23 @@ void TcpServer::incomingConnection(qintptr handle)
 }
 
 
+///**
+// * @brief TcpServer::Sltdisconnected
+// * 客户端断开连接调用槽函数
+// */
+//void TcpServer::Sltdisconnected()
+//{
+//     ClientSocket *client = (ClientSocket *)sender();
+//     TcpSocket *tcp_socket = client->m_tcpSocket;
+
+//     emit clientDisconnected(tcp_socket->peerAddress().toString(),tcp_socket->peerPort());
+//     m_clients.removeOne(client);
+//}
 /**
  * @brief TcpServer::Sltdisconnected
- * 客户端断开连接调用槽函数
+ * @param ip
+ * @param port
  */
-void TcpServer::Sltdisconnected()
-{
-     ClientSocket *client = (ClientSocket *)sender();
-     TcpSocket *tcp_socket = client->m_tcpSocket;
-
-     emit clientDisconnected(tcp_socket->peerAddress().toString(),tcp_socket->peerPort());
-     m_clients.removeOne(client);
-}
-
 void TcpServer::Sltdisconnected(QString &ip,int &port)
 {
      emit clientDisconnected(ip,port);
@@ -148,7 +152,7 @@ TcpMsgServer::TcpMsgServer(QObject *parent):
 
     connect(this,SIGNAL(clientConnected(QString,int)),this,SIGNAL(newconnect_client(QString,int)));
     connect(this,SIGNAL(clientDisconnected(QString,int)),this,SIGNAL(disconnect_client(QString,int)));
-    connect(this,SIGNAL(clientDisconnected(QString,int)),this,SLOT(Sltdisconnected()));
+    connect(this,SIGNAL(clientDisconnected(QString,int)),this,SLOT(SltDisConnected()));
     connect(this,SIGNAL(clientConnected(QString,int)),this,SLOT(SltConnected()));
 
 }

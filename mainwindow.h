@@ -16,6 +16,7 @@
 #include "restricted_para.h"
 #include "shake_table_para.h"
 #include "tcpserver.h"
+#include <QDockWidget>
 
 
 namespace Ui {
@@ -34,6 +35,9 @@ public:
 private:
     Ui::MainWindow *ui;
 
+    //主窗口的两个DockWidget控件
+    QDockWidget *msgDock;
+    QDockWidget *statusDock;
     //Qcharviewer绘图控件
     QFrame       *leftFrame;
     QChartViewer *m_ChartViewer;        // QChartViewer control

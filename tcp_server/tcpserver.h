@@ -37,8 +37,8 @@ protected:
 public:
     QList<ClientSocket *> &get_ConnectClients();
 
-private slots:
-     void Sltdisconnected();
+public slots:
+
      void Sltdisconnected(QString &ip,int &port);
 
 signals:

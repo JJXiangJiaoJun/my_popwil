@@ -1,10 +1,18 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include "loadingscreen.h"
+#include<QTextCodec>
+#include<QHostInfo>
+#include "myhelper.h"
+
+
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    //设置样式表
+    myHelper::setStyle("pop_wil");
+
     MainWindow w;
     //loadingscreen *load = new loadingscreen;
    // load->show();

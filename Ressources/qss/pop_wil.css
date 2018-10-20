@@ -1,0 +1,175 @@
+*{
+font-family: 微软雅黑;
+}
+
+/*MainWindow中的样式*/
+/*主窗口*/
+QMainWindow#MainWindow{
+border-image: url(:/Image/Ressources/MainWindow.png);
+}
+/*主窗口*/
+Qwidget#dockWidgetContents_5{
+	border-image: url(:/Image/Ressources/MainWindow.png);
+}
+
+QTabWidget#tabWidget{
+	border-image:url(:/Image/Ressources/MainWindow.png);
+}
+
+QStatusBar#statusBar{
+	background-color:transparent;
+	font-size:15px;
+	font-weight:bold;
+}
+
+QStatusBar#statusBar QLabel{
+	background-color:transparent;
+	font-size:15px;
+	font-weight:bold;
+}
+
+QDockWidget#Status_dock{
+	width:431px;
+	height:464px;
+}
+
+
+
+QDockWidget#Message_dock{
+	width:431px;
+	height:193px;
+	background-color:transparent;
+}
+
+
+/*结束*/
+
+QDockWidget#Status_dock QTextBrowser{
+background-color:rgb(0,0,0);
+font-size: 20px;
+font-weight:bold;
+font-family:"Times New Roman";
+}
+
+QDockWidget#Status_dock QLineEdit{
+font-size: 20px;
+font-weight:bold;
+font-family:"Times New Roman";
+background-color: rgb(161, 161, 161);
+}
+
+
+/*set_measurement样式*/
+QTableWidget#unit_widget{ border-width:1px;
+              border-color:rgb(48, 104, 151);
+              border-style: outset;
+              background-color: rgb(132, 171, 208);
+              background: transparent;
+              background-image: url(:/Image/Ressources/MainWindow.png);
+}
+
+QDialog#set_measurement_unit .QComboBox,QDialog#set_measurement_unit .QLabel{
+font-family:"Times New Roman";
+font-size:25px;
+} 
+
+
+/*Qmenu Style Sheets*/
+ QMenu {
+     background-color: white; /* sets background of the menu 设置整个菜单区域的背景色，我用的是白色：white*/
+     border: 1px solid white;/*整个菜单区域的边框粗细、样式、颜色*/
+ }
+
+ QMenu::item {
+     /* sets background of menu item. set this to something non-transparent
+         if you want menu color and menu item color to be different */
+     background-color: transparent;
+     padding:8px 32px;/*设置菜单项文字上下和左右的内边距，效果就是菜单中的条目左右上下有了间隔*/
+     margin:0px 8px;/*设置菜单项的外边距*/
+     border-bottom:1px solid #DBDBDB;/*为菜单项之间添加横线间隔*/
+ }
+
+ QMenu::item:selected { /* when user selects item using mouse or keyboard */
+     background-color: #2dabf9;/*这一句是设置菜单项鼠标经过选中的样式*/
+ }
+
+ 
+QComboBox {  
+     border: 1px solid #32435E;  
+     border-radius: 3px;  
+     padding: 1px 18px 1px 3px;  
+     min-width: 6em; 
+     color:white;	 
+}  
+QComboBox::hover{  
+  border-color:#5D8B9E;
+}  
+  
+QComboBox:editable {  
+     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,  
+                                 stop: 0 #080B10,  
+                                 stop: 1.0 #212C3F);  
+}  
+QComboBox:!editable, QComboBox::drop-down:editable {  
+      background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,  
+                                 stop: 0 #080B10,  
+                                 stop: 1.0 #212C3F);  
+} 
+/* QComboBox gets the "on" state when the popup is open */  
+QComboBox:!editable:on, QComboBox::drop-down:editable:on {  
+     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,  
+                                 stop: 0 #080B10,  
+                                 stop: 1.0 #212C3F);;  
+}  
+QComboBox:on { /* shift the text when the popup opens */  
+     padding-top: 3px;  
+     padding-left: 4px;  
+}  
+QComboBox::drop-down {  
+     subcontrol-origin: padding;  
+     subcontrol-position: top right;  
+     width: 15px;  
+     border-left-width: 1px;  
+     border-left-color: 32435E;  
+     border-left-style: solid; /* just a single line */  
+     border-top-right-radius: 3px; /* same radius as the QComboBox */  
+     border-bottom-right-radius: 3px;  
+}  
+QComboBox::down-arrow {  
+     image: url(qss/downarrow.png);  
+}  
+QComboBox::down-arrow:on { /* shift the arrow when popup is open */  
+     top: 1px;  
+     left: 1px;  
+}  
+QComboBox QAbstractItemView {  
+	border: 2px solid #32435E;  
+	selection-background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,  
+                                 stop: 0 #506B79,  
+                                 stop: 1.0 #0D95A6);  
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,  
+                                 stop: 0 #1B2534, stop: 0.4 #010101,  
+                                 stop: 0.5 #000101, stop: 1.0 #1F2B3C);  
+}
+
+QTabWidget::pane { /* The tab widget frame */  
+     border: 0px solid #32435E;  
+     position: absolute;  
+     left: -0.1em;  
+}  
+ 
+QLineEdit,QTextEdit {  
+    border: 1px solid #32435E;  
+    border-radius: 3px;  
+    /* padding: 0 8px; */  
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,  
+                                 stop: 0 #080B10,  
+                                 stop: 1.0 #212C3F);  
+    selection-background-color: #0A246A;  
+}
+
+ 
+ 
+
+
+

@@ -311,4 +311,8 @@
         <file>Ressources/beautiful/Task Manager alt 2.png</file>
         <file>Ressources/beautiful/Task Manager.png</file>
     </qresource>
+    <qresource prefix="/"/>
+    <qresource prefix="/qss">
+        <file>Ressources/qss/pop_wil.css</file>
+    </qresource>
 </RCC>

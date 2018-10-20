@@ -40,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
  //*********************************************************************************************
-
+    resize(QSize(1000,800));
     // Pointer push button
     QPushButton *pointerPB = new QPushButton();
     // Zoom In push button
@@ -143,6 +143,15 @@ MainWindow::MainWindow(QWidget *parent) :
      m_tcpmsgserver = new TcpMsgServer(this);
      connect(m_tcpmsgserver,SIGNAL(newconnect_client(QString,int)),this,SLOT(tcpsever_connect(QString)));
      connect(m_tcpmsgserver,SIGNAL(disconnect_client(QString,int)),this,SLOT(tcpsever_disconnect(QString)));
+  //************************************************两个DockWidget的设置***********************************
+
+     msgDock = ui->Message_dock;
+     statusDock = ui->Status_dock;
+     //只能停留在右方
+     msgDock->setAllowedAreas(Qt::RightDockWidgetArea|Qt::LeftDockWidgetArea);
+     statusDock->setAllowedAreas(Qt::RightDockWidgetArea|Qt::LeftDockWidgetArea);
+
+
 
 }
 

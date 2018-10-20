@@ -24,13 +24,6 @@ set_measurement_unit::set_measurement_unit(QWidget *parent) :
                   } ");
 
 
-//    this->setStyleSheet("\
-//    #set_measurement_unit{\
-//    font-family:\"Times New Roman\" \
-//    font-size:50px\
-//    background: transparent;\
-//    }​");
-
     change_unit=ui->unit_widget;
     change_unit->setFont(QFont("Times New Roman",30));
 
