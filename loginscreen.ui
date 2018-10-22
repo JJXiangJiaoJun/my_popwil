@@ -243,6 +243,9 @@
       <iconset resource="assets.qrc">
        <normaloff>:/tool_bar_icon/Ressources/pictos/bookmarks.png</normaloff>:/tool_bar_icon/Ressources/pictos/bookmarks.png</iconset>
      </property>
+     <property name="default">
+      <bool>false</bool>
+     </property>
     </widget>
    </item>
    <item row="4" column="7" colspan="2">

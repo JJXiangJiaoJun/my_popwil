@@ -31,8 +31,13 @@ QStatusBar#statusBar QLabel{
 QDockWidget#Status_dock{
 	width:431px;
 	height:464px;
+	background-color:transparent;
 }
 
+
+QDockWidget#Status_dock QLabel{
+	text-shadow: 5px 5px 5px #FF0000;
+}
 
 
 QDockWidget#Message_dock{
@@ -42,7 +47,21 @@ QDockWidget#Message_dock{
 }
 
 
+
 /*结束*/
+/*登录界面*/
+QWidget#loginscreen QPushButton
+{
+	border:2px groove gray;
+	border-radius:10px;
+	padding:2px 4px;
+}
+
+QWidget#loginscreen QPushButton:hover
+{
+	 border-color:#5D8B9E;
+}
+/*登录界面*/
 
 QDockWidget#Status_dock QTextBrowser{
 background-color:rgb(0,0,0);
@@ -160,13 +179,19 @@ QTabWidget::pane { /* The tab widget frame */
  
 QLineEdit,QTextEdit {  
     border: 1px solid #32435E;  
-    border-radius: 3px;  
-    /* padding: 0 8px; */  
+    border-radius: 5px;  
+    padding: 0 8px;  
     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,  
                                  stop: 0 #080B10,  
                                  stop: 1.0 #212C3F);  
-    selection-background-color: #0A246A;  
+    selection-background-color: #0A246A;
+	box-shadow: 10px 10px 5px #888888;
 }
+
+
+
+
+
 
  
  

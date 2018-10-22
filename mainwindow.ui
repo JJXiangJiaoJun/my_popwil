@@ -259,8 +259,6 @@ p, li { white-space: pre-wrap; }
       <attribute name="title">
        <string>历史记录</string>
       </attribute>
-      <zorder>layoutWidget</zorder>
-      <zorder>layoutWidget</zorder>
      </widget>
     </widget>
     <widget class="QWidget" name="layoutWidget">
@@ -408,8 +406,7 @@ p, li { white-space: pre-wrap; }
      </size>
     </property>
     <property name="styleSheet">
-     <string notr="true">
-</string>
+     <string notr="true"/>
     </property>
     <layout class="QGridLayout" name="gridLayout_2">
      <property name="sizeConstraint">
