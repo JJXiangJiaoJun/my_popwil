@@ -17,7 +17,8 @@
 #include "shake_table_para.h"
 #include "tcpserver.h"
 #include <QDockWidget>
-
+#include "mytitlebar.h"
+#include <QGuiApplication>
 
 namespace Ui {
 class MainWindow;
@@ -102,6 +103,8 @@ private:
     //*********************TCP server********************
 
     TcpMsgServer *m_tcpmsgserver;
+    //*********************自定义标题栏*******************
+    MyTitleBar   *m_titleBar;
 
 private slots:
     void on_Start_btn_clicked();
@@ -129,6 +132,16 @@ private slots:
     void on_Setting_confine_para_triggered();
 
     void on_Setting_target_triggered();
+
+
+    //标题栏按钮
+    void onButtonMinClicked();
+    void onButtonRestoreClicked();
+    void onButtonMaxClicked();
+    void onButtonCloseClicked();
+
+private:
+    void initTitleBar();
 };
 
 #endif // MAINWINDOW_H

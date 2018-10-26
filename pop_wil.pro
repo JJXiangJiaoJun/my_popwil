@@ -88,6 +88,7 @@ RESOURCES += \
 include($$PWD/tcp_server/tcp_server.pri)
 include($$PWD/protocol/protocol.pri)
 include($$PWD/init_helper/init_helper.pri)
+include($$PWD/ui_style/ui_style.pri)
 #qcharview动态链接库
 
 LIBS += -lwinmm  #PerformanceTimer required

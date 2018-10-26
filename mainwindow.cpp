@@ -25,6 +25,7 @@
 #include <QFileDialog>
 #include "channel_param.h"
 #include "set_measurement_unit.h"
+#include <QScreen>
 
 QString send_data = "This is Qt Tcp Server\r\n";
 
@@ -33,12 +34,20 @@ using namespace std;
 #define PI   3.141592657
 #define PERIOD 1000
 
-
+/**
+ * @brief MainWindow::MainWindow
+ * @param parent
+ */
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    //隐藏标题栏
+    this->setWindowFlags(Qt::FramelessWindowHint);
+    //初始化自定义标题栏
+    initTitleBar();
+    ui->Message_dock->setMinimumHeight(221);
  //*********************************************************************************************
     resize(QSize(1000,800));
     // Pointer push button
@@ -697,6 +706,61 @@ void MainWindow::onSave(bool)
 }
 
 
+/**
+ * @brief MainWindow::initTitleBar
+ */
+void MainWindow::initTitleBar()
+{
+    m_titleBar = new MyTitleBar(this);
+    int height =m_titleBar->height();
+    m_titleBar->move(0,0);
+
+    m_titleBar->setTitleContent(QString("popwil振动平台控制系统"));
+
+    m_titleBar->setButtonType(MIN_MAX_BUTTON);
+    m_titleBar->setTitleWidth(this->width());
+    m_titleBar->setTitleIcon(":/my_icon/Ressources/my_ico/popwil.png");
+    m_titleBar->setButtonMinBackground(":/my_icon/Ressources/48/117.png");
+    m_titleBar->setButtonMaxBackground(":/my_icon/Ressources/48/112.png");
+    m_titleBar->setButtonRestoreBackground(":/my_icon/Ressources/48/48.png");
+    m_titleBar->setButtonCloseBackground(":/my_icon/Ressources/48/118.png");
+
+    connect(m_titleBar, SIGNAL(signalButtonMinClicked()), this, SLOT(onButtonMinClicked()));
+    connect(m_titleBar, SIGNAL(signalButtonRestoreClicked()), this, SLOT(onButtonRestoreClicked()));
+    connect(m_titleBar, SIGNAL(signalButtonMaxClicked()), this, SLOT(onButtonMaxClicked()));
+    connect(m_titleBar, SIGNAL(signalButtonCloseClicked()), this, SLOT(onButtonCloseClicked()));
+
+}
+///*****************************************************与标题栏相关的信号槽*************************************
+void MainWindow::onButtonMinClicked()
+{
+    showMinimized();
+}
+
+void MainWindow::onButtonRestoreClicked()
+{
+    QPoint windowPos;
+    QSize windowSize;
+    m_titleBar->getRestoreInfo(windowPos,windowSize);
+    this->setGeometry(QRect(windowPos,windowSize));
+}
+
+void MainWindow::onButtonMaxClicked()
+{
+    m_titleBar->saveRestoreInfo(this->pos(),QSize(this->width(),this->height()));
+    QScreen *screen=QGuiApplication::primaryScreen ();
+    //QRect desktopRect = QGuiApplication::primaryScreen()->availableGeometry();
+    QRect desktopRect = screen->availableGeometry();
+    QRect FactRect = QRect(desktopRect.x() - 3, desktopRect.y() - 3, desktopRect.width() + 6, desktopRect.height() + 6);
+    setGeometry(FactRect);
+    delete screen;
+}
+
+void MainWindow::onButtonCloseClicked()
+{
+    close();
+}
+///*****************************************************与标题栏相关的信号槽*************************************
 void MainWindow::on_Start_btn_clicked()
 {
 //    mytcpserver->sendData("1",ProtocolSet::DATA);
