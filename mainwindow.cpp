@@ -34,6 +34,25 @@ using namespace std;
 #define PI   3.141592657
 #define PERIOD 1000
 
+/*******************************************
+/**
+ * @brief MyMainWindow::MyMainWindow
+ * @param parent
+ */
+MyMainWindow::MyMainWindow(QWidget *parent):
+    MyBaseWindow(parent)
+{
+    //设置窗口大小
+    this->resize(QSize(1100,900));
+    //可以重新设置标题栏的图标和内容
+
+    //新建下方的主窗口
+    m_MainWindow = new MainWindow(this);
+    //添加到布局中
+    addWindows(m_MainWindow);
+    m_titleBar->setTitleWidth(this->width());
+}
+
 /**
  * @brief MainWindow::MainWindow
  * @param parent
@@ -46,8 +65,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //隐藏标题栏
     this->setWindowFlags(Qt::FramelessWindowHint);
     //初始化自定义标题栏
-    initTitleBar();
-    ui->Message_dock->setMinimumHeight(221);
+
+    ui->Message_dock->setMinimumHeight(250);
  //*********************************************************************************************
     resize(QSize(1000,800));
     // Pointer push button
@@ -83,6 +102,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QWidget *dynamic_polt_area = ui->dynamic_plot_area;
     QGridLayout *grid_layout = new QGridLayout(ui->dynamic_plot_area);
 
+
+
 /****************************绘制实时曲线Qcharviewer控件************************************/
     // Chart Viewer
     m_ChartViewer = new QChartViewer(dynamic_polt_area);
@@ -98,8 +119,10 @@ MainWindow::MainWindow(QWidget *parent) :
     m_ViewPortControl = new QViewPortControl(dynamic_polt_area);
     //m_ViewPortControl->setGeometry(10, 480, 640, 80);
     m_ViewPortControl->setViewer(m_ChartViewer);
+
     grid_layout->addWidget(m_ViewPortControl);
 /****************************************************************************************/
+
 
 //*********************************参数初始化************************************************************
 
@@ -706,61 +729,6 @@ void MainWindow::onSave(bool)
 }
 
 
-/**
- * @brief MainWindow::initTitleBar
- */
-void MainWindow::initTitleBar()
-{
-    m_titleBar = new MyTitleBar(this);
-    int height =m_titleBar->height();
-    m_titleBar->move(0,0);
-
-    m_titleBar->setTitleContent(QString("popwil振动平台控制系统"));
-
-    m_titleBar->setButtonType(MIN_MAX_BUTTON);
-    m_titleBar->setTitleWidth(this->width());
-    m_titleBar->setTitleIcon(":/my_icon/Ressources/my_ico/popwil.png");
-    m_titleBar->setButtonMinBackground(":/my_icon/Ressources/48/117.png");
-    m_titleBar->setButtonMaxBackground(":/my_icon/Ressources/48/112.png");
-    m_titleBar->setButtonRestoreBackground(":/my_icon/Ressources/48/48.png");
-    m_titleBar->setButtonCloseBackground(":/my_icon/Ressources/48/118.png");
-
-    connect(m_titleBar, SIGNAL(signalButtonMinClicked()), this, SLOT(onButtonMinClicked()));
-    connect(m_titleBar, SIGNAL(signalButtonRestoreClicked()), this, SLOT(onButtonRestoreClicked()));
-    connect(m_titleBar, SIGNAL(signalButtonMaxClicked()), this, SLOT(onButtonMaxClicked()));
-    connect(m_titleBar, SIGNAL(signalButtonCloseClicked()), this, SLOT(onButtonCloseClicked()));
-
-}
-///*****************************************************与标题栏相关的信号槽*************************************
-void MainWindow::onButtonMinClicked()
-{
-    showMinimized();
-}
-
-void MainWindow::onButtonRestoreClicked()
-{
-    QPoint windowPos;
-    QSize windowSize;
-    m_titleBar->getRestoreInfo(windowPos,windowSize);
-    this->setGeometry(QRect(windowPos,windowSize));
-}
-
-void MainWindow::onButtonMaxClicked()
-{
-    m_titleBar->saveRestoreInfo(this->pos(),QSize(this->width(),this->height()));
-    QScreen *screen=QGuiApplication::primaryScreen ();
-    //QRect desktopRect = QGuiApplication::primaryScreen()->availableGeometry();
-    QRect desktopRect = screen->availableGeometry();
-    QRect FactRect = QRect(desktopRect.x() - 3, desktopRect.y() - 3, desktopRect.width() + 6, desktopRect.height() + 6);
-    setGeometry(FactRect);
-    delete screen;
-}
-
-void MainWindow::onButtonCloseClicked()
-{
-    close();
-}
-///*****************************************************与标题栏相关的信号槽*************************************
 void MainWindow::on_Start_btn_clicked()
 {
 //    mytcpserver->sendData("1",ProtocolSet::DATA);

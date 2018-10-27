@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>control_param</class>
  <widget class="QWidget" name="control_param">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -16,6 +19,10 @@
   <property name="windowIcon">
    <iconset resource="assets.qrc">
     <normaloff>:/my_icon/Ressources/48/29.png</normaloff>:/my_icon/Ressources/48/29.png</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_10">
    <item row="0" column="0" colspan="3">

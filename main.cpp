@@ -13,11 +13,14 @@ int main(int argc, char *argv[])
     //设置样式表
     myHelper::setStyle("pop_wil");
 
-    MainWindow w;
+    //MainWindow w;
+    //BaseWindow test;
+    MyMainWindow w;
     //loadingscreen *load = new loadingscreen;
    // load->show();
     //Sleep(2000);
     w.show();
+   // test.show();
    //oad->finish(&w);
    // delete load;
     return a.exec();

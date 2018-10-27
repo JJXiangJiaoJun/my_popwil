@@ -3,16 +3,18 @@ font-family: 微软雅黑;
 }
 
 /*自定义标题栏的样式*/
-MyTitleBar{
-        padding:1px;
-        margin:1px;
 
+MyTitleBar{
+	border:1px groove gray;
+	padding:1px;
+	background-image:url(:/Images/Ressources/backgroundpreviewcustomwhite.jpg);
 }
+
 
 MyTitleBar QLabel#TitleContent{
 
-  font-size:15px;
-  margin-left:1px;
+     font-size:17px;
+     margin-left:2px;
 }
 
 MyTitleBar QLabel#TitleIcon{
@@ -20,9 +22,10 @@ MyTitleBar QLabel#TitleIcon{
 }
 
 MyTitleBar QPushButton{
-        border:2px groove gray;
+	border:2px groove gray;
 	border-radius:10px;
-	padding:2px 4px;
+	padding:2px 2px;
+	margin:1px;
 }
 
 MyTitleBar QPushButton#ButtonMin{
@@ -326,7 +329,13 @@ margin-top: 6px;
 
 margin-bottom: -6px;
 
-}​
+}
+
+
+QDialog#shake_table_para{
+	border-image: url(:/Images/Ressources/backgroundpreviewcustomwhite.jpg);
+	}
+
 
 
 
@@ -334,6 +343,7 @@ margin-bottom: -6px;
 
  
  
+
 
 
 

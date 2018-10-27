@@ -7,7 +7,7 @@
 
 #define BUTTON_HEIGHT  35
 #define BUTTON_WIDTH   35
-#define TITLE_HEIGHT   35
+#define TITLE_HEIGHT   38
 
 
 /**
@@ -15,7 +15,7 @@
  * @param parent  作为parent的标题栏
  */
 MyTitleBar::MyTitleBar(QWidget *parent) :
-    QWidget(parent),
+    QFrame(parent),
     m_colorR(139),
     m_colorG(187),
     m_colorB(209),
@@ -182,21 +182,34 @@ void MyTitleBar::setButtonType(ButtonType buttonType)
     }
 }
 
+/**
+ * @brief MyTitleBar::setButtonMinBackground
+ * @param filepath
+ */
 void MyTitleBar::setButtonMinBackground(QString filepath)
 {
     m_pButtonMin->setIcon(QIcon(filepath));
 }
-
+/**
+ * @brief MyTitleBar::setButtonCloseBackground
+ * @param filepath
+ */
 void MyTitleBar::setButtonCloseBackground(QString filepath)
 {
     m_pButtonClose->setIcon(QIcon(filepath));
 }
-
+/**
+ * @brief MyTitleBar::setButtonMaxBackground
+ * @param filepath
+ */
 void MyTitleBar::setButtonMaxBackground(QString filepath)
 {
     m_pButtonMax->setIcon(QIcon(filepath));
 }
-
+/**
+ * @brief MyTitleBar::setButtonRestoreBackground
+ * @param filepath
+ */
 void MyTitleBar::setButtonRestoreBackground(QString filepath)
 {
     m_pButtonRestore->setIcon(QIcon(filepath));
@@ -238,30 +251,30 @@ void MyTitleBar::getRestoreInfo(QPoint &point, QSize &size)
 }
 
 /**
- * @brief MyTitleBar::paintEvent  重绘时间绘制标题栏背景色
+ * @brief MyTitleBar::paintEvent  重绘实现绘制标题栏背景色
  * @param event
  */
-void MyTitleBar::paintEvent(QPaintEvent *event)
-{
-    if(!m_isTransparent)
-    {
-        QPainter painter(this);
-        QPainterPath pathBack;
-        pathBack.setFillRule(Qt::WindingFill);
-        pathBack.addRoundedRect(QRect(0,0,this->width(),this->height()),3,3);
-        painter.setRenderHint(QPainter::Antialiasing,true);
-        painter.fillPath(pathBack,QBrush(QColor(m_colorR,m_colorG,m_colorB)));
+//void MyTitleBar::paintEvent(QPaintEvent *event)
+//{
+//    if(!m_isTransparent)
+//    {
+//        QPainter painter(this);
+//        QPainterPath pathBack;
+//        pathBack.setFillRule(Qt::WindingFill);
+//        pathBack.addRoundedRect(QRect(0,0,this->width(),this->height()),3,3);
+//        painter.setRenderHint(QPainter::Antialiasing,true);
+//        painter.fillPath(pathBack,QBrush(QColor(m_colorR,m_colorG,m_colorB)));
 
-    }
+//    }
 
-    // 当窗口最大化或者还原后，窗口长度变了，标题栏的长度应当一起改变;
-    // 这里减去m_windowBorderWidth ，是因为窗口可能设置了不同宽度的边框;
-    // 如果窗口有边框则需要设置m_windowBorderWidth的值，否则m_windowBorderWidth默认为0;
-    if (this->width() != (this->parentWidget()->width() - m_windowBorderWidth))
-    {
-        this->setFixedWidth(this->parentWidget()->width() - m_windowBorderWidth);
-    }
-}
+//    // 当窗口最大化或者还原后，窗口长度变了，标题栏的长度应当一起改变;
+//    // 这里减去m_windowBorderWidth ，是因为窗口可能设置了不同宽度的边框;
+//    // 如果窗口有边框则需要设置m_windowBorderWidth的值，否则m_windowBorderWidth默认为0;
+//    if (this->width() != (this->parentWidget()->width() - m_windowBorderWidth))
+//    {
+//        this->setFixedWidth(this->parentWidget()->width() - m_windowBorderWidth);
+//    }
+//}
 
 /**
  * @brief MyTitleBar::mouseDoubleClickEvent 实现双击标题栏进行最大化最小化操作

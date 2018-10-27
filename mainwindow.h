@@ -19,10 +19,14 @@
 #include <QDockWidget>
 #include "mytitlebar.h"
 #include <QGuiApplication>
+#include <QWidget>
+#include "mybasewindow.h"
 
 namespace Ui {
 class MainWindow;
 }
+
+
 
 class MainWindow : public QMainWindow
 {
@@ -104,7 +108,6 @@ private:
 
     TcpMsgServer *m_tcpmsgserver;
     //*********************自定义标题栏*******************
-    MyTitleBar   *m_titleBar;
 
 private slots:
     void on_Start_btn_clicked();
@@ -134,14 +137,18 @@ private slots:
     void on_Setting_target_triggered();
 
 
-    //标题栏按钮
-    void onButtonMinClicked();
-    void onButtonRestoreClicked();
-    void onButtonMaxClicked();
-    void onButtonCloseClicked();
-
-private:
-    void initTitleBar();
 };
+
+
+
+
+class MyMainWindow:public MyBaseWindow
+{
+    Q_OBJECT
+public:
+    MyMainWindow(QWidget *parent=0);
+    MainWindow *m_MainWindow;
+};
+
 
 #endif // MAINWINDOW_H

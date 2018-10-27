@@ -88,8 +88,13 @@
    </item>
    <item row="0" column="0" colspan="6">
     <widget class="QTabWidget" name="tabWidget">
+     <property name="styleSheet">
+      <string notr="true">QWidget#control_param{
+	border-image: url(:/Image/Ressources/metebng.png);
+}</string>
+     </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="Input_Channel">
       <attribute name="icon">

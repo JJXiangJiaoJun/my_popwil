@@ -27,7 +27,7 @@ enum ButtonType{
  * @brief The MyTitleBar class
  * 自定义标题栏
  */
-class MyTitleBar : public QWidget
+class MyTitleBar : public QFrame
 {
     Q_OBJECT
 public:
@@ -62,7 +62,7 @@ public:
     void setButtonRestoreBackground(QString filepath);
 private:
 
-    void paintEvent(QPaintEvent *event);
+    //void paintEvent(QPaintEvent *event);
     void mouseDoubleClickEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
