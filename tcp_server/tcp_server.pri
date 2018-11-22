@@ -3,11 +3,11 @@ DEPENDPATH      += $$PWD
 
 HEADERS += \
     $$PWD/clientsocket.h \
-    $$PWD/tcpserver.h \
+    $$PWD/TcpServer.h \
     $$PWD/serverthread.h
 
 SOURCES += \
     $$PWD/clientsocket.cpp \
-    $$PWD/tcpserver.cpp \
+    $$PWD/TcpServer.cpp \
     $$PWD/serverthread.cpp
 

@@ -18,11 +18,14 @@ class MyBaseWindow : public QWidget
 public:
      MyBaseWindow(QWidget *parent = nullptr);
      ~MyBaseWindow();
-public:
-     MyTitleBar *m_titleBar;
-     QVBoxLayout *m_verticalLayout;
-public:
-     void addWindows(QWidget *m_window);
+
+     MyTitleBar         *m_titleBar;
+     QVBoxLayout        *m_verticalLayout;
+
+     void   addWindows(QWidget *m_window);
+private:
+      void initTitleBar();
+
 signals:
 
 private slots:
@@ -31,8 +34,6 @@ private slots:
      void onButtonRestoredClicked();
      void onButtonMaxClicked();
      void onButtonCloseClicked();
-private:
-      void initTitleBar();
 
 };
 

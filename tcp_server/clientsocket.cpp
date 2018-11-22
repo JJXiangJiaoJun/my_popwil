@@ -4,6 +4,7 @@
 #include <QDataStream>
 #include <QDebug>
 #include <QByteArray>
+
 TcpSocket::TcpSocket(QObject *parent) :  QTcpSocket(parent)
 {
     connect(this, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(deleteLater()));
@@ -11,6 +12,8 @@ TcpSocket::TcpSocket(QObject *parent) :  QTcpSocket(parent)
 
 
 }
+
+int ClientSocket::sm_totalConnectId = 0;
 
 /**
  * @brief ClientSocket::ClientSocket
@@ -20,7 +23,9 @@ TcpSocket::TcpSocket(QObject *parent) :  QTcpSocket(parent)
  */
 ClientSocket::ClientSocket(QObject *parent, qintptr socketDescriptor)
 {
-    m_nId = -1;
+    //设置当前套接字id
+    m_connectId = ++sm_totalConnectId;
+
     m_tcpSocket  = new TcpSocket(this);
     //设置套接字
 
@@ -58,10 +63,7 @@ ClientSocket::~ClientSocket()
 
 }
 
-int ClientSocket::GetUserId() const
-{
-    return m_nId;
-}
+
 /**
  * @brief ClientSocket::Close
  */
@@ -89,7 +91,7 @@ void ClientSocket::SltConnected()
 void ClientSocket::SltDisconnected()
 {
     qDebug()<<"ClientSocket::SltDisconnected";
-    emit signalDisConnected(this->ip,this->port);
+    emit signalDisConnected(this->ip,this->port,this->m_connectId);
 }
 
 /**
@@ -117,14 +119,18 @@ void ClientSocket::SltReadyRead()
  * @param type
  * @param data
  */
-void ClientSocket::SltSendMessage(ProtocolSet::MessageType &type, QString &data)
+void ClientSocket::SltSendMessage(ProtocolSet::MessageTypeEnum &type, QString &data)
 {
     if(!m_tcpSocket->isOpen())  {return;}
+
 
     //构建数据报
     ProtocolSet msg;
     QByteArray sendbuf;
+
     sendbuf = msg.send_Msg(type,data);
+    qDebug()<<sendbuf;
+
     m_tcpSocket->write(sendbuf);
 }
 /**
@@ -165,6 +171,6 @@ int ClientSocket::getPort()
  */
 int ClientSocket::getId()
 {
-    return this->getId();
+    return this->m_connectId;
 }
 

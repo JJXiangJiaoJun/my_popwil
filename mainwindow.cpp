@@ -1,8 +1,4 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include "qdebug.h"
-#include "loginscreen.h"
-#include "control_param.h"
+#include <QScreen>
 #include <QWidget>
 #include <QLayout>
 #include <QAction>
@@ -12,9 +8,10 @@
 #include <math.h>
 #include <vector>
 #include <sstream>
-#include "QTime"
 #include <QProcess>
 #include <QIcon>
+
+#include "QTime"
 #include "qdatetime.h"
 #include "qmessagebox.h"
 #include "performancetimer.h"
@@ -25,7 +22,12 @@
 #include <QFileDialog>
 #include "channel_param.h"
 #include "set_measurement_unit.h"
-#include <QScreen>
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+#include "qdebug.h"
+#include "loginscreen.h"
+#include "control_param.h"
+
 
 QString send_data = "This is Qt Tcp Server\r\n";
 
@@ -168,13 +170,13 @@ MainWindow::MainWindow(QWidget *parent) :
     statubar->addPermanentWidget(tcpstatus);
     statubar->showMessage("已开放端口8087,等待连接",3000);
     tcpstatus->setText("未连接到控制器");
-    tcpserver_count = 0;
+    TcpServerAbstract_count = 0;
 
 
 
      m_tcpmsgserver = new TcpMsgServer(this);
-     connect(m_tcpmsgserver,SIGNAL(newconnect_client(QString,int)),this,SLOT(tcpsever_connect(QString)));
-     connect(m_tcpmsgserver,SIGNAL(disconnect_client(QString,int)),this,SLOT(tcpsever_disconnect(QString)));
+     connect(m_tcpmsgserver,SIGNAL(clientConnected(QString,int)),this,SLOT(tcpsever_connect(QString)));
+     connect(m_tcpmsgserver,SIGNAL(clientDisconnected(QString,int)),this,SLOT(tcpsever_disconnect(QString)));
   //************************************************两个DockWidget的设置***********************************
 
      msgDock = ui->Message_dock;
@@ -728,17 +730,16 @@ void MainWindow::onSave(bool)
     }
 }
 
-
+/**
+ * @brief MainWindow::on_Start_btn_clicked
+ *开始按钮按下
+ */
 void MainWindow::on_Start_btn_clicked()
 {
-//    mytcpserver->sendData("1",ProtocolSet::DATA);
-//    mytcpserver->sendData("2",ProtocolSet::COMMAND);
-    //mytcpserver->sendData("3",ProtocolSet::ERR);
-//      mytcpserver->sendData("",ProtocolSet::ERR);
-    //mytcpserver->sendData("Please send PID param",ProtocolSet::TEST);
-    QString msg("Please send PID param");
+
+    QString msg("P");
     m_tcpmsgserver->SltMsgToClient(ProtocolSet::TEST,msg);
-    //mytcpserver->sendData("test");
+
 }
 
 //点击菜单栏用户登录按钮
@@ -793,8 +794,8 @@ void MainWindow::tcpsever_connect(const QString &ip)
 {
     QStatusBar *statubar = this->statusBar();
     statubar->showMessage("新的控制器连接 IP:"+ip,3000);
-    tcpserver_count++;
-    QString sta = QString("当前控制器连接个数: %1").arg(tcpserver_count);
+    TcpServerAbstract_count++;
+    QString sta = QString("当前控制器连接个数: %1").arg(TcpServerAbstract_count);
     tcpstatus->setText(sta);
 
     qDebug()<<"回调tcpsever_connect";
@@ -805,13 +806,13 @@ void MainWindow::tcpsever_disconnect(const QString &ip)
 {
     QStatusBar *statubar = this->statusBar();
     //若出现错误
-    tcpserver_count--;
+    TcpServerAbstract_count--;
     statubar->showMessage("控制器断开连接",3000);
     QString sta;
-    if(tcpserver_count==0)
+    if(TcpServerAbstract_count==0)
         sta.sprintf("未连接到控制器");
     else
-        sta.sprintf("当前控制器连接个数: %d",tcpserver_count);
+        sta.sprintf("当前控制器连接个数: %d",TcpServerAbstract_count);
     tcpstatus->setText(sta);
     qDebug()<<"回调tcpsever_disconnect";
 }

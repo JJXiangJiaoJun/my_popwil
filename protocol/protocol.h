@@ -11,18 +11,18 @@ class ProtocolSet
 {
 public:
     ProtocolSet();
-//    static QString ConfigFile;          //配置文件路径
-//    static QString SendFileName;        //发送配置文件名
-//    static QString DeviceFileName;      //模拟设备数据文件名
+    static QString ConfigFile;          //配置文件路径
+    static QString SendFileName;        //发送配置文件名
+    static QString DeviceFileName;      //模拟设备数据文件名
 
-//    //TCP服务器配置参数
-//    static bool HexSendTcpServer;       //16进制发送
-//    static bool HexReceiveTcpServer;    //16进制接收
-//    static bool AsciiTcpServer;         //ASCII模式
-//    static bool DebugTcpServer;         //启用数据调试
-//    static bool AutoSendTcpServer;      //自动发送数据
-//    static int IntervalTcpServer;       //发送数据间隔
-//    static int TcpListenPort;           //监听端口
+    //TCP服务器配置参数
+    static bool HexSendTcpServerAbstract;       //16进制发送
+    static bool HexReceiveTcpServerAbstract;    //16进制接收
+    static bool AsciiTcpServerAbstract;         //ASCII模式
+    static bool DebugTcpServerAbstract;         //启用数据调试
+    static bool AutoSendTcpServerAbstract;      //自动发送数据
+    static int IntervalTcpServerAbstract;       //发送数据间隔
+    static int TcpListenPort;           //监听端口
 
 
 //    //读写配置参数及其他操作
@@ -37,9 +37,9 @@ public:
 //    static QStringList Values;
 //    static void readSendData();
 //    static void readDeviceData();
-public:
+
     //数据帧类型枚举体,作为公共接口暴露
-    enum  MessageType{
+    enum  MessageTypeEnum{
         DATA = 0xFF00 ,
         COMMAND = 0xFF01 ,
         ECHO = 0xFF02 ,
@@ -49,16 +49,15 @@ public:
         PARA = 0xFF06,
     };
 
-    enum  ServerPort{
+    enum  ServerPortEnum{
         COMMUNICATION_PORT = 8087,
         FILE_PORT = 40,
     };
 
-public:
    //构造不同结构的信息帧，返回值为构造的信息帧
-    QByteArray send_Msg(ProtocolSet::MessageType msg_type,QString msg);
+    QByteArray send_Msg(ProtocolSet::MessageTypeEnum msg_type,QString msg);
     QByteArray payload;
-    qint16 head;
+    qint16     head;
 
    //数据帧头部长度 （字节数） 帧头（qint16） 2bytes + 长度（qint32） 4bytes + 功能码（qint16） 2bytes = 8bytes
     qint32 HEAD_LENGTH;

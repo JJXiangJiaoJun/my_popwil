@@ -8,15 +8,13 @@
 serverThread::serverThread(qintptr socketDesc, QObject *parent):
     QThread(parent),socketDescriptor(socketDesc)
 {
-//    m_socket = new ClientSocket(0,socketDescriptor);
-//    //连接信号槽  客户端连接，断开信号槽
-//    connect(m_socket,SIGNAL(signalDisConnected(QString,int)),this,SIGNAL(SignalDisconnectToHost(QString,int)));
-//    connect(m_socket,SIGNAL(signalConnected(QString,int)),this,SIGNAL(SignalNewconnection(QString,int)));
 
-//    connect(m_socket,SIGNAL(signalConnected(QString,int)),this,SLOT(SltNewconnection()));
-//    connect(m_socket,SIGNAL(signalDisConnected(QString,int)),this,SLOT(SltDisconnectToHost()));
+    //新建套接字
+    m_socket = new ClientSocket(this,socketDescriptor);
 
-
+    //将新连接的套接字加入服务器的连接中
+    TcpServerAbstract *connect_server = (TcpServerAbstract*) parent;
+    connect_server->get_ConnectClients().append(m_socket);
 }
 
 /**
@@ -53,29 +51,27 @@ void serverThread::run()
 {
 
     qDebug()<<"run()----------------------------------";
-    m_socket = new ClientSocket(this,socketDescriptor);
+
     qDebug()<<"创建新的套接字连接";
+
     QString cur_ip=m_socket->getIP();
     int cur_port =m_socket->getPort();
-    //connect(m_socket,SIGNAL(signalDisConnected(QString,int)),this,SIGNAL(SignalDisconnectToHost(QString,int)));
-    //connect(m_socket,SIGNAL(signalConnected(QString,int)),this,SIGNAL(SignalNewconnection(QString,int)));
+
 
     connect(m_socket,SIGNAL(signalConnected(QString,int)),this,SLOT(SltNewconnection()));
-     qDebug()<<" connect(m_socket,SIGNAL(signalConnected(QString,int)),this,SLOT(SltNewconnection()))";
 
-    connect(m_socket,SIGNAL(signalDisConnected(QString,int)),this,SLOT(SltDisconnectToHost()));
-    qDebug()<<"connect(m_socket,SIGNAL(signalDisConnected(QString,int)),this,SLOT(SltDisconnectToHost()))";
+
+    connect(m_socket,SIGNAL(signalDisConnected(QString,int,int)),this,SLOT(SltDisconnectToHost()));
+
     //发送消息信号
-    connect(this,SIGNAL(SignalSendMsgToHost(ProtocolSet::MessageType&,QString&)),\
-            m_socket,SLOT(SltSendMessage(ProtocolSet::MessageType&,QString&)));
-   qDebug()<<"connect(this,SIGNAL(SignalSendMsgToHost(ProtocolSet::MessageType&,QString&)),\n\
-             m_socket,SLOT(SltSendMessage(ProtocolSet::MessageType&,QString&)));";
+    connect(this,SIGNAL(SignalSendMsgToHost(ProtocolSet::MessageTypeEnum&,QString&)),\
+            m_socket,SLOT(SltSendMessage(ProtocolSet::MessageTypeEnum&,QString&)));
+
      //断开连接的话退出该线程
    connect(m_socket,SIGNAL(signalConnected(QString,int)),this,SLOT(quit()));
-    qDebug()<<" connect(m_socket,SIGNAL(signalConnected(QString,int)),this,SLOT(quit()));";
+
      //发送新连接信号
-     emit SignalNewconnection(cur_ip,cur_port);
-   qDebug()<<"发送连接信号";
+   emit SignalNewconnection(cur_ip,cur_port);
     //线程开始运行
     exec();
 }
@@ -86,7 +82,7 @@ void serverThread::run()
 void serverThread::SltDisconnectToHost()
 {
    m_socket->Disconnect();
-   emit SignalDisconnectToHost(m_socket->getIP(),m_socket->getPort());
+   emit SignalDisconnectToHost(m_socket->getIP(),m_socket->getPort(),m_socket->getId());
 
 }
 

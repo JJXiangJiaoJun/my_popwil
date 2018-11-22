@@ -7,7 +7,7 @@
 #include <QTcpServer>
 #include <QtGlobal>
 #include <QString>
-//****************************************TCP多线程编程，需要重写 QTcpsocket类 和 QTcpserver类***********************************
+//****************************************TCP多线程编程，需要重写 QTcpsocket类 和 QTcpServerAbstract类***********************************
 //****************************************incomingconnect函数需要重写，在其中获得套接字****************************************
 
 class TcpSocket : public QTcpSocket
@@ -34,39 +34,45 @@ public:
     explicit ClientSocket(QObject *parent=0, qintptr socketDescriptor=0);
     ~ClientSocket();
 
-    int GetUserId() const;
-    void Close();
-    void Disconnect();
-signals:
-    void signalConnected(QString ip,int port);
-    void signalDisConnected(QString ip,int port);
-    void signalMsgToClient(ProtocolSet::MessageType &type,const int &id);
-public slots:
+//***********************静态变量**************************
+    static int sm_totalConnectId;  //总连接数，每次来一个连接就+1
 
-public:
+//***********************公有成员变量**************************
     TcpSocket *m_tcpSocket;
 
-private:
-    int m_nId;
-    QString ip;
-    int port;
-public:
+//***********************公有成员函数**************************
+    void Close();
+    void Disconnect();
+
     void setIP(QString ip);
     void setPort(int port);
     QString getIP();
     int getPort();
     int getId();
+
+//***********************私有成员变量**************************
+private:
+    int m_connectId;             //保存到当前连接套接字的id
+    QString ip;
+    int port;
+
+
+
+// 信号和槽函数*************************************************
+signals:
+    void signalConnected(QString ip,int port);
+    void signalDisConnected(QString ip,int port,int disconnId);
+    void signalMsgToClient(ProtocolSet::MessageTypeEnum &type,const int &id);
+
 public slots:
     //消息回发
-    void SltSendMessage(ProtocolSet::MessageType &type,QString &data);
+    void SltSendMessage(ProtocolSet::MessageTypeEnum &type,QString &data);
 private slots:
     void SltConnected();
     void SltDisconnected();
     void SltReadyRead();
 
-
-private:
-   //客户端上来的消息解析功能
+// 信号和槽函数*************************************************
 
 };
 

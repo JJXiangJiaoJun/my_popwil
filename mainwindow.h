@@ -1,26 +1,29 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QDockWidget>
 #include <QMainWindow>
-#include "qchartviewer.h"
-#include "chartdir.h"
+#include <QGuiApplication>
+#include <QWidget>
 #include <QDialog>
 #include <QDateTime>
 #include <QTimer>
 #include <QLabel>
 #include <QScrollbar>
+
+
 #include "qdoublebufferedqueue.h"
 #include "randomwalk.h"
 #include "performancetimer.h"
 #include "new_experiment.h"
 #include "restricted_para.h"
 #include "shake_table_para.h"
-#include "tcpserver.h"
-#include <QDockWidget>
+#include "TcpServer.h"
 #include "mytitlebar.h"
-#include <QGuiApplication>
-#include <QWidget>
 #include "mybasewindow.h"
+#include "qchartviewer.h"
+#include "chartdir.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -81,7 +84,7 @@ private:
     long msStartCount;
     PerformanceTimer *timer;
 
-    int tcpserver_count;
+    int TcpServerAbstract_count;
     QLabel *tcpstatus;
     //******************************************************************************
 

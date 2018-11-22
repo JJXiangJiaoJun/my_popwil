@@ -11,7 +11,7 @@ void  CALLBACK PeriodCycle(uint timerId,uint,DWORD_PTR user,DWORD_PTR,DWORD_PTR)
 }
 PerformanceTimer::PerformanceTimer(QObject *parent) : QObject(parent)
 {
-    m_id=0;
+    m_connectId=0;
 }
 PerformanceTimer::~PerformanceTimer()
 {
@@ -20,13 +20,13 @@ PerformanceTimer::~PerformanceTimer()
 void PerformanceTimer::start(int timeInterval)
 
 {
-    m_id=timeSetEvent(timeInterval,1,PeriodCycle,(DWORD_PTR)this,TIME_CALLBACK_FUNCTION|TIME_PERIODIC|TIME_KILL_SYNCHRONOUS);
+    m_connectId=timeSetEvent(timeInterval,1,PeriodCycle,(DWORD_PTR)this,TIME_CALLBACK_FUNCTION|TIME_PERIODIC|TIME_KILL_SYNCHRONOUS);
 }
 void PerformanceTimer::stop()
 {
-    if(m_id)
+    if(m_connectId)
     {
-        timeKillEvent(m_id);
-        m_id=0;
+        timeKillEvent(m_connectId);
+        m_connectId=0;
      }
 }

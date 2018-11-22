@@ -16,6 +16,6 @@ public slots:
     friend WINAPI void  CALLBACK PeriodCycle(uint,uint,DWORD_PTR,DWORD_PTR,DWORD_PTR);
 private:
     int m_interval;
-    int m_id;
+    int m_connectId;
 };
 #endif // PERFORMANCETIMER_H

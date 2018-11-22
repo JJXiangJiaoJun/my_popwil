@@ -1,72 +1,49 @@
-#include "tcpserver.h"
 #include <QtWidgets>
 #include <QHostAddress>
 #include <QDebug>
+
+#include "global_setting.h"
+#include "TcpServer.h"
 /**
- * @brief TcpServer::TcpServer
+ * @brief TcpServerAbstract::TcpServerAbstract
  * @param parent
  */
-TcpServer::TcpServer(QObject *parent) : QTcpServer(parent)
+TcpServerAbstract::TcpServerAbstract(QObject *parent) : QTcpServer(parent)
 {
     //连接信号槽
     connect(this,SIGNAL(newConnection()),this,SLOT(SltNewConnection()));
 }
 /**
- * @brief TcpServer::~TcpServer
+ * @brief TcpServerAbstract::~TcpServerAbstract
  * 析构函数关闭服务器
  */
-TcpServer::~TcpServer()
+TcpServerAbstract::~TcpServerAbstract()
 {
     if(this->isListening()) this->close();
 }
 
-///**
-// * @brief TcpServer::incomingConnection
-// * 每当有新连接就会调用这个函数，可以在这个函数中为每个连接开辟一个线程，实现并发服务器的功能
-// * @param handle  获得的套接字
-// */
-//void TcpServer::incomingConnection(qintptr handle)
-//{
-
-//    //绑定套接字，并且绑定信号槽，在类的构造函数中
-//    ClientSocket *client = new ClientSocket(0,handle);
-//    connect(client,SIGNAL(signalDisConnected()),this,SLOT(Sltdisconnected()));
-
-
-//    //返回连接套接字的  Ip地址和端口号
-//    QString ip = client->m_tcpSocket->peerAddress().toString();
-//    int port = client->m_tcpSocket->peerPort();
-
-//    //设置套接字IP和端口号
-//    client->setIP(ip);
-//    client->setPort(port);
-//    //将当前套接字放入连接列表中
-//    //clients.append(client);
-//    m_clients.append(client);
-//    qDebug()<<"客户端连接"<<" "<<"IP:"<<ip<<"  端口号:"<<port;
-//    //发送客户端连接信号
-//    emit clientConnected(ip, port);
-
-
-//}
-
 
 /**
- * @brief TcpServer::incomingConnection
+ * @brief TcpServerAbstract::incomingConnection
  * 每当有新连接就会调用这个函数，可以在这个函数中为每个连接开辟一个线程，实现并发服务器的功能
  * @param handle  获得的套接字
  */
-void TcpServer::incomingConnection(qintptr handle)
+void TcpServerAbstract::incomingConnection(qintptr handle)
 {
 
     //在serverThread构造函数里面，首先设置 连接的socket套接字为 handle
     qDebug()<<"创建新线程";
     serverThread *thread = new serverThread(handle,this);
 
-    //连接信号槽，将socket的信号与tcpserver连接起来
+    //连接信号槽，将socket的信号与TcpServerAbstract连接起来
    connect(thread,SIGNAL(SignalNewconnection(QString,int)),this,SIGNAL(clientConnected(QString,int)));
-   connect(thread,SIGNAL(SignalDisconnectToHost(QString,int)),this,SIGNAL(clientDisconnected(QString,int)));
-   connect(thread,SIGNAL(SignalDisconnectToHost(QString,int)),this,SLOT(Sltdisconnected(QString,int)));
+   connect(thread,SIGNAL(SignalDisconnectToHost(QString,int,int)),this,SIGNAL(clientDisconnected(QString,int)));
+
+    ///连接后调用的槽函数，SltConnected虚函数具体实现在子类中
+   connect(thread,SIGNAL(SignalNewconnection(QString,int)),this,SLOT(SltConnected(QString,int)));
+
+   ///用于删除断开连接的套接字，SltDisconnetctd为虚函数，具体实现在子类中
+   connect(thread,SIGNAL(SignalDisconnectToHost(QString,int,int)),this,SLOT(SltDisConnected(QString,int,int)));
    ///该线程退出后，删除该线程
    connect(thread,SIGNAL(finished()),thread,SLOT(deleteLater()));
    //线程开始
@@ -75,35 +52,14 @@ void TcpServer::incomingConnection(qintptr handle)
 }
 
 
-///**
-// * @brief TcpServer::Sltdisconnected
-// * 客户端断开连接调用槽函数
-// */
-//void TcpServer::Sltdisconnected()
-//{
-//     ClientSocket *client = (ClientSocket *)sender();
-//     TcpSocket *tcp_socket = client->m_tcpSocket;
-
-//     emit clientDisconnected(tcp_socket->peerAddress().toString(),tcp_socket->peerPort());
-//     m_clients.removeOne(client);
-//}
-/**
- * @brief TcpServer::Sltdisconnected
- * @param ip
- * @param port
- */
-void TcpServer::Sltdisconnected(QString &ip,int &port)
-{
-     emit clientDisconnected(ip,port);
-}
 
 /**
- * @brief TcpServer::StartListen
+ * @brief TcpServerAbstract::StartListen
  * @param port  侦听端口
  * @return 开启成功返回true，否则返回false
  * 服务器开始侦听
  */
-bool TcpServer::StartListen(int port)
+bool TcpServerAbstract::StartListen(int port)
 {
     if(this->isListening()) this->close();
     bool bOk = this->listen(QHostAddress::AnyIPv4,port);
@@ -113,24 +69,24 @@ bool TcpServer::StartListen(int port)
     }
     else
     {
-        qDebug()<<endl;
         qDebug()<<"服务器启动成功，监听端口:"<<port;
     }
+
     return bOk;
 }
 
-void TcpServer::CloseListen()
+void TcpServerAbstract::CloseListen()
 {
     if(this->isListening()) this->close();
 }
 
 
 /**
-  * @brief TcpServer::get_ConnectClients
+  * @brief TcpServerAbstract::get_ConnectClients
   * 获得连接的套接字列表
   * @return
   */
- QList<ClientSocket *> &TcpServer::get_ConnectClients()
+ QList<ClientSocket *> &TcpServerAbstract::get_ConnectClients()
  {
 
      return this->m_clients;
@@ -144,16 +100,14 @@ void TcpServer::CloseListen()
  * 构造函数，连接信号槽
  */
 TcpMsgServer::TcpMsgServer(QObject *parent):
-    TcpServer(parent)
+    TcpServerAbstract(parent)
 {
     //启动服务器
     this->StartListen(ProtocolSet::COMMUNICATION_PORT);
 
 
-    connect(this,SIGNAL(clientConnected(QString,int)),this,SIGNAL(newconnect_client(QString,int)));
-    connect(this,SIGNAL(clientDisconnected(QString,int)),this,SIGNAL(disconnect_client(QString,int)));
-    connect(this,SIGNAL(clientDisconnected(QString,int)),this,SLOT(SltDisConnected()));
-    connect(this,SIGNAL(clientConnected(QString,int)),this,SLOT(SltConnected()));
+    ///用于给状态栏发送消息
+
 
 }
 
@@ -190,24 +144,43 @@ void TcpMsgServer::SltConnected()
 }
 
 /**
- * @brief TcpMsgServer::SltDisConnected
- * 客户端断开连接
+ * @brief TcpMsgServer::SltDisConnected 客户端断开连接函数
+ * @param ip                            断开连接的ip
+ * @param port                          断开连接的port
+ * @param disconnId                     断开连接的套接字id
  */
-void TcpMsgServer::SltDisConnected()
+void TcpMsgServer::SltDisConnected(const QString &ip,const int &port,const int disconnId)
 {
-    qDebug()<<"服务器与客户端断开连接";
+
+     //获取当前的连接列表
+     ///注意要返回引用!!!!!!!!!!!!!
+     QList<ClientSocket *> &clients = this->get_ConnectClients();
+
+     //从连接列表中删除断开的连接
+     foreach(ClientSocket *client,clients){
+         if(client->getId()==disconnId)
+         {
+             clients.removeOne(client);
+             break;
+         }
+     }
+
 }
+
 /**
  * @brief TcpMsgServer::SltMsgToClient
  * @param type   消息类型
  * @param msg    消息内容
  * 对所有连接客户端发送消息
  */
-void TcpMsgServer::SltMsgToClient(ProtocolSet::MessageType type, QString &msg)
+void TcpMsgServer::SltMsgToClient(ProtocolSet::MessageTypeEnum type, QString &msg)
 {
 
     QList<ClientSocket *> clients = this->get_ConnectClients();
     foreach (ClientSocket *client, clients) {
+       #ifdef USE_DEBUG
+        qDebug()<<"连接的id为 "<<client->getId();
+       #endif
        client->SltSendMessage(type,msg);
     }
 }

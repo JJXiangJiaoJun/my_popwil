@@ -7,7 +7,7 @@
 #include <QDebug>
 
 #include "clientsocket.h"
-
+#include "TcpServer.h"
 
 class serverThread : public QThread
 {
@@ -15,23 +15,25 @@ class serverThread : public QThread
 public:
     serverThread(qintptr socketDesc,QObject *parent=0);
     ~serverThread();
+
+    qintptr         getSocketDescriptor();
+    ClientSocket    *getConnectSocket();
     void run();
 private:
-    qintptr socketDescriptor;
+    //当前连接的套接字描述符
+    qintptr         socketDescriptor;
+    //当前连接的Socket指针对象
+    ClientSocket    *m_socket;
 
-public:
-    qintptr getSocketDescriptor();
-    ClientSocket *getConnectSocket();
 signals:
-    void SignalDisconnectToHost(QString ip,int port);
+    void SignalDisconnectToHost(QString ip,int port,int disconnId);
     void SignalNewconnection(QString ip,int port);
-    void SignalSendMsgToHost(ProtocolSet::MessageType &type,QString &data);
+    void SignalSendMsgToHost(ProtocolSet::MessageTypeEnum &type,QString &data);
+
 private slots:
     void SltDisconnectToHost();
     void SltNewconnection();
 
-private:
-    ClientSocket *m_socket;
 };
 
 #endif // SERVERTHREAD_H
