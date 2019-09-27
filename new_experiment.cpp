@@ -1,9 +1,13 @@
 #include "new_experiment.h"
 #include "ui_new_experiment.h"
+
 #include <qmath.h>
 #include <cmath>
 #include <QTextStream>
 #include <QDebug>
+
+
+#include "sinewave.h"
 
 const double double_Pi = 3.141592757;
 
@@ -121,5 +125,16 @@ void integrator::Func_Integral_Trapezoid(QString filename, int n, float *data,in
      qDebug()<<"写入完成";
 
      delete inter_data;
+
+}
+
+
+/**
+ * @brief new_experiment::on_SineWaveExperiment_Button_clicked
+ */
+void new_experiment::on_SineWaveExperiment_Button_clicked()
+{
+    sinewave *SineWaveParamDialog = new sinewave(this);
+    SineWaveParamDialog->show();
 
 }

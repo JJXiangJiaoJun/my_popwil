@@ -10,7 +10,9 @@
 #include <QTimer>
 #include <QLabel>
 #include <QScrollbar>
-
+#include <QTime>
+#include <QLineEdit>
+#include <QTextBrowser>
 
 #include "qdoublebufferedqueue.h"
 #include "randomwalk.h"
@@ -23,6 +25,12 @@
 #include "mybasewindow.h"
 #include "qchartviewer.h"
 #include "chartdir.h"
+#include "chartdata.h"
+#include "myhelper.h"
+#include "global_setting.h"
+#include "globaldata.h"
+
+
 
 
 namespace Ui {
@@ -60,10 +68,11 @@ private:
     // A thread-safe queue with minimal read/write contention
     struct DataPacket
     {
-        double elapsedTime;
-        double series0;
-        double series1;
+        ChartDataType elapsedTime;
+        ChartDataType series0;
+        ChartDataType series1;
     };
+
     QDoubleBufferedQueue<DataPacket> buffer;//每组数据有三个
 
     // The number of samples per data series used in this demo
@@ -94,9 +103,9 @@ private:
     bool trackLineIsAtEnd;
 
     //三个绘图数组
-    double m_timeStamps[sampleSize];        // The timestamps for the data series
-    double m_dataSeriesA[sampleSize];       // The values for the data series A
-    double m_dataSeriesB[sampleSize];       // The values for the data series B
+    ChartDataType m_timeStamps[sampleSize];        // The timestamps for the data series
+    ChartDataType m_dataSeriesA[sampleSize];       // The values for the data series A
+    ChartDataType m_dataSeriesB[sampleSize];       // The values for the data series B
 
     int m_currentIndex;                     // Index of the array position to which new values are added.
 
@@ -110,8 +119,27 @@ private:
     //*********************TCP server********************
 
     TcpMsgServer *m_tcpmsgserver;
-    //*********************自定义标题栏*******************
+    //*********************StatusDock*******************
+    QTime *m_totalRunningTime;
+    QTime *m_MeasureTime;
+    QTime *m_ReleaveTime;
 
+    QLineEdit *TotalRunningTime_LineEdit;
+    QLineEdit *MeasureTime_LineEdit;
+    QLineEdit *ReleaveTime_LineEdit;
+    QLineEdit *HintMsg_LineEdit;
+
+    QTextBrowser *PosPeakValue_TextBrowser;
+    QTextBrowser *VelocityValue_TextBrowser;
+    QTextBrowser *SampleRate1_TextBrowser;
+    QTextBrowser *SampleRate2_TextBrowser;
+    QTextBrowser *AccRMS1_TextBrowser;
+    QTextBrowser *AccRMS2_TextBrowser;
+    QTextBrowser *DriverPeakValue_TextBrowser;
+    QTextBrowser *Order_TextBrowser;
+
+
+    QTimer *statusUpdateTimer;
 private slots:
     void on_Start_btn_clicked();
 
@@ -139,6 +167,13 @@ private slots:
 
     void on_Setting_target_triggered();
 
+
+    void on_Stop_btn_clicked();
+
+    void StatusUpdateTimerSlot();
+
+private:
+    void StatusDockInit();
 
 };
 

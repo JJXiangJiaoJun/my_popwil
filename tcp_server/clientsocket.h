@@ -3,10 +3,19 @@
 
 #include <QObject>
 #include <QTcpSocket>
-#include "protocol.h"
 #include <QTcpServer>
 #include <QtGlobal>
 #include <QString>
+#include <QByteArray>
+
+#include "protocol.h"
+#include "process_package.h"
+#include "global_setting.h"
+#include "globaldata.h"
+
+
+//extern QByteArray tcp_buffer;
+
 //****************************************TCP多线程编程，需要重写 QTcpsocket类 和 QTcpServerAbstract类***********************************
 //****************************************incomingconnect函数需要重写，在其中获得套接字****************************************
 
@@ -49,6 +58,9 @@ public:
     QString getIP();
     int getPort();
     int getId();
+
+    void SendMsg(ProtocolSet::MessageTypeEnum &type,void *msg,const qint32 msg_len);
+
 
 //***********************私有成员变量**************************
 private:

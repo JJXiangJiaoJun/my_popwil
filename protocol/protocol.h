@@ -4,13 +4,26 @@
 #include <QtGlobal>
 #include <QObject>
 #include <QWidget>
+
+
+#include "global_setting.h"
 //////////////////////////////////////////////////////////////////////////////
 /// \brief The ProtocolSet class
 ///构造数据报的协议
+///
+
+#define PROTOCOL_HEAD 0xAAAA
+#define PACKAGE_MINIMA_SIZE sizeof(quint16)+sizeof(qint16)
+
+
+
 class ProtocolSet
 {
 public:
     ProtocolSet();
+
+    static FrameLengthType FrameLegthLen;
+    static FrameFuncType FrameFuncLen;
     static QString ConfigFile;          //配置文件路径
     static QString SendFileName;        //发送配置文件名
     static QString DeviceFileName;      //模拟设备数据文件名
@@ -25,36 +38,29 @@ public:
     static int TcpListenPort;           //监听端口
 
 
-//    //读写配置参数及其他操作
-//    static void readConfig();           //读取配置参数
-//    static void writeConfig();          //写入配置参数
-//    static void newConfig();            //以初始值新建配置文件
-//    static bool checkConfig();          //校验配置文件
-
-//    static QStringList Intervals;
-//    static QStringList Datas;
-//    static QStringList Keys;
-//    static QStringList Values;
-//    static void readSendData();
-//    static void readDeviceData();
-
     //数据帧类型枚举体,作为公共接口暴露
-    enum  MessageTypeEnum{
-        DATA = 0xFF00 ,
-        COMMAND = 0xFF01 ,
-        ECHO = 0xFF02 ,
-        ERR = 0xFF03 ,
-        WARNING = 0xFF04,
-        TEST = 0xFF05,
-        PARA = 0xFF06,
+     enum  MessageTypeEnum{
+        F_DATA = 0x10FE,
+        ACC_DATA = 0x10FF,
+        POS_DATA = 0x1100 ,
+        COMMAND = 0x1101 ,
+        ECHO = 0x1102 ,
+        ERR = 0x1103 ,
+        WARNING = 0x1104,
+        TEST = 0x1105,
+        PARAM = 0x1106,
     };
 
     enum  ServerPortEnum{
-        COMMUNICATION_PORT = 8087,
+        COMMUNICATION_PORT = 8092,
         FILE_PORT = 40,
     };
 
+
+
    //构造不同结构的信息帧，返回值为构造的信息帧
+
+    QByteArray SendMsg(const ProtocolSet::MessageTypeEnum msg_type,void * msg,const qint32 msg_len);
     QByteArray send_Msg(ProtocolSet::MessageTypeEnum msg_type,QString msg);
     QByteArray payload;
     qint16     head;
@@ -64,11 +70,21 @@ public:
 
 private:
    //内部的数据帧构造
+    //QByteArray PosDataMsg(QString msg);
     QByteArray data_msg(QString msg);
     QByteArray command_msg(QString msg);
     QByteArray echo_msg(QString msg);
     QByteArray error_msg(QString msg);
     QByteArray test_msg(const QString &msg);
+
+
+    QByteArray DataMsg(void *msg,const qint32 msg_len);
+    QByteArray CommandMsg(void *msg,const qint32 msg_len);
+    QByteArray EchoMsg(void *msg,const qint32 msg_len);
+    QByteArray ErrorMsg(void *msg,const qint32 msg_len);
+    QByteArray TestMsg(void *msg,const qint32 msg_len);
+
+    QByteArray ExperimentParamMsg(void *msg,const qint32 msg_len);
 
 };
 

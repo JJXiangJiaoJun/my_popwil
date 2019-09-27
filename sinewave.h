@@ -3,6 +3,13 @@
 
 #include <QDialog>
 #include <QString>
+#include <QLineEdit>
+
+
+#include "global_setting.h"
+#include "globaldata.h"
+
+
 namespace Ui {
 class sinewave;
 }
@@ -33,6 +40,11 @@ public:
     QString time_text;
     QString phase_text;
     QString samplerate_text;
+
+private:
+    QLineEdit *Amplitude_LineEdit;
+    QLineEdit *Frequency_LineEdit;
+
 };
 
 #endif // SINEWAVE_H

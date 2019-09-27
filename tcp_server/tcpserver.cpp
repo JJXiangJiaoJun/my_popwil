@@ -185,3 +185,13 @@ void TcpMsgServer::SltMsgToClient(ProtocolSet::MessageTypeEnum type, QString &ms
     }
 }
 
+void TcpMsgServer::SendMsgToClient(ProtocolSet::MessageTypeEnum type, void *msg, const qint32 msg_len)
+{
+    QList<ClientSocket *> clients = this->get_ConnectClients();
+    foreach (ClientSocket *client, clients) {
+       #ifdef USE_DEBUG
+        qDebug()<<"连接的id为 "<<client->getId();
+       #endif
+        client->SendMsg(type,msg,msg_len);
+    }
+}

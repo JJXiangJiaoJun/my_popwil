@@ -16,9 +16,17 @@
 #include <QDebug>
 #include <QSettings>
 
+
+#include "chartdata.h"
+#include "global_setting.h"
+
+
+//typedef double ChartDataType;
+
 /**
  * @brief The myHelper class
  * 设置一些启动参数
+ *
  */
 class myHelper : public QObject
 {
@@ -41,5 +49,10 @@ signals:
 
 public slots:
 };
+
+
+
+
+
 
 #endif // MYHELPER_H

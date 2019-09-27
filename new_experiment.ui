@@ -88,7 +88,7 @@
       <attribute name="title">
        <string>典型试验</string>
       </attribute>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
          <x>50</x>
@@ -180,7 +180,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="sin">
+           <widget class="QPushButton" name="SineWaveExperiment_Button">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>

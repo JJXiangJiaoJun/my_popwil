@@ -27,6 +27,8 @@ private slots:
 
     void get_sine_wave_para(QString A,QString f,QString t,QString p,QString samp);
 
+    void on_SineWaveExperiment_Button_clicked();
+
 private:
     Ui::new_experiment *ui;
     void generate_sine_wave_data(QString filename,float m_amplitude,float m_frequency,float m_time,float m_phase);

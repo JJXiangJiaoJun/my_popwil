@@ -10,6 +10,10 @@
 #include <sstream>
 #include <QProcess>
 #include <QIcon>
+#include <QComboBox>
+#include <QFileDialog>
+#include <QLineEdit>
+
 
 #include "QTime"
 #include "qdatetime.h"
@@ -18,8 +22,6 @@
 #include "qdesktopservices.h"
 #include "qmath.h"
 #include "qdebug.h"
-#include <QComboBox>
-#include <QFileDialog>
 #include "channel_param.h"
 #include "set_measurement_unit.h"
 #include "mainwindow.h"
@@ -31,13 +33,15 @@
 
 QString send_data = "This is Qt Tcp Server\r\n";
 
+
+
 using namespace std;
 #define PERFORMANCEINTERVAL 10
 #define PI   3.141592657
 #define PERIOD 1000
-
+#define PAINT_PERIOD 50
+#define STATUSUPDATEINTERVAL 1000
 /*******************************************
-/**
  * @brief MyMainWindow::MyMainWindow
  * @param parent
  */
@@ -67,8 +71,11 @@ MainWindow::MainWindow(QWidget *parent) :
     //隐藏标题栏
     this->setWindowFlags(Qt::FramelessWindowHint);
     //初始化自定义标题栏
-
+    msgDock = ui->Message_dock;
+    statusDock = ui->Status_dock;
     ui->Message_dock->setMinimumHeight(250);
+
+    StatusDockInit();
  //*********************************************************************************************
     resize(QSize(1000,800));
     // Pointer push button
@@ -155,9 +162,9 @@ MainWindow::MainWindow(QWidget *parent) :
     m_ChartUpdateTimer = new QTimer(this);
     connect(m_ChartUpdateTimer, SIGNAL(timeout()), SLOT(onChartUpdateTimer()));
 
-    // The chart update rate is set to 100ms
+    // The chart update rate is set to PAINT_PERIOD ms
     //绘图定时器，100ms绘制一次
-    m_ChartUpdateTimer->start(100);
+    m_ChartUpdateTimer->start(PAINT_PERIOD);
 
     timer = new PerformanceTimer(this);
     connect(timer,SIGNAL(timeout()),this,SLOT(slotFuction()));
@@ -177,10 +184,12 @@ MainWindow::MainWindow(QWidget *parent) :
      m_tcpmsgserver = new TcpMsgServer(this);
      connect(m_tcpmsgserver,SIGNAL(clientConnected(QString,int)),this,SLOT(tcpsever_connect(QString)));
      connect(m_tcpmsgserver,SIGNAL(clientDisconnected(QString,int)),this,SLOT(tcpsever_disconnect(QString)));
+
+     //GlobalData::g_TcpMsgServer = m_tcpmsgserver;
+     g_TcpMsgServer = m_tcpmsgserver;
+
   //************************************************两个DockWidget的设置***********************************
 
-     msgDock = ui->Message_dock;
-     statusDock = ui->Status_dock;
      //只能停留在右方
      msgDock->setAllowedAreas(Qt::RightDockWidgetArea|Qt::LeftDockWidgetArea);
      statusDock->setAllowedAreas(Qt::RightDockWidgetArea|Qt::LeftDockWidgetArea);
@@ -321,79 +330,23 @@ void MainWindow::slotFuction()
 {
 
 
-   // double PosVref=0,duk=0;
-    //*************************************状态栏*********************************************
-//    if (msCount%1000==0)
-//    {
-//        QDateTime time = QDateTime::currentDateTime();
-//        QString str = "系统时间："+time.toString("yyyy-MM-dd hh:mm:ss");
-//        //currentLabel->setText(str);
-//    }
-    //*********************************读取位移数据*******************************************************
-
-//    int x_position = Enc7480_Get_Encoder(0);//
-//    ui->lineEdit_S->setText(QString::number(x_position*(-0.0024)));
-//    //qDebug()<<"水平位置："<<x_position;
-    //*********************************将数据放入缓冲区*****************************************************
     msCount+=PERFORMANCEINTERVAL;
     msStartCount+=PERFORMANCEINTERVAL;
 
-    static double time=0;
-    static double plot1 = 0;
-    static double plot2 = 0;
 
-    double series0;
-    double series1;
-    double elapsedTime;
-
-    plot1 = time/PERIOD*PI;
-    plot2 = time/(PERIOD*2)*PI;
-    series0=sin(plot1);//real s
-    series1=2*cos(plot2);//ideal s
-    time += 10;
-
-    //*****************************AO输出*********************************************************
-//    if (startFlag)
-//    {
-//        qDebug()<<"msStartCout="<<msStartCount;
-//        x1=50;
-//        PosVref=msStartCount*speed;
-//        if(PosVref>x1)
-//            PosVref=x1;
-//        series1=PosVref;
-//        ek=PosVref-series0;
-//        duk=sPIDInfo.SP*(ek-ek_1)+sPIDInfo.SI*ek+sPIDInfo.SD*(ek-2*ek_1+ek_2);
-//        qDebug()<<"PosVref="<<PosVref<<"series0="<<series0<<"duk="<<duk;
-//        if (duk>0.3)
-//            duk=0.3;
-//        if(duk<-0.3)
-//            duk=-0.3;
-
-//        uk=duk+uk_1;
-//        qDebug()<<"uk="<<uk;
-//        if(uk>1)
-//            uk=1;
-//        if (uk<-1)
-//            uk=-1;
-
-//        for (int i = 0; i < 2; i++)
-//            dataScaled[i]=uk;
-//        if (series0>70||series0<-70)
-//            dataScaled[0]=dataScaled[1]=0;
-//        ErrorCode errorCode = Success;
-//        errorCode = instantAoCtrl->Write(configureAO.channelStart,configureAO.channelCount, dataScaled);
-//        CheckError(errorCode);
-
-//        ek_2=ek_1;
-//        ek_1=ek;
-//        uk_1=uk;
-//    }
+    ChartDataType elapsedTime;
 
     elapsedTime=msCount / 1000.0;
     DataPacket packet;
     packet.elapsedTime = elapsedTime;
-    packet.series0 = series0;
-    packet.series1 = series1;
+
+
+    //从控制器传来的数据
+    //如位移、速度等等 类型为float型
+    packet.series0 = g_PosData.TakeFirst();
+//    qDebug()<<"绘图数据   "<<packet.series0;
+    packet.series1 =g_AccData.TakeFirst();
+
     buffer.put(packet);
 
 }
@@ -714,6 +667,135 @@ void MainWindow::OnData(void *self, double elapsedTime, double series0, double s
     ((MainWindow *)self)->buffer.put(packet);*/
 }
 
+
+void MainWindow::StatusDockInit()
+{
+    //初始化LineEdit
+    TotalRunningTime_LineEdit = ui->TotalRuningTime_LineEdit;
+    MeasureTime_LineEdit = ui->MeasureTime_LineEdit;
+    ReleaveTime_LineEdit = ui->ReleaveTime_LineEdit;
+    HintMsg_LineEdit = ui->HintMsg_LineEdit;
+
+    //初始化TextBrowser
+    PosPeakValue_TextBrowser = ui->PosPeakValue_TextBrowser;
+    PosPeakValue_TextBrowser->setPlaceholderText("请开始试验");
+    VelocityValue_TextBrowser = ui->VelocityPeakValue_TextBrowser;
+    SampleRate1_TextBrowser = ui->SampleRate1_TextBrowser;
+    SampleRate2_TextBrowser = ui->SampleRate2_TextBrowser;
+    AccRMS1_TextBrowser = ui->AccRMS1_TextBrowser;
+    AccRMS2_TextBrowser = ui->AccRMS2_TextBrowser;
+    DriverPeakValue_TextBrowser = ui->DriverPeakValue_TextBrowser;
+    Order_TextBrowser = ui->Order_TextBrowser;
+
+    //初始化更新定时器
+    statusUpdateTimer = new QTimer();
+    connect(statusUpdateTimer,SIGNAL(timeout()),this,SLOT(StatusUpdateTimerSlot()));
+
+    //初始化QTime类
+    m_totalRunningTime = new QTime(0,0,0,0);
+    m_MeasureTime = new QTime(0,0,0,0);
+    m_ReleaveTime = new QTime(0,10,0,0);
+
+    //初始化全局参数
+    //GlobalData::g_AccPeakValue = 0.0;
+    g_AccPeakValue = 0.0;
+   // GlobalData::g_PosPeakValue = 0.0;
+    g_PosPeakValue = 0.0;
+
+    TotalRunningTime_LineEdit->setReadOnly(true);
+    QString curRunningTime = m_totalRunningTime->toString("hh:mm:ss");
+    TotalRunningTime_LineEdit->setText(QString(curRunningTime));
+    TotalRunningTime_LineEdit->displayText();
+
+    MeasureTime_LineEdit->setReadOnly(true);
+    QString curMeasureTime = m_MeasureTime->toString("hh:mm:ss");
+    MeasureTime_LineEdit->setText(QString(curMeasureTime));
+    MeasureTime_LineEdit->displayText();
+
+    ReleaveTime_LineEdit = ui->ReleaveTime_LineEdit;
+    QString curReleaveTime = m_ReleaveTime->toString("hh:mm:ss");
+    ReleaveTime_LineEdit->setText(QString(curReleaveTime));
+    ReleaveTime_LineEdit->displayText();
+
+    HintMsg_LineEdit->setPlaceholderText("未连接请开始试验");
+
+//    GlobalData::g_AccPeakValue = 1.0755;
+//    GlobalData::g_PosPeakValue = 2.1024;
+
+    g_AccPeakValue = 0.0755;
+    g_PosPeakValue = 0.1204;
+
+    //初始化TextBrowser
+    //QString curPosPeakValue = QString::number(GlobalData::g_AccPeakValue,'f',4);
+    QString curPosPeakValue = QString::number(g_AccPeakValue,'f',4);
+    PosPeakValue_TextBrowser->setText(curPosPeakValue);
+
+
+    QString curSampleRate1 = QString::number(100);
+    QString curSampleRate2 = QString::number(1000);
+    SampleRate1_TextBrowser->setText(curSampleRate1);
+    SampleRate2_TextBrowser->setText(curSampleRate2);
+
+    QString curVelocityValue = QString::number(0.0293,'f',4);
+    VelocityValue_TextBrowser->setText(curVelocityValue);
+
+    //QString curAccRMS1 = QString::number(GlobalData::g_AccPeakValue,'f',4);
+    QString curAccRMS1 = QString::number(g_AccPeakValue,'f',4);
+    AccRMS1_TextBrowser->setText(curAccRMS1);
+    //QString curAccRMS2 = QString::number(GlobalData::g_AccPeakValue,'f',4);
+    QString curAccRMS2 = QString::number(g_PosPeakValue,'f',4);
+    AccRMS2_TextBrowser->setText(curAccRMS2);
+
+    QString curDriverPeakValue = QString::number(0.004168,'f',4);
+    DriverPeakValue_TextBrowser->setText(curDriverPeakValue);
+
+    QString curOrder = QString("正常量级");
+    Order_TextBrowser->setText(curOrder);
+
+    //GlobalData::g_IsRunning = false;
+    g_IsRunning = false;
+    statusUpdateTimer->start(STATUSUPDATEINTERVAL);
+
+}
+
+
+void MainWindow::StatusUpdateTimerSlot()
+{
+    //update the runing time
+    *m_totalRunningTime = m_totalRunningTime->addMSecs(STATUSUPDATEINTERVAL);
+    QString curRunningTime = m_totalRunningTime->toString("hh:mm:ss");
+    TotalRunningTime_LineEdit->setText(curRunningTime);
+    TotalRunningTime_LineEdit->displayText();
+
+    if(g_IsRunning == true)
+    //if(GlobalData::g_IsRunning == true)
+    {
+        *m_MeasureTime = m_MeasureTime->addMSecs(STATUSUPDATEINTERVAL);
+        *m_ReleaveTime = m_ReleaveTime->addMSecs(-STATUSUPDATEINTERVAL);
+        //QString curPosPeakValue = QString::number(GlobalData::g_AccPeakValue,'f',4);
+        QString curPosPeakValue = QString::number(g_AccPeakValue,'f',4);
+        PosPeakValue_TextBrowser->setText(curPosPeakValue);
+        //QString curAccRMS1 = QString::number(GlobalData::g_AccPeakValue,'f',4);
+        QString curAccRMS1 = QString::number(g_AccPeakValue,'f',4);
+        AccRMS1_TextBrowser->setText(curAccRMS1);
+       // QString curAccRMS2 = QString::number(GlobalData::g_AccPeakValue,'f',4);
+        QString curAccRMS2 = QString::number(g_AccPeakValue+0.0127,'f',4);
+        AccRMS2_TextBrowser->setText(curAccRMS2);
+//        QString curMeasureTime = m_totalRunningTime->toString("hh:mm:ss");
+//        MeasureTime_LineEdit->setText(curMeasureTime);
+//        MeasureTime_LineEdit->displayText();
+    }
+    QString curMeasureTime = m_MeasureTime->toString("hh:mm:ss");
+    MeasureTime_LineEdit->setText(curMeasureTime);
+    MeasureTime_LineEdit->displayText();
+
+    QString curReleaveTime = m_ReleaveTime->toString("hh:mm:ss");
+    ReleaveTime_LineEdit->setText(QString(curReleaveTime));
+    ReleaveTime_LineEdit->displayText();
+
+    //qDebug()<<curTime;
+}
+
 //******************************************保存按钮按下则将当前绘图曲线保存
 void MainWindow::onSave(bool)
 {
@@ -737,9 +819,28 @@ void MainWindow::onSave(bool)
 void MainWindow::on_Start_btn_clicked()
 {
 
-    QString msg("P");
-    m_tcpmsgserver->SltMsgToClient(ProtocolSet::TEST,msg);
+    QString msg("start");
+    m_tcpmsgserver->SltMsgToClient(ProtocolSet::COMMAND,msg);
+    //设置状态为开始运行
+    //GlobalData::g_IsRunning = true;
+    g_IsRunning = true;
+    HintMsg_LineEdit->setPlaceholderText("试验正在进行.....");
 
+
+}
+/**
+ * @brief MainWindow::on_Stop_btn_clicked
+ */
+void MainWindow::on_Stop_btn_clicked()
+{
+    QString msg("stop");
+    m_tcpmsgserver->SltMsgToClient(ProtocolSet::COMMAND,msg);
+
+    //GlobalData::g_IsRunning = false;
+    g_IsRunning = false;
+    //清零计数器
+    m_MeasureTime->setHMS(0,0,0);
+    HintMsg_LineEdit->setPlaceholderText("试验停止");
 }
 
 //点击菜单栏用户登录按钮
@@ -841,3 +942,5 @@ void MainWindow::on_Setting_target_triggered()
     shake_table_para *shake_table_unit = new shake_table_para;
     shake_table_unit->show();
 }
+
+

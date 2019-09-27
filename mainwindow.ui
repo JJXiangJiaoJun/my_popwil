@@ -225,7 +225,7 @@ gridline-color: rgb(0, 0, 0);</string>
       <enum>QTabWidget::Triangular</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <property name="styleSheet">
@@ -257,8 +257,62 @@ p, li { white-space: pre-wrap; }
      </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
-       <string>历史记录</string>
+       <string>记录</string>
       </attribute>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>60</x>
+         <y>20</y>
+         <width>261</width>
+         <height>151</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_5">
+        <item row="0" column="0">
+         <widget class="QLabel" name="ExperimentWave_Label">
+          <property name="text">
+           <string>试验波形</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="lineEdit">
+          <property name="text">
+           <string>       正弦波</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="lineEdit_2">
+          <property name="text">
+           <string>       0.124</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="lineEdit_3">
+          <property name="text">
+           <string>       5Hz</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="Ampli_Label">
+          <property name="text">
+           <string>  幅值</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="Frequency_Label">
+          <property name="text">
+           <string>  频率</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </widget>
     <widget class="QWidget" name="layoutWidget">
@@ -471,7 +525,7 @@ p, li { white-space: pre-wrap; }
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
-            <widget class="QTextBrowser" name="textBrowser">
+            <widget class="QTextBrowser" name="AccRMS1_TextBrowser">
              <property name="styleSheet">
               <string notr="true"/>
              </property>
@@ -485,7 +539,7 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
-            <widget class="QTextBrowser" name="textBrowser_2">
+            <widget class="QTextBrowser" name="AccRMS2_TextBrowser">
              <property name="styleSheet">
               <string notr="true"/>
              </property>
@@ -501,7 +555,7 @@ p, li { white-space: pre-wrap; }
           </layout>
          </item>
          <item>
-          <widget class="QTextBrowser" name="textBrowser_3">
+          <widget class="QTextBrowser" name="DriverPeakValue_TextBrowser">
            <property name="styleSheet">
             <string notr="true"/>
            </property>
@@ -515,7 +569,7 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item>
-          <widget class="QTextBrowser" name="textBrowser_4">
+          <widget class="QTextBrowser" name="Order_TextBrowser">
            <property name="styleSheet">
             <string notr="true"/>
            </property>
@@ -529,7 +583,7 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item>
-          <widget class="QTextBrowser" name="textBrowser_5">
+          <widget class="QTextBrowser" name="VelocityPeakValue_TextBrowser">
            <property name="styleSheet">
             <string notr="true"/>
            </property>
@@ -543,7 +597,7 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item>
-          <widget class="QTextBrowser" name="textBrowser_6">
+          <widget class="QTextBrowser" name="PosPeakValue_TextBrowser">
            <property name="styleSheet">
             <string notr="true"/>
            </property>
@@ -559,7 +613,7 @@ p, li { white-space: pre-wrap; }
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <widget class="QTextBrowser" name="textBrowser_7">
+            <widget class="QTextBrowser" name="SampleRate1_TextBrowser">
              <property name="styleSheet">
               <string notr="true"/>
              </property>
@@ -573,7 +627,7 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
-            <widget class="QTextBrowser" name="textBrowser_8">
+            <widget class="QTextBrowser" name="SampleRate2_TextBrowser">
              <property name="styleSheet">
               <string notr="true"/>
              </property>
@@ -619,14 +673,14 @@ p, li { white-space: pre-wrap; }
          <item>
           <widget class="QLabel" name="label_16">
            <property name="text">
-            <string>m/s</string>
+            <string>cm/s</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QLabel" name="label_17">
            <property name="text">
-            <string>mm</string>
+            <string>cm</string>
            </property>
           </widget>
          </item>
@@ -682,7 +736,7 @@ p, li { white-space: pre-wrap; }
         <enum>QLayout::SetNoConstraint</enum>
        </property>
        <item row="0" column="0">
-        <widget class="QLineEdit" name="lineEdit_2">
+        <widget class="QLineEdit" name="TotalRuningTime_LineEdit">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -698,7 +752,7 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QLineEdit" name="lineEdit_3">
+        <widget class="QLineEdit" name="MeasureTime_LineEdit">
          <property name="styleSheet">
           <string notr="true"/>
          </property>
@@ -708,7 +762,7 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QLineEdit" name="lineEdit_4">
+        <widget class="QLineEdit" name="ReleaveTime_LineEdit">
          <property name="styleSheet">
           <string notr="true"/>
          </property>
@@ -749,6 +803,9 @@ p, li { white-space: pre-wrap; }
        </property>
        <item>
         <widget class="QPushButton" name="Start_btn">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -772,7 +829,7 @@ p, li { white-space: pre-wrap; }
           </size>
          </property>
          <property name="checkable">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
          <property name="autoRepeat">
           <bool>false</bool>
@@ -816,7 +873,7 @@ p, li { white-space: pre-wrap; }
           </size>
          </property>
          <property name="checkable">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
          <property name="autoDefault">
           <bool>true</bool>
@@ -883,7 +940,7 @@ p, li { white-space: pre-wrap; }
           </size>
          </property>
          <property name="checkable">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
          <property name="flat">
           <bool>true</bool>
@@ -990,7 +1047,7 @@ p, li { white-space: pre-wrap; }
       </layout>
      </item>
      <item row="2" column="0" colspan="4">
-      <widget class="QLineEdit" name="lineEdit">
+      <widget class="QLineEdit" name="HintMsg_LineEdit">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>0</horstretch>

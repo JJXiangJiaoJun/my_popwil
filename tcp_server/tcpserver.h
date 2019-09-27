@@ -85,6 +85,10 @@ private:
 
 signals:
 
+public:
+    void SendMsgToClient(ProtocolSet::MessageTypeEnum type,void *msg,const qint32 msg_len);
+
+
 public slots:
     void SltMsgToClient(ProtocolSet::MessageTypeEnum type,QString &msg);
 //重写的虚函数
