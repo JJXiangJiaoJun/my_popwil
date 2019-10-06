@@ -13,6 +13,8 @@
 #include <QComboBox>
 #include <QFileDialog>
 #include <QLineEdit>
+#include <algorithm>
+#include <QFile>
 
 
 #include "QTime"
@@ -41,6 +43,7 @@ using namespace std;
 #define PERIOD 1000
 #define PAINT_PERIOD 50
 #define STATUSUPDATEINTERVAL 1000
+
 /*******************************************
  * @brief MyMainWindow::MyMainWindow
  * @param parent
@@ -75,7 +78,9 @@ MainWindow::MainWindow(QWidget *parent) :
     statusDock = ui->Status_dock;
     ui->Message_dock->setMinimumHeight(250);
 
+    GlobalVariableInit();
     StatusDockInit();
+
  //*********************************************************************************************
     resize(QSize(1000,800));
     // Pointer push button
@@ -344,7 +349,11 @@ void MainWindow::slotFuction()
     //从控制器传来的数据
     //如位移、速度等等 类型为float型
     packet.series0 = g_PosData.TakeFirst();
-//    qDebug()<<"绘图数据   "<<packet.series0;
+
+    //更新最大值
+    g_AccPeakValue = std::max(g_AccPeakValue,packet.series0);
+
+
     packet.series1 =g_AccData.TakeFirst();
 
     buffer.put(packet);
@@ -668,6 +677,21 @@ void MainWindow::OnData(void *self, double elapsedTime, double series0, double s
 }
 
 
+void MainWindow::GlobalVariableInit()
+{
+
+    //位移峰值
+     g_PosPeakValue = 0.0;
+    //加速度峰值
+     g_AccPeakValue = 0.0;
+
+     g_IsRunning  = false;
+
+     g_ExperimentParam.waveform = 0;
+     g_ExperimentParam.amplitude = 0.1;
+     g_ExperimentParam.frequency = 5.0;
+}
+
 void MainWindow::StatusDockInit()
 {
     //初始化LineEdit
@@ -796,6 +820,23 @@ void MainWindow::StatusUpdateTimerSlot()
     //qDebug()<<curTime;
 }
 
+
+/**
+ * @brief MainWindow::ExperimentParamChangeSlot
+ * 改变试验显示信息
+ */
+void MainWindow::ExperimentParamChangeSlot()
+{
+    QLineEdit *AmpliLineEdit = ui->Ampli_LineEdit;
+    QLineEdit *FrequncyLineEdit = ui->Frequency_LineEdit;
+    QString AmpliStr = QString::number(g_ExperimentParam.amplitude,'f',4);
+    QString FrequncyStr = QString::number(g_ExperimentParam.frequency,'f',4);
+
+    AmpliLineEdit->setText(AmpliStr);
+    FrequncyLineEdit->setText(FrequncyStr);
+
+}
+
 //******************************************保存按钮按下则将当前绘图曲线保存
 void MainWindow::onSave(bool)
 {
@@ -886,7 +927,7 @@ void MainWindow::on_action_Exit_triggered()
 void MainWindow::on_action_New_triggered()
 {
     new_experiment *new_exp = new new_experiment;
-
+    connect(new_exp,new_experiment::ExperimentParamChangeSingal,this,ExperimentParamChangeSlot);
     new_exp->show();
 }
 
@@ -944,3 +985,72 @@ void MainWindow::on_Setting_target_triggered()
 }
 
 
+/**
+ * @brief MainWindow::on_action_print_triggered
+ */
+void MainWindow::on_action_print_triggered()
+{
+
+}
+
+/**
+ * @brief MainWindow::on_GenerateReport_Action_triggered
+ * 打印结果
+ */
+void MainWindow::on_GenerateReport_Action_triggered()
+{
+    QFile *report = new QFile("report.txt");
+    if(!report->open(QIODevice::WriteOnly|QIODevice::Text))
+    {
+        qDebug()<<"Open file failed";
+    }
+
+    QTextStream out(report);
+    out.setCodec("UTF-8");
+    QString ExperimentIDStr = "试验编号";
+    QString ExperimentID = QString::number(g_ExperimentID);
+
+    QString WaveFormStr = "波形";
+    QString WaveForm = "正弦波";
+
+    QString ControlStrategyStr = "控制方法";
+    QString ControlStrategy = "PID";
+
+    QString ControlParamStr = "控制参数";
+    QString P = "P\t0.25";
+    QString I = "I\t0.25";
+    QString D = "D\t0.25";
+
+    QString ExperimentParamStr = "实验参数";
+    QString Amplifier = QString("幅值\t%1%2").arg("25.0").arg("mm");
+    QString Frequncy = QString("频率\t%1%2").arg("1.0").arg("Hz");
+    QString Phase = QString("相位\t%1%2").arg("0.0").arg("");
+
+
+    out <<ExperimentIDStr << endl;
+    out <<ExperimentID << endl;
+    out <<endl<<endl;
+
+    out << WaveFormStr <<endl;
+    out << WaveForm <<endl;
+    out <<endl<<endl;
+
+    out << ControlStrategyStr <<endl;
+    out << ControlStrategy << endl;
+    out <<endl<<endl;
+
+    out << ControlParamStr << endl;
+    out << P << endl;
+    out << I << endl;
+    out << D << endl;
+    out <<endl<<endl;
+
+    out << ExperimentParamStr << endl;
+    out << Amplifier << endl;
+    out << Frequncy << endl;
+    out << Phase << endl;
+    out <<endl<<endl;
+
+    report->close();
+
+}

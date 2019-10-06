@@ -1,9 +1,13 @@
 #ifndef GLOBALDATA_H
 #define GLOBALDATA_H
 
+#include <QtGlobal>
+
 #include "chartdata.h"
 #include "global_setting.h"
 //#include "tcpserver.h"
+#include "global_setting.h"
+
 
 class TcpMsgServer;
 
@@ -21,6 +25,10 @@ extern TcpMsgServer *g_TcpMsgServer;
 
 extern QByteArray tcp_buffer;
 
+extern ExperimentParamStruct g_ExperimentParam;
+
+extern qint32  g_ExperimentID;
+void SetGlobalExperimentParam(ExperimentParamStruct *paramStruct);
 
 ///**
 // * @brief The Global class

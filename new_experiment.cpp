@@ -24,9 +24,6 @@ new_experiment::new_experiment(QWidget *parent) :
 //    time = 0.0;
     filename = "sinewave.csv";
 
-    //连接信号槽
-    connect(&sinepara,SIGNAL(sinewave_para(QString,QString,QString,QString,QString)),\
-            this,SLOT(get_sine_wave_para(QString,QString,QString,QString,QString)));
 }
 
 void new_experiment::get_sine_wave_para(QString A, QString f, QString t, QString p, QString samp){
@@ -40,6 +37,7 @@ void new_experiment::get_sine_wave_para(QString A, QString f, QString t, QString
 new_experiment::~new_experiment()
 {
     delete ui;
+    delete sinepara;
 }
 
 void new_experiment::on_exit_clicked()
@@ -96,9 +94,10 @@ void new_experiment::on_sin_clicked()
 {
 
     // qfloat16 deltaTime = 1/sample_rate;
-    //sinepara = new sinewave(this);
-    sinepara.exec();
-    generate_sine_wave_data(filename,amplitude,frequecy,time,phase);
+    sinepara = new sinewave(this);
+    connect(sinepara,sinewave::SignalChangeExperimentParam,this,ExperimentParamChangeSingal);
+    sinepara->exec();
+    //generate_sine_wave_data(filename,amplitude,frequecy,time,phase);
 
 }
 
@@ -135,6 +134,7 @@ void integrator::Func_Integral_Trapezoid(QString filename, int n, float *data,in
 void new_experiment::on_SineWaveExperiment_Button_clicked()
 {
     sinewave *SineWaveParamDialog = new sinewave(this);
+    connect(SineWaveParamDialog,sinewave::SignalChangeExperimentParam,this,ExperimentParamChangeSingal);
     SineWaveParamDialog->show();
 
 }

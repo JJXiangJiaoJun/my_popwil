@@ -119,7 +119,7 @@
     <property name="title">
      <string>报告(R)</string>
     </property>
-    <addaction name="action_reprot_message"/>
+    <addaction name="GenerateReport_Action"/>
     <addaction name="action_reprot_content"/>
     <addaction name="separator"/>
     <addaction name="action_report_word"/>
@@ -259,7 +259,7 @@ p, li { white-space: pre-wrap; }
       <attribute name="title">
        <string>记录</string>
       </attribute>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
          <x>60</x>
@@ -277,21 +277,21 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="lineEdit">
+         <widget class="QLineEdit" name="WaveForm_LineEdit">
           <property name="text">
            <string>       正弦波</string>
           </property>
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="lineEdit_2">
+         <widget class="QLineEdit" name="Ampli_LineEdit">
           <property name="text">
            <string>       0.124</string>
           </property>
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QLineEdit" name="lineEdit_3">
+         <widget class="QLineEdit" name="Frequency_LineEdit">
           <property name="text">
            <string>       5Hz</string>
           </property>
@@ -1131,9 +1131,9 @@ p, li { white-space: pre-wrap; }
     <string>Ctrl+E</string>
    </property>
   </action>
-  <action name="action_reprot_message">
+  <action name="GenerateReport_Action">
    <property name="text">
-    <string>报告信息...</string>
+    <string> 生成报告</string>
    </property>
   </action>
   <action name="action_reprot_content">

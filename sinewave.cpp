@@ -61,8 +61,8 @@ void sinewave::on_generate_wave_clicked()
     double amplitiude;
     double frequency;
     qint16 waveform = 1;
-    qint32 msg_len = sizeof(ExperimentParmStruct);
-    ExperimentParmStruct *param_prt = new ExperimentParmStruct;
+    qint32 msg_len = sizeof(ExperimentParamStruct);
+    ExperimentParamStruct *param_prt = new ExperimentParamStruct;
 
     //把编辑的正弦波参数读入到公有属性
     ampilitude_text=ui->Amplitude_LineEdit->text();
@@ -82,6 +82,8 @@ void sinewave::on_generate_wave_clicked()
 
     qDebug()<<"幅值"<<param_prt->amplitude << "相位" <<param_prt->frequency;
 
+    SetGlobalExperimentParam(param_prt);
+
     //发送数据帧
     //GlobalData::g_TcpMsgServer->SendMsgToClient(ProtocolSet::PARAM,(void *) param_prt,msg_len);
     g_TcpMsgServer->SendMsgToClient(ProtocolSet::PARAM,(void *) param_prt,msg_len);
@@ -96,7 +98,7 @@ void sinewave::on_generate_wave_clicked()
     qDebug()<<ampilitude_text<<frequency_text<<time_text<<phase_text<<samplerate_text;
 
     //发送信号
-    emit sinewave_para(ampilitude_text,frequency_text,time_text,phase_text,samplerate_text);
+    emit SignalChangeExperimentParam();
 
     QMessageBox msg(QMessageBox::NoIcon,"提示","成功生成正弦波形");
     msg.setIconPixmap(QPixmap(":/my_beautiful_icon/Ressources/beautiful/Task Manager alt 2.png"));

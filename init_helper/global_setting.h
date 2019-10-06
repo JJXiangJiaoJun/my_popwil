@@ -13,7 +13,7 @@ typedef double AccPeakValueType;
 
 
 
-struct ExperimentParmStruct
+struct ExperimentParamStruct
 {
     qint16 waveform;
     double amplitude;

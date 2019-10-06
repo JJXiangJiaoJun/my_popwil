@@ -29,12 +29,15 @@ private slots:
 
     void on_SineWaveExperiment_Button_clicked();
 
+signals:
+    void ExperimentParamChangeSingal();
+
 private:
     Ui::new_experiment *ui;
     void generate_sine_wave_data(QString filename,float m_amplitude,float m_frequency,float m_time,float m_phase);
 
 private:
-    sinewave sinepara;
+    sinewave *sinepara;
     QString filename;
     float max_time;
     float sample_rate;

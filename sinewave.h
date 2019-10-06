@@ -31,7 +31,7 @@ private:
     Ui::sinewave *ui;
 signals:
 void sinewave_para(QString A,QString f,QString t,QString p,QString samp);
-
+void SignalChangeExperimentParam();
 
 public:
     //保存正弦波动参数

@@ -129,7 +129,7 @@ QByteArray ProtocolSet::ExperimentParamMsg(void *msg, const qint32 msg_len)
     //解析数据指针
     QByteArray pbuf;
     if(msg_len <=0) pbuf;
-    ExperimentParmStruct *paramMsg_prt = (ExperimentParmStruct *)msg;
+    ExperimentParamStruct *paramMsg_prt = (ExperimentParamStruct *)msg;
 
 
     qDebug() << "构造数据包幅值" << paramMsg_prt->amplitude << "构造数据包相位" << paramMsg_prt->frequency;

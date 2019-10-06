@@ -26,3 +26,16 @@ bool g_IsRunning;
 TcpMsgServer *g_TcpMsgServer;
 
 QByteArray tcp_buffer;
+
+
+ExperimentParamStruct g_ExperimentParam;
+
+qint32  g_ExperimentID;
+
+
+void SetGlobalExperimentParam(ExperimentParamStruct *paramStruct)
+{
+    g_ExperimentParam.amplitude = paramStruct->amplitude;
+    g_ExperimentParam.frequency = paramStruct->frequency;
+    g_ExperimentParam.waveform  = paramStruct->waveform;
+}

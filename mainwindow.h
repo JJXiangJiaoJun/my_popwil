@@ -172,9 +172,15 @@ private slots:
 
     void StatusUpdateTimerSlot();
 
+    void ExperimentParamChangeSlot();
+
+    void on_action_print_triggered();
+
+    void on_GenerateReport_Action_triggered();
+
 private:
     void StatusDockInit();
-
+    void GlobalVariableInit();
 };
 
 
