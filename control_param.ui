@@ -21,8 +21,7 @@
     <normaloff>:/my_icon/Ressources/48/29.png</normaloff>:/my_icon/Ressources/48/29.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">
-</string>
+   <string notr="true"/>
   </property>
   <layout class="QGridLayout" name="gridLayout_10">
    <item row="0" column="0" colspan="3">
@@ -40,19 +39,19 @@
       </size>
      </property>
      <property name="title">
-      <string>PID设置</string>
+      <string>控制参数</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
       <item row="0" column="0">
        <widget class="QGroupBox" name="P">
         <property name="title">
-         <string>位移设置</string>
+         <string>位移参数</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_5">
          <item row="0" column="0">
           <widget class="QLabel" name="pos_P">
            <property name="text">
-            <string>P</string>
+            <string>前馈</string>
            </property>
           </widget>
          </item>
@@ -62,7 +61,7 @@
          <item row="1" column="0">
           <widget class="QLabel" name="pos_I">
            <property name="text">
-            <string>I</string>
+            <string>反馈</string>
            </property>
           </widget>
          </item>
@@ -72,7 +71,7 @@
          <item row="2" column="0">
           <widget class="QLabel" name="pos_D">
            <property name="text">
-            <string>D</string>
+            <string>校正</string>
            </property>
           </widget>
          </item>
@@ -85,13 +84,13 @@
       <item row="0" column="1">
        <widget class="QGroupBox" name="v">
         <property name="title">
-         <string>速度设置</string>
+         <string>速度参数</string>
         </property>
         <layout class="QGridLayout" name="gridLayout">
          <item row="0" column="0">
           <widget class="QLabel" name="velocity_P">
            <property name="text">
-            <string>P</string>
+            <string>前馈</string>
            </property>
           </widget>
          </item>
@@ -101,7 +100,7 @@
          <item row="1" column="0">
           <widget class="QLabel" name="velocity_I">
            <property name="text">
-            <string>I</string>
+            <string>反馈</string>
            </property>
           </widget>
          </item>
@@ -111,7 +110,7 @@
          <item row="2" column="0">
           <widget class="QLabel" name="velocity_D">
            <property name="text">
-            <string>D</string>
+            <string>校正</string>
            </property>
           </widget>
          </item>
@@ -124,13 +123,13 @@
       <item row="0" column="2">
        <widget class="QGroupBox" name="a">
         <property name="title">
-         <string>加速度设置</string>
+         <string>加速度参数</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_6">
          <item row="0" column="0">
           <widget class="QLabel" name="acc_P">
            <property name="text">
-            <string>P</string>
+            <string>前馈</string>
            </property>
           </widget>
          </item>
@@ -140,7 +139,7 @@
          <item row="1" column="0">
           <widget class="QLabel" name="acc_I">
            <property name="text">
-            <string>I</string>
+            <string>反馈</string>
            </property>
           </widget>
          </item>
@@ -150,7 +149,7 @@
          <item row="2" column="0">
           <widget class="QLabel" name="acc_D">
            <property name="text">
-            <string>D</string>
+            <string>校正</string>
            </property>
           </widget>
          </item>
@@ -191,7 +190,7 @@
       <item row="0" column="0">
        <widget class="QRadioButton" name="single_channel">
         <property name="text">
-         <string>单通道</string>
+         <string>PID</string>
         </property>
         <property name="icon">
          <iconset resource="assets.qrc">
@@ -202,7 +201,7 @@
       <item row="0" column="1">
        <widget class="QRadioButton" name="multiple_channel_3">
         <property name="text">
-         <string>最大值</string>
+         <string>三参量</string>
         </property>
         <property name="icon">
          <iconset resource="assets.qrc">
@@ -213,7 +212,7 @@
       <item row="1" column="0">
        <widget class="QRadioButton" name="maximun">
         <property name="text">
-         <string>多通道</string>
+         <string>3PID</string>
         </property>
         <property name="icon">
          <iconset resource="assets.qrc">
@@ -224,7 +223,7 @@
       <item row="1" column="1">
        <widget class="QRadioButton" name="minimun">
         <property name="text">
-         <string>最小值</string>
+         <string>迭代学习控制</string>
         </property>
         <property name="icon">
          <iconset resource="assets.qrc">

@@ -19,6 +19,9 @@
 class ProcessPackage
 {
 public:
+    static void ParseCurPosDataMsg(QDataStream &raw_data,quint16 msg_len);
+    static void ParseCurVelDataMsg(QDataStream &raw_data,quint16 msg_len);
+    static void ParseCurAccDataMsg(QDataStream &raw_data,quint16 msg_len);
     static void ParsePosDataMsg(QDataStream &raw_data,quint16 msg_len);
     static void ParseAccDataMsg(QDataStream &raw_data,quint16 msg_len);
     static void ParseCommandMsg(QDataStream &raw_data,quint16 msg_len);

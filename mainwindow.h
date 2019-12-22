@@ -13,6 +13,7 @@
 #include <QTime>
 #include <QLineEdit>
 #include <QTextBrowser>
+#include <QString>
 
 #include "qdoublebufferedqueue.h"
 #include "randomwalk.h"
@@ -57,6 +58,7 @@ private:
     //Qcharviewer绘图控件
     QFrame       *leftFrame;
     QChartViewer *m_ChartViewer;        // QChartViewer control
+    QChartViewer *m_previewChart;
     QViewPortControl *m_ViewPortControl;    // QViewPortControl
     //******************************************************************************
     // The random data source
@@ -91,6 +93,7 @@ private:
 
     long msCount;
     long msStartCount;
+    double elapsedTime;
     PerformanceTimer *timer;
 
     int TcpServerAbstract_count;
@@ -178,9 +181,18 @@ private slots:
 
     void on_GenerateReport_Action_triggered();
 
+    void on_RealPosRadioButton_clicked();
+
+    void on_RealVelRadioButton_clicked();
+
+    void on_RealAccRadioButton_clicked();
+
+    void on_PreviewWave_PushButton_clicked();
+
 private:
     void StatusDockInit();
     void GlobalVariableInit();
+    void WavePreview(QString title);
 };
 
 

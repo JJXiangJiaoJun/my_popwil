@@ -12,6 +12,7 @@ TARGET = pop_wil
 TEMPLATE = app
 
 INCLUDEPATH += ../pop_wil/charview_include
+INCLUDEPATH += Eigen/
 
 #注： 1、-L 参数指定 .lib/.a 文件的位置
 #        2、-l  参数指定导入库文件名(不要加扩展名)
@@ -49,8 +50,7 @@ SOURCES += \
     loadingscreen.cpp \
     sinewave.cpp \
     restricted_para.cpp \
-    shake_table_para.cpp
-
+    shake_table_para.cpp \
 
 
 HEADERS += \
@@ -67,7 +67,8 @@ HEADERS += \
     loadingscreen.h \
     sinewave.h \
     restricted_para.h \
-    shake_table_para.h
+    shake_table_para.h \
+
 
 
 
@@ -91,6 +92,7 @@ include($$PWD/init_helper/init_helper.pri)
 include($$PWD/ui_style/ui_style.pri)
 include($$PWD/utils/utils.pri)
 include($$PWD/data_process/data_process.pri)
+include($$PWD/filter/filter.pri)
 #qcharview动态链接库
 
 LIBS += -lwinmm  #PerformanceTimer required

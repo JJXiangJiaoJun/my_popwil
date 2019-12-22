@@ -2,4 +2,7 @@ INCLUDEPATH     += $$PWD
 DEPENDPATH      += $$PWD
 
 HEADERS += \
-    $$PWD/global_setting.h
+    $$PWD/SignalGenerator.h
+
+SOURCES += \
+    $$PWD/SignalGenerator.cpp

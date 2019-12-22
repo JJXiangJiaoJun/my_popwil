@@ -1,20 +1,18 @@
-#include "globaldata.h"
-
 #include <QByteArray>
 
+#include "globaldata.h"
 #include "tcpserver.h"
 
-
-//用于给chart_direct绘图的全局变量
-//ChartData GlobalData::g_PosData;
-//ChartData GlobalData::g_AccData;
-//PosPeakValueType GlobalData::g_PosPeakValue;
-//AccPeakValueType GlobalData::g_AccPeakValue;
-//bool GlobalData::g_IsRunning = false;
-//TcpMsgServer * GlobalData::g_TcpMsgServer;
+SystemInfo      g_SystemInfo;
+PIDParamStruct  g_PIDParam;
+RefDataStruct   g_PosRefArray;
+RefDataStruct   g_VelRefArray;
+RefDataStruct   g_AccRefArray;
 
 ChartData g_PosData;
 ChartData g_AccData;
+ChartData g_VelData;
+
 
 //位移峰值
 PosPeakValueType g_PosPeakValue;
@@ -32,6 +30,7 @@ ExperimentParamStruct g_ExperimentParam;
 
 qint32  g_ExperimentID;
 
+qint32 g_DisplayType = ChartDisplayTypeEnum::PlotPos;
 
 void SetGlobalExperimentParam(ExperimentParamStruct *paramStruct)
 {

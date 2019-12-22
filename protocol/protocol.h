@@ -57,7 +57,6 @@ public:
     };
 
 
-
    //构造不同结构的信息帧，返回值为构造的信息帧
 
     QByteArray SendMsg(const ProtocolSet::MessageTypeEnum msg_type,void * msg,const qint32 msg_len);

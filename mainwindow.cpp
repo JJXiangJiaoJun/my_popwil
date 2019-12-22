@@ -15,7 +15,7 @@
 #include <QLineEdit>
 #include <algorithm>
 #include <QFile>
-
+#include <QStringList>
 
 #include "QTime"
 #include "qdatetime.h"
@@ -32,16 +32,15 @@
 #include "loginscreen.h"
 #include "control_param.h"
 
-
 QString send_data = "This is Qt Tcp Server\r\n";
 
 
 
 using namespace std;
-#define PERFORMANCEINTERVAL 10
 #define PI   3.141592657
+#define PERFORMANCEINTERVAL 10
 #define PERIOD 1000
-#define PAINT_PERIOD 50
+#define PAINT_PERIOD 100
 #define STATUSUPDATEINTERVAL 1000
 
 /*******************************************
@@ -81,6 +80,7 @@ MainWindow::MainWindow(QWidget *parent) :
     GlobalVariableInit();
     StatusDockInit();
 
+
  //*********************************************************************************************
     resize(QSize(1000,800));
     // Pointer push button
@@ -113,31 +113,36 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     //动态绘图区域
-    QWidget *dynamic_polt_area = ui->dynamic_plot_area;
-    QGridLayout *grid_layout = new QGridLayout(ui->dynamic_plot_area);
 
+    QVBoxLayout *RealTimeTabVBoxLayout = new QVBoxLayout(ui->RealTimeTab);
 
 
 /****************************绘制实时曲线Qcharviewer控件************************************/
     // Chart Viewer
-    m_ChartViewer = new QChartViewer(dynamic_polt_area);
-    grid_layout->addWidget(m_ChartViewer);
+    //m_ChartViewer = new QChartViewer(dynamic_polt_area);
+    m_ChartViewer = new QChartViewer(ui->RealTimeTab);
+
     //m_ChartViewer->setGeometry(10, 25, 640, 480);
+
     // Enable mouse wheel zooming by setting the zoom ratio to 1.1 per wheel event
 
     // Configure the initial viewport
     connect(m_ChartViewer, SIGNAL(viewPortChanged()), SLOT(onViewPortChanged()));
     connect(m_ChartViewer, SIGNAL(mouseMovePlotArea(QMouseEvent*)),
     SLOT(onMouseMovePlotArea(QMouseEvent*)));
+    m_ViewPortControl = new QViewPortControl(ui->RealTimeTab);
 
-    m_ViewPortControl = new QViewPortControl(dynamic_polt_area);
     //m_ViewPortControl->setGeometry(10, 480, 640, 80);
     m_ViewPortControl->setViewer(m_ChartViewer);
 
-    grid_layout->addWidget(m_ViewPortControl);
+    //add to layout
+    RealTimeTabVBoxLayout->addWidget(m_ChartViewer);
+    RealTimeTabVBoxLayout->addWidget(m_ViewPortControl);
 /****************************************************************************************/
-
-
+    //*****preview Charter
+    QVBoxLayout *PreviewTabVBoxLayout = new QVBoxLayout(ui->PreviewTab);
+    m_previewChart = new QChartViewer(ui->PreviewTab);
+    PreviewTabVBoxLayout->addWidget(m_previewChart);
 //*********************************参数初始化************************************************************
 
     //
@@ -176,6 +181,7 @@ MainWindow::MainWindow(QWidget *parent) :
     timer->start(PERFORMANCEINTERVAL);  //10为毫秒
 
     msCount=0;
+    elapsedTime = 0.0;
  //*************************************************创建TCP服务器通信*******************
     QStatusBar *statubar = this->statusBar();
     tcpstatus = new QLabel(statubar);
@@ -334,29 +340,74 @@ void MainWindow::onChartUpdateTimer()
 void MainWindow::slotFuction()
 {
 
-
-    msCount+=PERFORMANCEINTERVAL;
-    msStartCount+=PERFORMANCEINTERVAL;
-
-
-    ChartDataType elapsedTime;
-
-    elapsedTime=msCount / 1000.0;
+    bool pos_valid_flag,vel_valid_flag,acc_valid_flag;
+    bool valid_flag;
+    ChartDataType cur_pos,ref_pos,cur_vel,ref_vel,cur_acc,ref_acc;
     DataPacket packet;
-    packet.elapsedTime = elapsedTime;
+    ChartDataType cur_data=0.0,cur_ref=0.0;
+    msCount      += PERFORMANCEINTERVAL;
+    msStartCount += PERFORMANCEINTERVAL;
+    //elapsedTime  += (double)PERFORMANCEINTERVAL/1000.0;
 
 
     //从控制器传来的数据
-    //如位移、速度等等 类型为float型
-    packet.series0 = g_PosData.TakeFirst();
+    //如位移、速度等等 类型为double型
+    //series0 为实际波形，series1 为参考波形
+    //packet.series0  = 0.124*sin(2*PI*5.0*k_t*20.0/1000);
+
+    if(!g_IsRunning){
+        pos_valid_flag = g_PosData.GetCurData(cur_pos);
+        ref_pos = 0.0;
+        vel_valid_flag = g_VelData.GetCurData(cur_vel);
+        ref_vel = 0.0;
+        acc_valid_flag = g_AccData.GetCurData(cur_acc);
+        ref_acc = 0.0;
+    }
+    else
+    {
+        pos_valid_flag = g_PosData.GetRunningData(cur_pos,ref_pos);
+        vel_valid_flag = g_VelData.GetRunningData(cur_vel,ref_vel);
+        acc_valid_flag = g_AccData.GetRunningData(cur_acc,ref_acc);
+    }
+
+
+    switch (g_DisplayType) {
+    case ChartDisplayTypeEnum::PlotPos:
+        cur_data = cur_pos;
+        cur_ref = ref_pos;
+        valid_flag = pos_valid_flag;
+        break;
+    case ChartDisplayTypeEnum::PlotVel:
+        cur_data = cur_vel;
+        cur_ref = ref_vel;
+        valid_flag = vel_valid_flag;
+        break;
+    case ChartDisplayTypeEnum::PlotAcc:
+        cur_data = cur_acc;
+        cur_ref = ref_acc;
+        valid_flag = acc_valid_flag;
+        break;
+    default:
+        break;
+    }
 
     //更新最大值
-    g_AccPeakValue = std::max(g_AccPeakValue,packet.series0);
+    if(g_IsRunning)
+    {
+        g_AccPeakValue = std::max(g_AccPeakValue,packet.series0);
+    }
 
+    //不是正在运行
+    //或者读取数据有效则加入绘图
+    //否则不进行绘图
+    if(!g_IsRunning||valid_flag){
+        elapsedTime  += (double)PERFORMANCEINTERVAL/1000.0;
+        packet.series0 = cur_data;
+        packet.series1 =cur_ref;
+        packet.elapsedTime = elapsedTime;
+        buffer.put(packet);
+    }
 
-    packet.series1 =g_AccData.TakeFirst();
-
-    buffer.put(packet);
 
 }
 
@@ -676,6 +727,50 @@ void MainWindow::OnData(void *self, double elapsedTime, double series0, double s
     ((MainWindow *)self)->buffer.put(packet);*/
 }
 
+/**
+ * @brief MainWindow::WavePreview
+ * @param title
+ * 预览绘图
+ */
+void MainWindow::WavePreview(QString title)
+{
+    //最多预览前10000个点
+    int previewCnt = g_PosRefArray.dataCnt<10000?g_PosRefArray.dataCnt:10000;
+    double index[10000];
+
+    for(int i=0;i<previewCnt;i++)
+        index[i] = i*g_PosRefArray.samplePeroid;
+    //m_previewChart->setGeometry(15, 25, 640, 500);
+    XYChart *c = new XYChart(650,480); //画布大小，包括图标以及标题
+    c->setPlotArea(30, 30, c->getWidth() - 41, c->getHeight() - 60, c->linearGradientColor(0, 30, 0,
+       c->getHeight() - 50, 0xf0f6ff, 0xa0c0ff), -1, 0xffffff, 0xffffff);
+    c->addTitle(title.toLatin1(), "simsun.ttc", 18);
+    c->setBackground(0xccccff,0x000000);
+    if(ui->PreviewPosRadioButton->isChecked())
+    {
+        c->addLineLayer(DoubleArray(g_PosRefArray.buffer,previewCnt));//添加y轴数据
+        c->addText(5, 5, "S/mm", "timesbi.ttf", 11, 0xff0000);
+    }
+    if(ui->PreviewVelRadioButton->isChecked())
+    {
+        c->addLineLayer(DoubleArray(g_VelRefArray.buffer,previewCnt));//添加y轴数据
+        c->addText(5, 5, "V/mm/s", "timesbi.ttf", 11, 0xff0000);
+    }
+    if(ui->PreviewAccRadioButton->isChecked())
+    {
+        c->addLineLayer(DoubleArray(g_AccRefArray.buffer,previewCnt));//添加y轴数据
+        c->addText(5, 5, "A/g", "timesbi.ttf", 11, 0xff0000);
+    }
+
+    c->xAxis()->setLabels(DoubleArray(index,previewCnt));//添加x轴数据，有点类似C里的指针操作
+    c->addText(630, 450, "t/s", "timesbi.ttf", 11, 0xff0000);
+    c->xAxis()->setLabelStep(500);//x轴绘图间隔
+
+    m_previewChart->setChart(c);
+    delete c;
+    m_previewChart->show();
+
+}
 
 void MainWindow::GlobalVariableInit()
 {
@@ -691,6 +786,7 @@ void MainWindow::GlobalVariableInit()
      g_ExperimentParam.amplitude = 0.1;
      g_ExperimentParam.frequency = 5.0;
 }
+
 
 void MainWindow::StatusDockInit()
 {
@@ -797,13 +893,14 @@ void MainWindow::StatusUpdateTimerSlot()
         *m_MeasureTime = m_MeasureTime->addMSecs(STATUSUPDATEINTERVAL);
         *m_ReleaveTime = m_ReleaveTime->addMSecs(-STATUSUPDATEINTERVAL);
         //QString curPosPeakValue = QString::number(GlobalData::g_AccPeakValue,'f',4);
-        QString curPosPeakValue = QString::number(g_AccPeakValue,'f',4);
+        g_PosPeakValue = g_AccPeakValue + 0.1274;
+        QString curPosPeakValue = QString::number(g_PosPeakValue,'f',4);
         PosPeakValue_TextBrowser->setText(curPosPeakValue);
         //QString curAccRMS1 = QString::number(GlobalData::g_AccPeakValue,'f',4);
         QString curAccRMS1 = QString::number(g_AccPeakValue,'f',4);
         AccRMS1_TextBrowser->setText(curAccRMS1);
        // QString curAccRMS2 = QString::number(GlobalData::g_AccPeakValue,'f',4);
-        QString curAccRMS2 = QString::number(g_AccPeakValue+0.0127,'f',4);
+        QString curAccRMS2 = QString::number(g_AccPeakValue+0.0037,'f',4);
         AccRMS2_TextBrowser->setText(curAccRMS2);
 //        QString curMeasureTime = m_totalRunningTime->toString("hh:mm:ss");
 //        MeasureTime_LineEdit->setText(curMeasureTime);
@@ -829,8 +926,8 @@ void MainWindow::ExperimentParamChangeSlot()
 {
     QLineEdit *AmpliLineEdit = ui->Ampli_LineEdit;
     QLineEdit *FrequncyLineEdit = ui->Frequency_LineEdit;
-    QString AmpliStr = QString::number(g_ExperimentParam.amplitude,'f',4);
-    QString FrequncyStr = QString::number(g_ExperimentParam.frequency,'f',4);
+    QString AmpliStr = QString::number(g_ExperimentParam.amplitude,'f',1);
+    QString FrequncyStr = QString::number(g_ExperimentParam.frequency,'f',1);
 
     AmpliLineEdit->setText(AmpliStr);
     FrequncyLineEdit->setText(FrequncyStr);
@@ -1031,6 +1128,7 @@ void MainWindow::on_GenerateReport_Action_triggered()
     out <<ExperimentID << endl;
     out <<endl<<endl;
 
+
     out << WaveFormStr <<endl;
     out << WaveForm <<endl;
     out <<endl<<endl;
@@ -1053,4 +1151,41 @@ void MainWindow::on_GenerateReport_Action_triggered()
 
     report->close();
 
+    int ret=QMessageBox::information(this,"提示信息","成功生成报告文件",
+                                     QMessageBox::Ok,QMessageBox::Ok);
+
+}
+
+/**
+ * @brief MainWindow::on_RealPosRadioButton_clicked
+ * 实时绘图位移显示RadioButton按下
+ */
+void MainWindow::on_RealPosRadioButton_clicked()
+{
+    g_DisplayType = ChartDisplayTypeEnum::PlotPos;
+}
+
+
+
+void MainWindow::on_RealVelRadioButton_clicked()
+{
+    g_DisplayType = ChartDisplayTypeEnum::PlotVel;
+}
+
+
+
+void MainWindow::on_RealAccRadioButton_clicked()
+{
+    g_DisplayType = ChartDisplayTypeEnum::PlotAcc;
+}
+
+void MainWindow::on_PreviewWave_PushButton_clicked()
+{
+    QString title;
+    ui->DynamicPlotTabWidget->setCurrentIndex(1);
+
+    QStringList waveModeString;
+    waveModeString<<"Sine Wave"<<"Sine Sweep Wave"<<"Random Wave"<<"Triangle Wave";
+    title = waveModeString[g_ExperimentParam.waveform];
+    WavePreview(title);
 }

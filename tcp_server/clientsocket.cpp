@@ -100,17 +100,25 @@ void ClientSocket::SltReadyRead()
 {
     //从缓冲区获取数据
     QByteArray recv_msg = m_tcpSocket->readAll();
-
+//#define COMM_DEBUG
 #ifdef COMM_DEBUG
     //下面是解析消息的函数
     //定义parse函数
-    if(reply.length()<0)
+    if(recv_msg.length()<0)
     {
         qDebug()<<"读取消息错误";
     }
-    QString data(reply);
+//    qDebug()<<"客户端1 ip 为" << "127.0.0.1";
+//    qDebug()<<"通信端口号" << this->port;
+    QString data(recv_msg);
     qDebug()<<"读取到一次消息";
     qDebug()<<data;
+
+//    qDebug()<<"客户端2 ip 为" << "10.180.123.121";
+//    qDebug()<<"通信端口号" << (this->port+2);
+//    qDebug()<<"读取到一次消息";
+//    qDebug()<<"this is client 2";
+
 #else
     /**
       首先将上次缓存加上这次数据,将包组合起来
@@ -160,11 +168,11 @@ void ClientSocket::SltReadyRead()
         case ProtocolSet::POS_DATA:
             //绘图读取,传输过来的数据中均为double类型
             qDebug()<<"ParsePosDataFrame\n";
-            ProcessPackage::ParsePosDataMsg(package,msg_len-ProtocolSet::FrameFuncLen);
+            ProcessPackage::ParseCurPosDataMsg(package,msg_len-ProtocolSet::FrameFuncLen);
             break;
         case ProtocolSet::ACC_DATA:
             qDebug()<<"ParseAccDataFrame\n";
-            ProcessPackage::ParseAccDataMsg(package,msg_len-ProtocolSet::FrameFuncLen);
+            ProcessPackage::ParseCurAccDataMsg(package,msg_len-ProtocolSet::FrameFuncLen);
             break;
         case ProtocolSet::ERR:
             qDebug()<<"ParseErrFrame\n";
