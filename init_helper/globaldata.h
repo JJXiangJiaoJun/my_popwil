@@ -4,6 +4,7 @@
 #include <QtGlobal>
 
 #include "chartdata.h"
+#include "qdoublebufferedqueue.h"
 #include "global_setting.h"
 
 
@@ -18,6 +19,7 @@ extern  RefDataStruct     g_AccRefArray;
 extern ChartData g_PosData;
 extern ChartData g_AccData;
 extern ChartData g_VelData;
+extern QDoubleBufferedQueue<DataPacket> g_buffer;
 //位移峰值
 extern PosPeakValueType g_PosPeakValue;
 //加速度峰值

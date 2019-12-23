@@ -19,7 +19,7 @@ struct RefDataStruct
     double buffer[MAX_POINT];   //数据保存buffer
     RefDataStruct()
     {
-
+        dataCnt=0;
     }
 
 };
@@ -59,6 +59,14 @@ struct PIDParamStruct{
     }
 };
 
+
+struct DataPacket
+{
+    ChartDataType elapsedTime;
+    ChartDataType series0;
+    ChartDataType series1;
+};
+
 struct TVCParamStruct{
     double fs,fv,fa;//前馈
     double bs,bv,ba;//反馈
@@ -67,7 +75,7 @@ struct TVCParamStruct{
 struct SystemInfo
 {
     double controlInterval;//控制周期 unit:s
-    double samplePeriod;// unit:s
+    double samplePeriod;// unit:ms
     double drawInterval;//绘图周期
     double maxOutU;//最大输出限幅
     double maxAbsoluteForce;//最大推力

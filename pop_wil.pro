@@ -93,6 +93,7 @@ include($$PWD/ui_style/ui_style.pri)
 include($$PWD/utils/utils.pri)
 include($$PWD/data_process/data_process.pri)
 include($$PWD/filter/filter.pri)
+include($$PWD/Draw/Draw.pri)
 #qcharview动态链接库
 
 LIBS += -lwinmm  #PerformanceTimer required

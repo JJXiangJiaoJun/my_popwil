@@ -13,6 +13,7 @@ ChartData g_PosData;
 ChartData g_AccData;
 ChartData g_VelData;
 
+QDoubleBufferedQueue<DataPacket> g_buffer;
 
 //位移峰值
 PosPeakValueType g_PosPeakValue;

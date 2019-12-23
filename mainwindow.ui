@@ -31,7 +31,7 @@
     <item>
      <widget class="QTabWidget" name="DynamicPlotTabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="RealTimeTab">
        <attribute name="title">
@@ -41,16 +41,19 @@
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>10</y>
+          <y>20</y>
           <width>193</width>
           <height>21</height>
          </rect>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <layout class="QHBoxLayout" name="RealTime_HBoxLayout">
          <item>
           <widget class="QRadioButton" name="RealPosRadioButton">
            <property name="text">
             <string>位移</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
            </property>
            <property name="checked">
             <bool>true</bool>
@@ -87,7 +90,7 @@
           <height>21</height>
          </rect>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <layout class="QHBoxLayout" name="Preview_HBoxLayout">
          <item>
           <widget class="QRadioButton" name="PreviewPosRadioButton">
            <property name="text">
