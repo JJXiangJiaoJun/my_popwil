@@ -16,12 +16,6 @@ new_experiment::new_experiment(QWidget *parent) :
     ui(new Ui::new_experiment)
 {
     ui->setupUi(this);
-//    max_time = 1000.0;
-//    sample_rate =10000.0;
-//    amplitude =1;
-//    frequecy = 10.0;
-//    phase = 0.0;
-//    time = 0.0;
     filename = "sinewave.csv";
 
 }
@@ -37,12 +31,12 @@ void new_experiment::get_sine_wave_para(QString A, QString f, QString t, QString
 new_experiment::~new_experiment()
 {
     delete ui;
-    delete sinepara;
+    delete SinewaveDialog;
 }
 
 void new_experiment::on_exit_clicked()
 {
-
+    this->close();
 }
 
 void new_experiment::generate_sine_wave_data(QString filename,float m_amplitude, float m_frequency, float m_time, float m_phase)
@@ -92,12 +86,11 @@ void new_experiment::generate_sine_wave_data(QString filename,float m_amplitude,
 //按下正弦试验按钮生成正弦波形
 void new_experiment::on_sin_clicked()
 {
+    //sinewave SinewaveDialog;
 
-    // qfloat16 deltaTime = 1/sample_rate;
-    sinepara = new sinewave(this);
-    connect(sinepara,sinewave::SignalChangeExperimentParam,this,ExperimentParamChangeSingal);
-    sinepara->exec();
-    //generate_sine_wave_data(filename,amplitude,frequecy,time,phase);
+    SinewaveDialog = new sinewave(this);
+    connect(SinewaveDialog,sinewave::SignalChangeExperimentParam,this,ExperimentParamChangeSingal);
+    SinewaveDialog->exec();
 
 }
 
@@ -135,6 +128,12 @@ void new_experiment::on_SineWaveExperiment_Button_clicked()
 {
     sinewave *SineWaveParamDialog = new sinewave(this);
     connect(SineWaveParamDialog,sinewave::SignalChangeExperimentParam,this,ExperimentParamChangeSingal);
-    SineWaveParamDialog->show();
+    SineWaveParamDialog->exec();
+}
 
+void new_experiment::on_SeismicWave_PushButton_clicked()
+{
+    QString fileName = QFileDialog::getOpenFileName(this,"打开文件","",
+                                                    "文本文件(*.txt);;CSV文件(*.csv)");
+    SignalGenerator::GenerateEarthQuakeWave(fileName);
 }

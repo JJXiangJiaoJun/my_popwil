@@ -18,7 +18,7 @@ public:
     //
     // 构造函数-构造一个给定数组大小的双缓冲数组
     //
-    QDoubleBufferedQueue(int bufferSize = 10000) :
+    QDoubleBufferedQueue(int bufferSize = 100000) :
         bufferLen(0), bufferSize(bufferSize)
 	{ 
 		buffer0 = buffer = new T[bufferSize]; 

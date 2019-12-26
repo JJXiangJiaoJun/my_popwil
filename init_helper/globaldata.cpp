@@ -3,8 +3,10 @@
 #include "globaldata.h"
 #include "tcpserver.h"
 
-SystemInfo      g_SystemInfo;
-PIDParamStruct  g_PIDParam;
+SystemInfoStruct      g_SystemInfo;
+PIDParamStruct  g_StaticPIDParam;
+PIDParamStruct  g_PosPIDParam;
+PIDParamStruct  g_AccPIDParam;
 RefDataStruct   g_PosRefArray;
 RefDataStruct   g_VelRefArray;
 RefDataStruct   g_AccRefArray;
@@ -21,11 +23,20 @@ PosPeakValueType g_PosPeakValue;
 AccPeakValueType g_AccPeakValue;
 
 bool g_IsRunning;
+int g_ConnectedClientCount=0;
+qint32 g_ControlMethod=ControlMethodEnum::PID;
+double g_CurPos = 0.0;
+double g_CurVel = 0.0;
+double g_CurAcc = 0.0;
 
 TcpMsgServer *g_TcpMsgServer;
 
 QByteArray tcp_buffer;
 
+QStringList g_WaveFormStringList({QString("正弦波"),QString("随机波"),
+                                  QString("正弦扫频"),QString("三角波"),QString("地震波")});
+QStringList g_ControlMethodStringList({QString("PID"),QString("三参量"),
+                                       QString("3PID"),QString("迭代学习控制")});
 
 ExperimentParamStruct g_ExperimentParam;
 

@@ -6,7 +6,12 @@
 #include <QDataStream>
 #include <QByteArray>
 #include <QString>
+#include <QFileDialog>
+
+
 #include "sinewave.h"
+#include "globaldata.h"
+#include "SignalGenerator.h"
 
 namespace Ui {
 class new_experiment;
@@ -22,12 +27,11 @@ public:
 
 private slots:
     void on_exit_clicked();
-
     void on_sin_clicked();
-
     void get_sine_wave_para(QString A,QString f,QString t,QString p,QString samp);
-
     void on_SineWaveExperiment_Button_clicked();
+
+    void on_SeismicWave_PushButton_clicked();
 
 signals:
     void ExperimentParamChangeSingal();
@@ -37,7 +41,7 @@ private:
     void generate_sine_wave_data(QString filename,float m_amplitude,float m_frequency,float m_time,float m_phase);
 
 private:
-    sinewave *sinepara;
+    sinewave *SinewaveDialog;
     QString filename;
     float max_time;
     float sample_rate;

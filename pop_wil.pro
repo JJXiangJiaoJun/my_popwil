@@ -68,6 +68,7 @@ HEADERS += \
     sinewave.h \
     restricted_para.h \
     shake_table_para.h \
+    popwil_header.h
 
 
 

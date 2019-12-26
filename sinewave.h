@@ -37,13 +37,16 @@ public:
     //保存正弦波动参数
     QString ampilitude_text;
     QString frequency_text;
-    QString time_text;
-    QString phase_text;
-    QString samplerate_text;
+    QString repeatCount_text;
+    QString mid_text;
+    QString samplePeriod_text;
 
 private:
     QLineEdit *Amplitude_LineEdit;
     QLineEdit *Frequency_LineEdit;
+    QLineEdit *Mid_LineEdit;
+    QLineEdit *SamplePeriod_LineEdit;
+    QLineEdit *RepeatCount_LineEdit;
 
 };
 

@@ -37,11 +37,9 @@ QString send_data = "This is Qt Tcp Server\r\n";
 
 
 using namespace std;
-#define PI   3.141592657
+
 #define PERFORMANCEINTERVAL 10
-#define PERIOD 1000
-#define PAINT_PERIOD 100
-#define STATUSUPDATEINTERVAL 1000
+#define STATUSUPDATEINTERVAL 500
 
 /*******************************************
  * @brief MyMainWindow::MyMainWindow
@@ -79,7 +77,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     GlobalVariableInit();
     StatusDockInit();
-
+    MessageDockInit();
 
  //*********************************************************************************************
     resize(QSize(1000,800));
@@ -121,7 +119,7 @@ MainWindow::MainWindow(QWidget *parent) :
     statubar->addPermanentWidget(tcpstatus);
     statubar->showMessage("已开放端口8087,等待连接",3000);
     tcpstatus->setText("未连接到控制器");
-    TcpServerAbstract_count = 0;
+    g_ConnectedClientCount = 0;
 
 
 
@@ -184,7 +182,9 @@ void MainWindow::slotFuction()
         vel_valid_flag = g_VelData.GetRunningData(cur_vel,ref_vel);
         acc_valid_flag = g_AccData.GetRunningData(cur_acc,ref_acc);
     }
-
+    g_CurPos = cur_pos;
+    g_CurVel = cur_vel;
+    g_CurAcc = cur_acc;
 
     switch (g_DisplayType) {
     case ChartDisplayTypeEnum::PlotPos:
@@ -282,11 +282,23 @@ void MainWindow::GlobalVariableInit()
 
      g_IsRunning  = false;
 
-     g_ExperimentParam.waveform = 0;
+     g_ExperimentParam.waveform = WaveFormEnum::SineWave;
      g_ExperimentParam.amplitude = 0.1;
      g_ExperimentParam.frequency = 5.0;
 }
 
+
+void MainWindow::MessageDockInit()
+{
+    WaveForm_LineEdit = ui->WaveForm_LineEdit;
+    Ampli_LineEdit = ui->Ampli_LineEdit;
+    Frequency_LineEdit = ui->Frequency_LineEdit;
+    ControlMethod_LineEdit = ui->ControlMethod_LineEdit;
+    CurPos_LineEdit = ui->CurPos_LineEdit;
+    CurVel_LineEdit = ui->CurVel_LineEdit;
+    CurAcc_LineEdit = ui->CurAcc_LineEdit;
+
+}
 
 void MainWindow::StatusDockInit()
 {
@@ -414,6 +426,16 @@ void MainWindow::StatusUpdateTimerSlot()
     ReleaveTime_LineEdit->setText(QString(curReleaveTime));
     ReleaveTime_LineEdit->displayText();
 
+
+    WaveForm_LineEdit->setText(g_WaveFormStringList[g_ExperimentParam.waveform]);
+    Ampli_LineEdit->setText(QString::number(g_ExperimentParam.amplitude));
+    Frequency_LineEdit->setText(QString::number(g_ExperimentParam.frequency));
+    ControlMethod_LineEdit->setText(g_ControlMethodStringList[g_ControlMethod]);
+    CurPos_LineEdit->setText(QString::number(g_CurPos));
+    CurVel_LineEdit->setText(QString::number(g_CurVel));
+    CurAcc_LineEdit->setText(QString::number(g_CurAcc));
+
+
     //qDebug()<<curTime;
 }
 
@@ -509,8 +531,8 @@ void MainWindow::on_action_Exit_triggered()
 void MainWindow::on_action_New_triggered()
 {
     new_experiment *new_exp = new new_experiment;
-    connect(new_exp,new_experiment::ExperimentParamChangeSingal,this,ExperimentParamChangeSlot);
-    new_exp->show();
+    connect(new_exp,&new_experiment::ExperimentParamChangeSingal,this,&ExperimentParamChangeSlot);
+    new_exp->exec();
 }
 
 
@@ -518,8 +540,8 @@ void MainWindow::tcpsever_connect(const QString &ip)
 {
     QStatusBar *statubar = this->statusBar();
     statubar->showMessage("新的控制器连接 IP:"+ip,3000);
-    TcpServerAbstract_count++;
-    QString sta = QString("当前控制器连接个数: %1").arg(TcpServerAbstract_count);
+    g_ConnectedClientCount++;
+    QString sta = QString("当前控制器连接个数: %1").arg(g_ConnectedClientCount);
     tcpstatus->setText(sta);
 
     qDebug()<<"回调tcpsever_connect";
@@ -530,13 +552,13 @@ void MainWindow::tcpsever_disconnect(const QString &ip)
 {
     QStatusBar *statubar = this->statusBar();
     //若出现错误
-    TcpServerAbstract_count--;
+    g_ConnectedClientCount--;
     statubar->showMessage("控制器断开连接",3000);
     QString sta;
-    if(TcpServerAbstract_count==0)
+    if(g_ConnectedClientCount==0)
         sta.sprintf("未连接到控制器");
     else
-        sta.sprintf("当前控制器连接个数: %d",TcpServerAbstract_count);
+        sta.sprintf("当前控制器连接个数: %d",g_ConnectedClientCount);
     tcpstatus->setText(sta);
     qDebug()<<"回调tcpsever_disconnect";
 }
@@ -696,4 +718,19 @@ void MainWindow::on_tool_bar_ZoomOut_triggered()
 void MainWindow::on_tool_bar_Save_File_triggered()
 {
     dPlot->onSave(true);
+}
+
+/**
+ * @brief MainWindow::on_LoadWave_PushButton_clicked
+ * 载入当前波形按下
+ */
+void MainWindow::on_LoadWave_PushButton_clicked()
+{
+    //判断当前是否有参考波形
+    if(g_PosRefArray.dataCnt==0||g_VelRefArray.dataCnt==0||g_AccRefArray.dataCnt==0)
+    {
+        QMessageBox::warning(this," 警告","未生成参考波形",QMessageBox::Ok|QMessageBox::Cancel,QMessageBox::Ok);
+        return;
+    }
+    //使用服务器将参考波形发送至控制器中
 }

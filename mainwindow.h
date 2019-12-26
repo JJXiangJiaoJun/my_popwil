@@ -66,8 +66,6 @@ private:
     long msStartCount;
     double elapsedTime;
     PerformanceTimer *timer;
-
-    int TcpServerAbstract_count;
     QLabel *tcpstatus;
 
     //*********************TCP server********************
@@ -82,6 +80,14 @@ private:
     QLineEdit *MeasureTime_LineEdit;
     QLineEdit *ReleaveTime_LineEdit;
     QLineEdit *HintMsg_LineEdit;
+
+    QLineEdit *WaveForm_LineEdit;
+    QLineEdit *Ampli_LineEdit;
+    QLineEdit *Frequency_LineEdit;
+    QLineEdit *ControlMethod_LineEdit;
+    QLineEdit *CurPos_LineEdit;
+    QLineEdit *CurVel_LineEdit;
+    QLineEdit *CurAcc_LineEdit;
 
     QTextBrowser *PosPeakValue_TextBrowser;
     QTextBrowser *VelocityValue_TextBrowser;
@@ -143,8 +149,11 @@ private slots:
 
     void on_tool_bar_Save_File_triggered();
 
+    void on_LoadWave_PushButton_clicked();
+
 private:
     void StatusDockInit();
+    void MessageDockInit();
     void GlobalVariableInit();
     void WavePreview(QString title);
 };

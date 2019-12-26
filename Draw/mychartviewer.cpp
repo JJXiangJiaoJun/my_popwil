@@ -3,7 +3,7 @@
 #include <cmath>
 #include <QDateTime>
 
-#define PAINT_PERIOD 100
+const static int  PAINT_PERIOD  = g_SystemInfo.drawInterval;
 using namespace std;
 
 MyChartViewer::MyChartViewer(QWidget *parent) : QWidget(parent){

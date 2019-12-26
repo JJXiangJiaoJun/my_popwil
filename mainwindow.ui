@@ -31,7 +31,7 @@
     <item>
      <widget class="QTabWidget" name="DynamicPlotTabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="RealTimeTab">
        <attribute name="title">
@@ -353,166 +353,216 @@ p, li { white-space: pre-wrap; }
       <attribute name="title">
        <string>记录</string>
       </attribute>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="">
        <property name="geometry">
         <rect>
-         <x>60</x>
-         <y>20</y>
-         <width>261</width>
-         <height>151</height>
+         <x>10</x>
+         <y>10</y>
+         <width>151</width>
+         <height>171</height>
         </rect>
        </property>
-       <layout class="QGridLayout" name="gridLayout_5">
-        <item row="0" column="0">
-         <widget class="QLabel" name="ExperimentWave_Label">
-          <property name="text">
-           <string>试验波形</string>
-          </property>
-         </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_8">
+          <item>
+           <widget class="QLabel" name="ExperimentWave_Label">
+            <property name="text">
+             <string>试验波形</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="Ampli_Label">
+            <property name="text">
+             <string>幅值</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="Frequency_Label">
+            <property name="text">
+             <string>频率</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="ControlMethod_Label">
+            <property name="text">
+             <string>控制方法</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="WaveForm_LineEdit">
-          <property name="text">
-           <string>       正弦波</string>
-          </property>
-         </widget>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_7">
+          <item>
+           <widget class="QLineEdit" name="WaveForm_LineEdit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>正弦波</string>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="Ampli_LineEdit">
+            <property name="text">
+             <string>0.124</string>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="Frequency_LineEdit">
+            <property name="text">
+             <string>5Hz</string>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="ControlMethod_LineEdit">
+            <property name="text">
+             <string>PID</string>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="Ampli_LineEdit">
-          <property name="text">
-           <string>       0.124</string>
-          </property>
-         </widget>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>20</y>
+         <width>181</width>
+         <height>141</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_9">
+          <item>
+           <widget class="QLabel" name="CurPos_Label">
+            <property name="text">
+             <string> 位移:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="CurVel_Label">
+            <property name="text">
+             <string> 速度:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="CurAcc_Label">
+            <property name="text">
+             <string> 加速度:</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="Frequency_LineEdit">
-          <property name="text">
-           <string>       5Hz</string>
-          </property>
-         </widget>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_10">
+          <item>
+           <widget class="QLineEdit" name="CurPos_LineEdit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="CurVel_LineEdit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="CurAcc_LineEdit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="Ampli_Label">
-          <property name="text">
-           <string>  幅值</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="Frequency_Label">
-          <property name="text">
-           <string>  频率</string>
-          </property>
-         </widget>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_11">
+          <item>
+           <widget class="QLabel" name="PosUnit_Label">
+            <property name="text">
+             <string>mm</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="VelUnit_Label">
+            <property name="text">
+             <string>mm/s</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="AccUnit_Label">
+            <property name="text">
+             <string>g</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>
      </widget>
     </widget>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>300</x>
-       <y>140</y>
-       <width>131</width>
-       <height>35</height>
-      </rect>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_3">
-      <item row="0" column="0">
-       <widget class="QPushButton" name="pushButton_6">
-        <property name="minimumSize">
-         <size>
-          <width>33</width>
-          <height>33</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="assets.qrc">
-          <normaloff>:/Images/Ressources/previousdarkbtn.png</normaloff>:/Images/Ressources/previousdarkbtn.png</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>33</width>
-          <height>33</height>
-         </size>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QPushButton" name="pushButton_5">
-        <property name="minimumSize">
-         <size>
-          <width>33</width>
-          <height>33</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="assets.qrc">
-          <normaloff>:/Images/Ressources/Pausedarkbtn.png</normaloff>:/Images/Ressources/Pausedarkbtn.png</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>33</width>
-          <height>33</height>
-         </size>
-        </property>
-        <property name="checkable">
-         <bool>false</bool>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QPushButton" name="pushButton">
-        <property name="minimumSize">
-         <size>
-          <width>33</width>
-          <height>33</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="assets.qrc">
-          <normaloff>:/Images/Ressources/forwarddarkbtn.png</normaloff>:/Images/Ressources/forwarddarkbtn.png</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>33</width>
-          <height>33</height>
-         </size>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-    <zorder>layoutWidget</zorder>
-    <zorder>tabWidget</zorder>
    </widget>
   </widget>
   <widget class="QDockWidget" name="Status_dock">
@@ -767,14 +817,14 @@ p, li { white-space: pre-wrap; }
          <item>
           <widget class="QLabel" name="label_16">
            <property name="text">
-            <string>cm/s</string>
+            <string>mm/s</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QLabel" name="label_17">
            <property name="text">
-            <string>cm</string>
+            <string>mm</string>
            </property>
           </widget>
          </item>

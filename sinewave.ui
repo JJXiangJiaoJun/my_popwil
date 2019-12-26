@@ -43,7 +43,7 @@
         <item>
          <widget class="QLabel" name="label">
           <property name="text">
-           <string>幅值(cm)</string>
+           <string>幅值(mm)</string>
           </property>
          </widget>
         </item>
@@ -111,7 +111,7 @@
         <item>
          <widget class="QLabel" name="label_3">
           <property name="text">
-           <string>时间(s)</string>
+           <string>重复次数</string>
           </property>
          </widget>
         </item>
@@ -129,7 +129,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QLineEdit" name="time">
+         <widget class="QLineEdit" name="RepeatCount_LineEdit">
           <property name="maximumSize">
            <size>
             <width>80</width>
@@ -145,7 +145,7 @@
         <item>
          <widget class="QLabel" name="label_4">
           <property name="text">
-           <string>初始相位(rad)</string>
+           <string>中心坐标(mm)</string>
           </property>
          </widget>
         </item>
@@ -163,7 +163,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QLineEdit" name="phase">
+         <widget class="QLineEdit" name="Mid_LineEdit">
           <property name="maximumSize">
            <size>
             <width>80</width>
@@ -179,7 +179,7 @@
         <item>
          <widget class="QLabel" name="label_5">
           <property name="text">
-           <string>采样频率(Hz)</string>
+           <string>采样周期(ms)</string>
           </property>
          </widget>
         </item>
@@ -197,7 +197,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QLineEdit" name="samplerate">
+         <widget class="QLineEdit" name="SamplePeriod_LineEdit">
           <property name="maximumSize">
            <size>
             <width>80</width>

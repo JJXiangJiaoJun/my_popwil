@@ -39,12 +39,12 @@ public:
 private:
     // The number of samples per data series used in this demo
    //显示缓冲区的图像大小
-   static const int sampleSize = 5000;
+   static const int sampleSize = 10000;
    // The full range is initialized to 180 seconds. It will extend when more data are available.
    static const int initialFullRange = 30;
    // The visible range is initialized to 30 seconds.
    //视野中可视化的秒数，非常重要的一个量
-   static const int initialVisibleRange = 10;
+   static const int initialVisibleRange = 20;
    // The maximum zoom in is 5 seconds.
    static const int zoomInLimit = 1;
 

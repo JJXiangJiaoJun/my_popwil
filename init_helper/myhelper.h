@@ -15,6 +15,7 @@
 #include <QTextCodec>
 #include <QDebug>
 #include <QSettings>
+#include <QMessageBox>
 
 
 #include "chartdata.h"
@@ -45,6 +46,11 @@ public:
         file.close();
     }
 
+    static bool ReadFromSystemInfoIni(QString fileName,SystemInfoStruct *sysInfo);
+    static bool WriteToSystemInfoIni(QString fileName,SystemInfoStruct sysInfo);
+
+    static bool ReadFromPIDParamIni(QString fileName,PIDParamStruct *staticPID,
+                                      PIDParamStruct *posPID,PIDParamStruct *accPID);
 signals:
 
 public slots:

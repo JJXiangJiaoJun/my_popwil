@@ -101,7 +101,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="QPushButton" name="Random">
+           <widget class="QPushButton" name="RandomWave_PushButton">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -145,7 +145,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="typical">
+           <widget class="QPushButton" name="TypicalWave_PushButton">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -215,7 +215,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="seismic">
+           <widget class="QPushButton" name="SeismicWave_PushButton">
             <property name="enabled">
              <bool>true</bool>
             </property>
