@@ -19,6 +19,7 @@ void ProcessPackage::ParseCurPosDataMsg(QDataStream &raw_data, FrameLengthType m
     {
         //将数据一个个读入缓冲区中
         raw_data >> data;
+        qDebug() << data;
         //GlobalData::g_PosData.PushBack(data);
         g_PosData.PushBackToCurDataArray(data);
     }
@@ -26,7 +27,7 @@ void ProcessPackage::ParseCurPosDataMsg(QDataStream &raw_data, FrameLengthType m
 
 }
 
-void ProcessPackage::ParseCurVelDataMsg(QDataStream &raw_data, quint16 msg_len)
+void ProcessPackage::ParseCurVelDataMsg(QDataStream &raw_data, FrameLengthType msg_len)
 {
     ChartDataType data;
     msg_len /= DATA_SIZE;
@@ -40,7 +41,7 @@ void ProcessPackage::ParseCurVelDataMsg(QDataStream &raw_data, quint16 msg_len)
     }
 }
 
-void ProcessPackage::ParseCurAccDataMsg(QDataStream &raw_data, quint16 msg_len)
+void ProcessPackage::ParseCurAccDataMsg(QDataStream &raw_data, FrameLengthType msg_len)
 {
     ChartDataType data;
     msg_len /= DATA_SIZE;
@@ -55,7 +56,7 @@ void ProcessPackage::ParseCurAccDataMsg(QDataStream &raw_data, quint16 msg_len)
 }
 
 
-void ProcessPackage::ParseCommandMsg(QDataStream &raw_data, quint16 msg_len)
+void ProcessPackage::ParseCommandMsg(QDataStream &raw_data, FrameLengthType msg_len)
 {
 
 }

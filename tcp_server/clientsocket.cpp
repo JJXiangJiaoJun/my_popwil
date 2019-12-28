@@ -211,8 +211,8 @@ void ClientSocket::SendMsg(ProtocolSet::MessageTypeEnum &type, void *msg, const 
 {
     if(!m_tcpSocket->isOpen()) {return;}
 
-    ProtocolSet protocolset;
-    m_tcpSocket->write(protocolset.SendMsg(type,msg,msg_len));
+    //ProtocolSet protocolset;
+    m_tcpSocket->write(ProtocolSet::SendMsg(type,msg,msg_len));
 }
 
 

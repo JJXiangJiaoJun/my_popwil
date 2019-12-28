@@ -6,7 +6,7 @@
 static const qint32 MAX_POINT=200000;
 #include <cmath>
 typedef double ChartDataType;
-typedef quint16 FrameLengthType;
+typedef quint32 FrameLengthType;
 typedef qint16  FrameFuncType;
 typedef double  PosPeakValueType;
 typedef double AccPeakValueType;

@@ -34,11 +34,47 @@ QByteArray ProtocolSet::SendMsg(const MessageTypeEnum msg_type,void * msg,const 
     QByteArray message;
 
     switch (msg_type) {
+    case RuningFData:
+        break;
+    case RuningAccData:
+        break;
+    case RuningVelData:
+        break;
+    case RuningPosData:
+        break;
+    case ACC_DATA:
+        break;
+    case Vel_DATA:
+        break;
     case POS_DATA:
         message = DataMsg(msg,msg_len);
         break;
+        break;
     case COMMAND:
         message = CommandMsg(msg,msg_len);
+        break;
+    case ControlMethod:
+        message = ControlMethodMsg(msg,msg_len);
+        break;
+    case PosPID:
+        break;
+    case VelPID:
+        break;
+    case AccPID:
+        break;
+    case PosRefData:
+        break;
+    case VelRefData:
+        break;
+    case AccRefData:
+        break;
+    case SystemInfo:
+        break;
+    case UploadData:
+        break;
+    case ConstrainParam:
+        break;
+    case EmegencyStop:
         break;
     case ECHO:
         message = EchoMsg(msg,msg_len);
@@ -107,9 +143,183 @@ QByteArray ProtocolSet::DataMsg(void *msg, const qint32 msg_len)
 
 }
 
+/**
+ * @brief ProtocolSet::CommandMsg
+ * @param msg
+ * @param msg_len
+ * 命令参数帧
+ * @return
+ */
 QByteArray ProtocolSet::CommandMsg(void *msg, const qint32 msg_len)
 {
+    //解析数据指针
+    QByteArray pbuf;
+    if(msg_len <=0) return pbuf;
 
+    qint16 cmd = *(qint16 *) msg;
+
+    qDebug() << "构造命令数据包\n" << "当前命令" << cmd;
+
+    QDataStream out(&pbuf,QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_5_9);
+    out.setByteOrder(QDataStream::BigEndian);
+    //构造消息数据包
+    FrameLengthType tot_len = 0;
+    out << tot_len << FrameFuncType(COMMAND) << qint16(cmd);
+    out.device()->seek(0);
+    out << FrameLengthType(pbuf.size()-FrameLegthLen);
+    return pbuf;
+
+}
+
+QByteArray ProtocolSet::ControlMethodMsg(void *msg, const qint32 msg_len)
+{
+    //解析数据指针
+    QByteArray pbuf;
+    if(msg_len <=0) return pbuf;
+
+    qint16 ctrlMethod = *(qint16 *) msg;
+
+    qDebug() << "构造控制方法数据包\n" << "当前控制方法" << g_ControlMethodStringList[ctrlMethod];
+
+    QDataStream out(&pbuf,QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_5_9);
+    out.setByteOrder(QDataStream::BigEndian);
+    //构造消息数据包
+    FrameLengthType tot_len = 0;
+    out << tot_len << FrameFuncType(ControlMethod) << qint16(ctrlMethod);
+    out.device()->seek(0);
+    out << FrameLengthType(pbuf.size()-FrameLegthLen);
+    return pbuf;
+}
+
+QByteArray ProtocolSet::PosPIDMsg(void *msg, const qint32 msg_len)
+{
+    QByteArray pbuf;
+    if(msg_len <=0) return pbuf;
+
+    PIDParamStruct *PIDParam = (PIDParamStruct *) msg;
+
+    qDebug() << "构造位移PID参数数据包\n" << "P: " << PIDParam->P<<"I: "<<PIDParam->I<<"D: "<<PIDParam->D;
+
+    QDataStream out(&pbuf,QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_5_9);
+    out.setByteOrder(QDataStream::BigEndian);
+    //构造消息数据包
+    FrameLengthType tot_len = 0;
+    out << tot_len << FrameFuncType(PosPID) << double(PIDParam->P)<<double(PIDParam->I)<<double(PIDParam->D);
+    out.device()->seek(0);
+    out << FrameLengthType(pbuf.size()-FrameLegthLen);
+    return pbuf;
+}
+
+QByteArray ProtocolSet::VelPIDMsg(void *msg,const qint32 msg_len)
+{
+    QByteArray pbuf;
+    if(msg_len <=0) return pbuf;
+
+    PIDParamStruct *PIDParam = (PIDParamStruct *) msg;
+
+    qDebug() << "构造速度PID参数数据包\n" << "P: " << PIDParam->P<<"I: "<<PIDParam->I<<"D: "<<PIDParam->D;
+
+    QDataStream out(&pbuf,QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_5_9);
+    out.setByteOrder(QDataStream::BigEndian);
+    //构造消息数据包
+    FrameLengthType tot_len = 0;
+    out << tot_len << FrameFuncType(VelPID) << double(PIDParam->P)<<double(PIDParam->I)<<double(PIDParam->D);
+    out.device()->seek(0);
+    out << FrameLengthType(pbuf.size()-FrameLegthLen);
+    return pbuf;
+}
+
+QByteArray ProtocolSet::AccPIDMsg(void *msg,const qint32 msg_len)
+{
+    QByteArray pbuf;
+    if(msg_len <=0) return pbuf;
+
+    PIDParamStruct *PIDParam = (PIDParamStruct *) msg;
+
+    qDebug() << "构造加速度PID参数数据包\n" << "P: " << PIDParam->P<<"I: "<<PIDParam->I<<"D: "<<PIDParam->D;
+
+    QDataStream out(&pbuf,QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_5_9);
+    out.setByteOrder(QDataStream::BigEndian);
+    //构造消息数据包
+    FrameLengthType tot_len = 0;
+    out << tot_len << FrameFuncType(AccPID) << double(PIDParam->P)<<double(PIDParam->I)<<double(PIDParam->D);
+    out.device()->seek(0);
+    out << FrameLengthType(pbuf.size()-FrameLegthLen);
+    return pbuf;
+}
+
+QByteArray ProtocolSet::PosRefDataMsg(void *msg, const qint32 msg_len)
+{
+    QByteArray pbuf;
+    if(msg_len <=0) return pbuf;
+
+    RefDataStruct *PosRef = (RefDataStruct *) msg;
+
+    qDebug() << "构造位移参考波形数据包\n" << "波形点数:" << PosRef->dataCnt;
+
+    QDataStream out(&pbuf,QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_5_9);
+    out.setByteOrder(QDataStream::BigEndian);
+    //构造消息数据包
+    FrameLengthType tot_len = 0;
+    out << tot_len << FrameFuncType(PosRefData);
+    for(int i=0;i<PosRef->dataCnt;i++)
+        out<<PosRef->buffer[i];
+
+    out.device()->seek(0);
+    out << FrameLengthType(pbuf.size()-FrameLegthLen);
+    return pbuf;
+}
+
+QByteArray ProtocolSet::VelRefDataMsg(void *msg, const qint32 msg_len)
+{
+    QByteArray pbuf;
+    if(msg_len <=0) return pbuf;
+
+    RefDataStruct *VelRef = (RefDataStruct *) msg;
+
+    qDebug() << "构造速度参考波形数据包\n" << "波形点数:" << VelRef->dataCnt;
+
+    QDataStream out(&pbuf,QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_5_9);
+    out.setByteOrder(QDataStream::BigEndian);
+    //构造消息数据包
+    FrameLengthType tot_len = 0;
+    out << tot_len << FrameFuncType(PosRefData);
+    for(int i=0;i<VelRef->dataCnt;i++)
+        out<<VelRef->buffer[i];
+
+    out.device()->seek(0);
+    out << FrameLengthType(pbuf.size()-FrameLegthLen);
+    return pbuf;
+}
+
+QByteArray ProtocolSet::AccRefDataMsg(void *msg, const qint32 msg_len)
+{
+    QByteArray pbuf;
+    if(msg_len <=0) return pbuf;
+
+    RefDataStruct *AccRef = (RefDataStruct *) msg;
+
+    qDebug() << "构造加速度参考波形数据包\n" << "波形点数:" << AccRef->dataCnt;
+
+    QDataStream out(&pbuf,QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_5_9);
+    out.setByteOrder(QDataStream::BigEndian);
+    //构造消息数据包
+    FrameLengthType tot_len = 0;
+    out << tot_len << FrameFuncType(PosRefData);
+    for(int i=0;i<AccRef->dataCnt;i++)
+        out<<AccRef->buffer[i];
+
+    out.device()->seek(0);
+    out << FrameLengthType(pbuf.size()-FrameLegthLen);
+    return pbuf;
 }
 
 
@@ -117,6 +327,8 @@ QByteArray ProtocolSet::EchoMsg(void *msg, const qint32 msg_len)
 {
 
 }
+
+
 
 QByteArray ProtocolSet::ErrorMsg(void *msg, const qint32 msg_len)
 {
