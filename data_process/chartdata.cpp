@@ -17,43 +17,6 @@ ChartData::ChartData()
 }
 
 
-//ChartDataType ChartData::GetCurData()
-//{
-//#ifndef CHART_DEBUG
-//    //保证参考波形和实际波形点数相对应，每次都读取一个点
-//    if(m_curDataList.isEmpty()||m_refDataList.isEmpty())
-//    {
-//        return 0;
-//    }
-//#else
-//    if(m_curDataList.isEmpty())
-//    {
-//        return 0;
-//    }
-//#endif
-//    m_lastData = m_curDataList.takeFirst();
-//    return m_lastData;
-
-//}
-
-//ChartDataType ChartData::GetRefData()
-//{
-//#ifndef CHART_DEBUG
-//    //保证参考波形和实际波形点数相对应，每次都读取一个点
-//    if(m_curDataList.isEmpty()||m_refDataList.isEmpty())
-//    {
-//        return 0;
-//    }
-//#else
-//    if(m_refDataList.isEmpty())
-//    {
-//        return 0;
-//    }
-//#endif
-//    m_lastData = m_refDataList.takeFirst();
-//    return m_lastData;
-
-//}
 
 bool ChartData::GetCurData(ChartDataType &curData)
 {
@@ -72,21 +35,22 @@ bool ChartData::GetRunningData(ChartDataType &curData, ChartDataType &refData)
     curData = 0.0;
     refData = 0.0;
     //保证参考波形和实际波形点数相对应，每次都读取一个点
-    if(curCount>=curDataArrayLen&&curCount>=refDataArrayLen)
+    //如果当前数据或者参考数据不够,则等待不读取
+    if(curCount>=curDataArrayLen||curCount>=refDataArrayLen)
         return false;
-    if(curCount < curDataArrayLen&& curCount<refDataArrayLen)
+    else
     {
         curData = m_curDataArray[curCount];
         refData = m_refDataArray[curCount++];
     }
-    else if (curCount < curDataArrayLen)
-    {
-        curData = m_curDataArray[curCount++];
-    }
-    else
-    {
-        refData = m_refDataArray[curCount++];
-    }
+//    else if (curCount < curDataArrayLen)
+//    {
+//        curData = m_curDataArray[curCount++];
+//    }
+//    else
+//    {
+//        refData = m_refDataArray[curCount++];
+//    }
 
 #else
     if(curCount>=curDataArrayLen||curCount>=refDataArrayLen)
@@ -103,11 +67,11 @@ bool ChartData::GetRunningData(ChartDataType &curData, ChartDataType &refData)
 
 
 
-void ChartData::Empty()
+void ChartData::Clear()
 {
     ClearDataCount();
-    EmptyCurDataArray();
-    EmptyRefDataArray();
+    ClearCurDataArray();
+    ClearRefDataArray();
 }
 
 void ChartData::ClearDataCount()
@@ -115,12 +79,12 @@ void ChartData::ClearDataCount()
     curCount = 0;
 }
 
-void ChartData::EmptyCurDataArray()
+void ChartData::ClearCurDataArray()
 {
     curDataArrayLen = 0;
 }
 
-void ChartData::EmptyRefDataArray()
+void ChartData::ClearRefDataArray()
 {
     refDataArrayLen = 0;
 }
@@ -139,25 +103,7 @@ void ChartData::PushBackToRefDataArray(const ChartDataType &value)
     m_refDataArray[refDataArrayLen++] = value;
 }
 
-//void ChartData::PushBackToCurDataList(const ChartDataType &value)
-//{
-//    if(m_curDataList.size()>MAX_DATA_SIZE)
-//    {
-//        qDebug()<<"数据已满，不能插入更多的数据";
-//        return;
-//    }
-//    m_curDataList.push_back(value);
-//}
 
-//void ChartData::PushBackToRefDataList(const ChartDataType &value)
-//{
-//    if(m_refDataList.size()>MAX_DATA_SIZE)
-//    {
-//        qDebug()<<"数据已满，不能插入更多的数据";
-//        return;
-//    }
-//    m_refDataList.push_back(value);
-//}
 
 
 

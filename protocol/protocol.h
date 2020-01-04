@@ -41,16 +41,17 @@ public:
     //数据帧类型枚举体,作为公共接口暴露
      enum  MessageTypeEnum{
         RuningFData   = 0x10F9,
-        RuningAccData = 0x10FB,
-        RuningVelData = 0x10FC,
-        RuningPosData = 0x10FD,
+        RuningAccData = 0x10FA,
+        RuningVelData = 0x10FB,
+        RuningPosData = 0x10FC,
+        F_DATA   = 0X10FD,
         ACC_DATA = 0x10FE,
         Vel_DATA = 0x10FF,
         POS_DATA = 0x1100 ,
         COMMAND = 0x1101 ,
         ControlMethod = 0x1102 ,
         PosPID = 0x1103,
-        VelPID = 0x1104,
+        StaticPID = 0x1104,
         AccPID = 0x1105,
         PosRefData = 0x1106,
         VelRefData = 0x1107,
@@ -61,9 +62,11 @@ public:
         EmegencyStop = 0x110C,
         ECHO = 0x110D,
         ERR = 0x110E ,
-        WARNING = 0x110F,
-        TEST = 0x1110,
-        PARAM = 0x1111,
+        ControlVarible = 0x110F,
+        SineWaveParam = 0x1110,
+        StaticVoltage = 0x1111,
+        TEST = 0x1112,
+
     };
 
     enum  ServerPortEnum{
@@ -96,18 +99,21 @@ private:
     static QByteArray CommandMsg(void *msg,const qint32 msg_len);
     static QByteArray ControlMethodMsg(void *msg,const qint32 msg_len);
     static QByteArray PosPIDMsg(void *msg,const qint32 msg_len);
-    static QByteArray VelPIDMsg(void *msg,const qint32 msg_len);
+    static QByteArray StaticPIDMsg(void *msg,const qint32 msg_len);
     static QByteArray AccPIDMsg(void *msg,const qint32 msg_len);
     static QByteArray PosRefDataMsg(void *msg,const qint32 msg_len);
     static QByteArray VelRefDataMsg(void *msg,const qint32 msg_len);
     static QByteArray AccRefDataMsg(void *msg,const qint32 msg_len);
+    static QByteArray SystemInfoMsg(void *msg,const qint32 msg_len);
+
 
     static QByteArray EchoMsg(void *msg,const qint32 msg_len);
     static QByteArray ErrorMsg(void *msg,const qint32 msg_len);
+    static QByteArray ControlVaribleMsg(void *msg,const qint32 msg_len);
+    static QByteArray SineWaveParamMsg(void *msg,const qint32 msg_len);
+    static QByteArray StaticVoltageMsg(void *msg,const qint32 msg_len);
+
     static QByteArray TestMsg(void *msg,const qint32 msg_len);
-
-    static QByteArray ExperimentParamMsg(void *msg,const qint32 msg_len);
-
 };
 
 #endif // PROTOCOL_H

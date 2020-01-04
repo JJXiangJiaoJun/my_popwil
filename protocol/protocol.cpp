@@ -49,7 +49,6 @@ QByteArray ProtocolSet::SendMsg(const MessageTypeEnum msg_type,void * msg,const 
     case POS_DATA:
         message = DataMsg(msg,msg_len);
         break;
-        break;
     case COMMAND:
         message = CommandMsg(msg,msg_len);
         break;
@@ -57,18 +56,25 @@ QByteArray ProtocolSet::SendMsg(const MessageTypeEnum msg_type,void * msg,const 
         message = ControlMethodMsg(msg,msg_len);
         break;
     case PosPID:
+        message = PosPIDMsg(msg,msg_len);
         break;
-    case VelPID:
+    case StaticPID:
+        message = StaticPIDMsg(msg,msg_len);
         break;
     case AccPID:
+        message = AccPIDMsg(msg,msg_len);
         break;
     case PosRefData:
+        message = PosRefDataMsg(msg,msg_len);
         break;
     case VelRefData:
+        message = VelRefDataMsg(msg,msg_len);
         break;
     case AccRefData:
+        message = AccRefDataMsg(msg,msg_len);
         break;
     case SystemInfo:
+        message = SystemInfoMsg(msg,msg_len);
         break;
     case UploadData:
         break;
@@ -81,12 +87,17 @@ QByteArray ProtocolSet::SendMsg(const MessageTypeEnum msg_type,void * msg,const 
         break;
     case ERR:
         message = ErrorMsg(msg,msg_len);
+    case ControlVarible:
+        message = ControlVaribleMsg(msg,msg_len);
+        break;
+    case SineWaveParam:
+        message = SineWaveParamMsg(msg,msg_len);
+        break;
+    case StaticVoltage:
+        message = StaticVoltageMsg(msg,msg_len);
         break;
     case TEST:
         message = TestMsg(msg,msg_len);
-        break;
-    case PARAM:
-        message = ExperimentParamMsg(msg,msg_len);
         break;
     default:
         qDebug()<<"错误！发送数据类型不正确";
@@ -158,7 +169,7 @@ QByteArray ProtocolSet::CommandMsg(void *msg, const qint32 msg_len)
 
     qint16 cmd = *(qint16 *) msg;
 
-    qDebug() << "构造命令数据包\n" << "当前命令" << cmd;
+    qDebug() << "构造命令数据包\n" << "当前命令" << g_CommandStringList[cmd];
 
     QDataStream out(&pbuf,QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_5_9);
@@ -213,21 +224,21 @@ QByteArray ProtocolSet::PosPIDMsg(void *msg, const qint32 msg_len)
     return pbuf;
 }
 
-QByteArray ProtocolSet::VelPIDMsg(void *msg,const qint32 msg_len)
+QByteArray ProtocolSet::StaticPIDMsg(void *msg,const qint32 msg_len)
 {
     QByteArray pbuf;
     if(msg_len <=0) return pbuf;
 
     PIDParamStruct *PIDParam = (PIDParamStruct *) msg;
 
-    qDebug() << "构造速度PID参数数据包\n" << "P: " << PIDParam->P<<"I: "<<PIDParam->I<<"D: "<<PIDParam->D;
+    qDebug() << "构造静态控制PID参数数据包\n" << "P: " << PIDParam->P<<"I: "<<PIDParam->I<<"D: "<<PIDParam->D;
 
     QDataStream out(&pbuf,QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_5_9);
     out.setByteOrder(QDataStream::BigEndian);
     //构造消息数据包
     FrameLengthType tot_len = 0;
-    out << tot_len << FrameFuncType(VelPID) << double(PIDParam->P)<<double(PIDParam->I)<<double(PIDParam->D);
+    out << tot_len << FrameFuncType(StaticPID) << double(PIDParam->P)<<double(PIDParam->I)<<double(PIDParam->D);
     out.device()->seek(0);
     out << FrameLengthType(pbuf.size()-FrameLegthLen);
     return pbuf;
@@ -267,7 +278,7 @@ QByteArray ProtocolSet::PosRefDataMsg(void *msg, const qint32 msg_len)
     out.setByteOrder(QDataStream::BigEndian);
     //构造消息数据包
     FrameLengthType tot_len = 0;
-    out << tot_len << FrameFuncType(PosRefData);
+    out << tot_len << FrameFuncType(PosRefData)<<qint32(PosRef->dataCnt)<<PosRef->samplePeroid;
     for(int i=0;i<PosRef->dataCnt;i++)
         out<<PosRef->buffer[i];
 
@@ -290,7 +301,7 @@ QByteArray ProtocolSet::VelRefDataMsg(void *msg, const qint32 msg_len)
     out.setByteOrder(QDataStream::BigEndian);
     //构造消息数据包
     FrameLengthType tot_len = 0;
-    out << tot_len << FrameFuncType(PosRefData);
+    out << tot_len << FrameFuncType(PosRefData)<<qint32(VelRef->dataCnt)<<VelRef->samplePeroid;
     for(int i=0;i<VelRef->dataCnt;i++)
         out<<VelRef->buffer[i];
 
@@ -313,10 +324,32 @@ QByteArray ProtocolSet::AccRefDataMsg(void *msg, const qint32 msg_len)
     out.setByteOrder(QDataStream::BigEndian);
     //构造消息数据包
     FrameLengthType tot_len = 0;
-    out << tot_len << FrameFuncType(PosRefData);
+    out << tot_len << FrameFuncType(PosRefData)<<qint32(AccRef->dataCnt)<<AccRef->samplePeroid;
     for(int i=0;i<AccRef->dataCnt;i++)
         out<<AccRef->buffer[i];
 
+    out.device()->seek(0);
+    out << FrameLengthType(pbuf.size()-FrameLegthLen);
+    return pbuf;
+}
+
+QByteArray ProtocolSet::SystemInfoMsg(void *msg, const qint32 msg_len)
+{
+    QByteArray pbuf;
+    if(msg_len <=0) return pbuf;
+
+    SystemInfoStruct *sysInfo = (SystemInfoStruct *) msg;
+
+    qDebug() << "构造系统参数数据包\n" ;
+
+    QDataStream out(&pbuf,QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_5_9);
+    out.setByteOrder(QDataStream::BigEndian);
+    //构造消息数据包
+    FrameLengthType tot_len = 0;
+    out << tot_len << FrameFuncType(SystemInfo);
+    //发送一些系统参数设置
+    out<<sysInfo->controlInterval<<sysInfo->drawInterval<<sysInfo->maxAbsoluteAcc;
     out.device()->seek(0);
     out << FrameLengthType(pbuf.size()-FrameLegthLen);
     return pbuf;
@@ -335,8 +368,31 @@ QByteArray ProtocolSet::ErrorMsg(void *msg, const qint32 msg_len)
 
 }
 
+QByteArray ProtocolSet::ControlVaribleMsg(void *msg, const qint32 msg_len)
+{
+    //解析数据指针
+    QByteArray pbuf;
+    if(msg_len <=0) return pbuf;
+    qint16 controlVar = *(qint16 *)msg;
 
-QByteArray ProtocolSet::ExperimentParamMsg(void *msg, const qint32 msg_len)
+
+    qDebug() << "控制变量帧:" << g_ControlMethodStringList[controlVar];
+
+    QDataStream out(&pbuf,QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_5_9);
+    out.setByteOrder(QDataStream::BigEndian);
+    //构造消息数据包
+    quint16 tot_len = 0;
+    out << tot_len << qint16(ControlVarible)  \
+        <<controlVar;
+    out.device()->seek(0);
+    out << quint16(pbuf.size()-FrameLegthLen);
+
+    return pbuf;
+}
+
+
+QByteArray ProtocolSet::SineWaveParamMsg(void *msg, const qint32 msg_len)
 {
     //解析数据指针
     QByteArray pbuf;
@@ -351,8 +407,31 @@ QByteArray ProtocolSet::ExperimentParamMsg(void *msg, const qint32 msg_len)
     out.setByteOrder(QDataStream::BigEndian);
     //构造消息数据包
     quint16 tot_len = 0;
-    out << tot_len << qint16(PARAM) << qint16(paramMsg_prt->waveform) << \
-           double(paramMsg_prt->amplitude) << double(paramMsg_prt->frequency);
+    out << tot_len << qint16(SineWaveParam)  \
+        <<double(paramMsg_prt->amplitude) << double(paramMsg_prt->frequency);
+    out.device()->seek(0);
+    out << quint16(pbuf.size()-FrameLegthLen);
+
+    return pbuf;
+}
+
+QByteArray ProtocolSet::StaticVoltageMsg(void *msg, const qint32 msg_len)
+{
+    //解析数据指针
+    QByteArray pbuf;
+    if(msg_len <=0) return pbuf;
+    double staticV = *(double *)msg;
+
+
+    qDebug() << "静态电压帧:" << staticV<<" mV";
+
+    QDataStream out(&pbuf,QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_5_9);
+    out.setByteOrder(QDataStream::BigEndian);
+    //构造消息数据包
+    quint16 tot_len = 0;
+    out << tot_len << qint16(StaticVoltage)  \
+        <<staticV;
     out.device()->seek(0);
     out << quint16(pbuf.size()-FrameLegthLen);
 

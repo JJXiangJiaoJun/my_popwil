@@ -20,10 +20,14 @@ control_param::control_param(QWidget *parent) :
     I_AccControl_LineEdit    = ui->I_AccControl_LineEdit;
     D_AccControl_LineEdit    = ui->D_AccControl_LineEdit;
 
+    StaticVoltage_LineEdit = ui->StaticVoltage_LineEdit;
+
     PID_RadioButton = ui->PID_RadioButton;
     TVC_RadioButton = ui->TVC_RadioButton;
     ThreePID_RadioButton = ui->ThreePID_RadioButton;
     IterativeControl_RadioButton = ui->IterativeControl_RadioButton;
+    PosVariable_RadioButton = ui->PosVariable_RadioButton;
+    FVariable_RadioButton = ui->FVariable_RadioButton;
 
     //设置初始的数值
     QDoubleValidator *P_StaticControl_Validator = new QDoubleValidator(-180.0,180.0,4,P_StaticControl_LineEdit);
@@ -38,7 +42,7 @@ control_param::control_param(QWidget *parent) :
     QDoubleValidator *I_AccControl_Validator = new QDoubleValidator(-180.0,180.0,4,I_AccControl_LineEdit);
     QDoubleValidator *D_AccControl_Validator = new QDoubleValidator(-180.0,180.0,4,D_AccControl_LineEdit);
 
-
+    QDoubleValidator *StaticVoltage_Validator = new QDoubleValidator(-20.0,20.0,4,StaticVoltage_LineEdit);
 
     P_StaticControl_LineEdit->setValidator(P_StaticControl_Validator);
     I_StaticControl_LineEdit->setValidator(I_StaticControl_Validator);
@@ -51,7 +55,9 @@ control_param::control_param(QWidget *parent) :
     P_AccControl_LineEdit->setValidator(P_AccControl_Validator);
     I_AccControl_LineEdit->setValidator(I_AccControl_Validator);
     D_AccControl_LineEdit->setValidator(D_AccControl_Validator);
-
+    StaticVoltage_LineEdit->setValidator(StaticVoltage_Validator);
+    PID_RadioButton->setChecked(true);
+    PosVariable_RadioButton->setChecked(true);
     SetDefaultParameter();
 
 
@@ -76,11 +82,14 @@ void control_param::SetDefaultParameter()
     I_PosControl_LineEdit->setText(QString::number(g_PosPIDParam.I));
     D_PosControl_LineEdit->setText(QString::number(g_PosPIDParam.D));
 
-    P_AccControl_LineEdit->setText(QString::number(g_PosPIDParam.P));
-    I_AccControl_LineEdit->setText(QString::number(g_PosPIDParam.I));
-    D_AccControl_LineEdit->setText(QString::number(g_PosPIDParam.D));
+    P_AccControl_LineEdit->setText(QString::number(g_AccPIDParam.P));
+    I_AccControl_LineEdit->setText(QString::number(g_AccPIDParam.I));
+    D_AccControl_LineEdit->setText(QString::number(g_AccPIDParam.D));
+
+    StaticVoltage_LineEdit->setText(QString::number(g_StaticVoltage));
 
     ControlMethod = g_ControlMethod;
+    ControlVariable = g_ControlVariable;
 }
 
 
@@ -106,15 +115,20 @@ void control_param::GetPIDParameter(PIDParamStruct *staticPID, PIDParamStruct *p
     staticPID->I = I_StaticControl_LineEdit->text().toDouble();
     staticPID->D = D_StaticControl_LineEdit->text().toDouble();
 
-    posPID->P = P_StaticControl_LineEdit->text().toDouble();
-    posPID->I = I_StaticControl_LineEdit->text().toDouble();
-    posPID->D = D_StaticControl_LineEdit->text().toDouble();
+    posPID->P = P_PosControl_LineEdit->text().toDouble();
+    posPID->I = I_PosControl_LineEdit->text().toDouble();
+    posPID->D = D_PosControl_LineEdit->text().toDouble();
 
     accPID->P = P_AccControl_LineEdit->text().toDouble();
     accPID->I = I_AccControl_LineEdit->text().toDouble();
     accPID->I = D_AccControl_LineEdit->text().toDouble();
 
 
+}
+
+void control_param::GetStaticVoltage(double *staticV)
+{
+    *staticV = StaticVoltage_LineEdit->text().toDouble();
 }
 
 /**
@@ -185,14 +199,22 @@ void control_param::on_ReadConfigFile_PushButton_clicked()
 void control_param::on_OK_PushButton_clicked()
 {
     //重新设置全局参数
-    SetPIDParameter(&g_StaticPIDParam,&g_PosPIDParam,&g_AccPIDParam);
+    GetPIDParameter(&g_StaticPIDParam,&g_PosPIDParam,&g_AccPIDParam);
+    GetStaticVoltage(&g_StaticVoltage);
     //重新设置控制方法
     g_ControlMethod = ControlMethod;
-
+    g_ControlVariable = ControlVariable;
 
     //使用服务器发送参数数据包
+    //PID控制参数以及控制方法
 
-
+    //控制方法帧
+    g_TcpMsgServer->SendMsgToClient(ProtocolSet::ControlMethod,&g_ControlMethod,sizeof(g_ControlMethod));
+    g_TcpMsgServer->SendMsgToClient(ProtocolSet::ControlVarible,&g_ControlVariable,sizeof(g_ControlVariable));
+    g_TcpMsgServer->SendMsgToClient(ProtocolSet::StaticVoltage,&g_StaticVoltage,sizeof(g_StaticVoltage));
+    g_TcpMsgServer->SendMsgToClient(ProtocolSet::StaticPID,&g_StaticPIDParam,sizeof(g_StaticPIDParam));
+    g_TcpMsgServer->SendMsgToClient(ProtocolSet::PosPID,&g_PosPIDParam,sizeof(g_PosPIDParam));
+    g_TcpMsgServer->SendMsgToClient(ProtocolSet::AccPID,&g_AccPIDParam,sizeof(g_AccPIDParam));
     this->close();
 }
 
@@ -200,4 +222,14 @@ void control_param::on_Cancel_PushButton_clicked()
 {
     //
     this->close();
+}
+
+void control_param::on_PosVariable_RadioButton_clicked()
+{
+    ControlVariable = ControlVariableEnum::Pos;
+}
+
+void control_param::on_FVariable_RadioButton_clicked()
+{
+    ControlVariable = ControlVariableEnum::F;
 }

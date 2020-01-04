@@ -12,6 +12,36 @@ typedef double  PosPeakValueType;
 typedef double AccPeakValueType;
 
 
+struct RunningDataStruct
+{
+    qint32 dataCnt;             //保存点数
+    double totalRunningTime;    //总运行时间
+    double samplePeroid;        //采样周期 unit:s
+    double RefBuffer[MAX_POINT];//保存原始值
+    double CurBuffer[MAX_POINT];//保存实际值
+
+    RunningDataStruct(double _samplePeroid = 0.0001)
+    {
+        Clear();
+        samplePeroid = _samplePeroid;
+    }
+
+    void Clear()
+    {
+        dataCnt = 0;
+        totalRunningTime = 0.0;
+    }
+
+    void push(double refData,double curData)
+    {
+        if(dataCnt >= MAX_POINT)
+            dataCnt *= 0.8;
+        RefBuffer[dataCnt] = refData;
+        CurBuffer[dataCnt] = curData;
+    }
+
+};
+
 struct RefDataStruct
 {
     qint32 dataCnt;             //采样点数
@@ -109,6 +139,7 @@ enum ChartDisplayTypeEnum
     PlotPos = 0,
     PlotVel = 1,
     PlotAcc = 2,
+    PlotF   = 3,
 };
 
 enum WaveFormEnum
@@ -128,5 +159,31 @@ enum ControlMethodEnum
     IterativeControl = 3,
 };
 
+enum ControlVariableEnum
+{
+    Pos = 0,
+    F   = 1,
+};
+
+enum CommandEnum
+{
+    Start = 0,
+    Stop  = 1,
+    Reset = 2,
+    Upload = 3,
+};
+
+enum EchoMessageEnum
+{
+    ReceiveRefData = 0,
+    ExperimentStart = 1,
+    ExperimentStop = 2,
+};
+
+enum ErrorMessageEnum
+{
+    RefDataERR = 0,
+    ControlParamERR = 1,
+};
 
 #endif // GLOBAL_SETTING_H

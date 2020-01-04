@@ -7,7 +7,7 @@
 
 
 //#define COMM_DEBUG
-
+#define DISPLAY_DEBUG
 
 TcpSocket::TcpSocket(QObject *parent) :  QTcpSocket(parent)
 {
@@ -54,6 +54,9 @@ ClientSocket::ClientSocket(QObject *parent, qintptr socketDescriptor)
     this->port = m_tcpSocket->peerPort();
 
     emit signalConnected(this->ip,this->port);
+
+    //发送参数信息帧
+    //m_tcpSocket->write()
 }
 
 ClientSocket::~ClientSocket()
@@ -165,20 +168,50 @@ void ClientSocket::SltReadyRead()
         case ProtocolSet::COMMAND:
             qDebug()<<"ParseCommandFrame\n";
             break;
+#ifdef DISPLAY_DEBUG
         case ProtocolSet::POS_DATA:
             //绘图读取,传输过来的数据中均为double类型
-            qDebug()<<"ParsePosDataFrame\n";
-            ProcessPackage::ParseCurPosDataMsg(package,msg_len-ProtocolSet::FrameFuncLen);
+            qDebug()<<"DEBUG: 调试位移数据帧\n";
+            ProcessPackage::ParseDebugPosDataMsg(package,msg_len-ProtocolSet::FrameFuncLen);
+            break;
+        case ProtocolSet::Vel_DATA:
+            qDebug()<<"DEBUG: 调试速度数据帧";
+            ProcessPackage::ParseDebugVelDataMsg(package,msg_len-ProtocolSet::FrameFuncLen);
             break;
         case ProtocolSet::ACC_DATA:
-            qDebug()<<"ParseAccDataFrame\n";
+            qDebug()<<"DEBUG: 调试加速度数据帧";
+            ProcessPackage::ParseDebugAccDataMsg(package,msg_len-ProtocolSet::FrameFuncLen);
+            break;
+#else
+        case ProtocolSet::POS_DATA:
+            //绘图读取,传输过来的数据中均为double类型
+            qDebug()<<"调试位移数据帧";
+            ProcessPackage::ParseCurPosDataMsg(package,msg_len-ProtocolSet::FrameFuncLen);
+            break;
+        case ProtocolSet::Vel_DATA:
+            qDebug()<<"调试速度数据帧";
+            ProcessPackage::ParseCurVelDataMsg(package,msg_len-ProtocolSet::FrameFuncLen);
+            break;
+        case ProtocolSet::ACC_DATA:
+            qDebug()<<"调试加速度数据帧";
             ProcessPackage::ParseCurAccDataMsg(package,msg_len-ProtocolSet::FrameFuncLen);
             break;
-        case ProtocolSet::ERR:
-            qDebug()<<"ParseErrFrame\n";
-            break;
+#endif
+        case ProtocolSet::RuningPosData:
+            qDebug()<<"试验过程位移数据帧";
+            ProcessPackage::ParseRunningPosDataMsg(package,msg_len - ProtocolSet::FrameFuncLen);
+        case ProtocolSet::RuningVelData:
+            qDebug()<<"试验过程速度数据帧";
+            ProcessPackage::ParseRunningVelDataMsg(package,msg_len - ProtocolSet::FrameFuncLen);
+        case ProtocolSet::RuningAccData:
+            qDebug()<<"试验过程加速度数据帧";
+            ProcessPackage::ParseRunningAccDataMsg(package,msg_len - ProtocolSet::FrameFuncLen);
         case ProtocolSet::ECHO:
-            qDebug()<<"ParseEchoFrame\n";
+            qDebug()<<"回复帧";
+            ProcessPackage::ParseEchoMsg(package,msg_len - ProtocolSet::FrameFuncLen);
+            break;
+        case ProtocolSet::ERR:
+            qDebug()<<"错误";
             break;
         default:
             qDebug()<<"Message not define\n";

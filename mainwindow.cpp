@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <QFile>
 #include <QStringList>
+#include <QFileInfo>
 
 #include "QTime"
 #include "qdatetime.h"
@@ -39,7 +40,7 @@ QString send_data = "This is Qt Tcp Server\r\n";
 using namespace std;
 
 #define PERFORMANCEINTERVAL 10
-#define STATUSUPDATEINTERVAL 500
+#define STATUSUPDATEINTERVAL 200
 
 /*******************************************
  * @brief MyMainWindow::MyMainWindow
@@ -105,6 +106,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->PreviewPosRadioButton,SIGNAL(clicked(bool)),this,SLOT(on_PreviewWave_PushButton_clicked()));
     connect(ui->PreviewVelRadioButton,SIGNAL(clicked(bool)),this,SLOT(on_PreviewWave_PushButton_clicked()));
     connect(ui->PreviewAccRadioButton,SIGNAL(clicked(bool)),this,SLOT(on_PreviewWave_PushButton_clicked()));
+    connect(ui->PreviewFRadioButton,SIGNAL(clicked(bool)),this,SLOT(on_PreviewWave_PushButton_clicked()));
 //*********************************参数初始化************************************************************
 
     timer = new PerformanceTimer(this);
@@ -117,7 +119,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QStatusBar *statubar = this->statusBar();
     tcpstatus = new QLabel(statubar);
     statubar->addPermanentWidget(tcpstatus);
-    statubar->showMessage("已开放端口8087,等待连接",3000);
+    statubar->showMessage(QString("已开放端口%1,等待连接").arg(ProtocolSet::COMMUNICATION_PORT),3000);
     tcpstatus->setText("未连接到控制器");
     g_ConnectedClientCount = 0;
 
@@ -153,9 +155,9 @@ MainWindow::~MainWindow()
 void MainWindow::slotFuction()
 {
 
-    bool pos_valid_flag,vel_valid_flag,acc_valid_flag;
+    bool pos_valid_flag,vel_valid_flag,acc_valid_flag,f_valid_flag;
     bool valid_flag;
-    ChartDataType cur_pos,ref_pos,cur_vel,ref_vel,cur_acc,ref_acc;
+    ChartDataType cur_pos,ref_pos,cur_vel,ref_vel,cur_acc,ref_acc,cur_f,ref_f;
     DataPacket packet;
     ChartDataType cur_data=0.0,cur_ref=0.0;
     msCount      += PERFORMANCEINTERVAL;
@@ -175,17 +177,24 @@ void MainWindow::slotFuction()
         ref_vel = 0.0;
         acc_valid_flag = g_AccData.GetCurData(cur_acc);
         ref_acc = 0.0;
+        f_valid_flag = g_FData.GetCurData(cur_f);
+        ref_f = 0.0;
     }
     else
     {
         pos_valid_flag = g_PosData.GetRunningData(cur_pos,ref_pos);
         vel_valid_flag = g_VelData.GetRunningData(cur_vel,ref_vel);
         acc_valid_flag = g_AccData.GetRunningData(cur_acc,ref_acc);
+        f_valid_flag = g_FData.GetRunningData(cur_f,ref_f);
     }
-    g_CurPos = cur_pos;
-    g_CurVel = cur_vel;
-    g_CurAcc = cur_acc;
-
+    if(pos_valid_flag)
+        g_CurPos = cur_pos;
+    if(vel_valid_flag)
+        g_CurVel = cur_vel;
+    if(acc_valid_flag)
+        g_CurAcc = cur_acc;
+    if(f_valid_flag)
+        g_CurF  = cur_f;
     switch (g_DisplayType) {
     case ChartDisplayTypeEnum::PlotPos:
         cur_data = cur_pos;
@@ -202,6 +211,10 @@ void MainWindow::slotFuction()
         cur_ref = ref_acc;
         valid_flag = acc_valid_flag;
         break;
+    case ChartDisplayTypeEnum::PlotF:
+        cur_data = cur_f;
+        cur_ref = ref_f;
+        valid_flag = f_valid_flag;
     default:
         break;
     }
@@ -260,6 +273,11 @@ void MainWindow::WavePreview(QString title)
     {
         c->addLineLayer(DoubleArray(g_AccRefArray.buffer,previewCnt));//添加y轴数据
         c->addText(5, 5, "A/g", "timesbi.ttf", 11, 0xff0000);
+    }
+    if(ui->PreviewFRadioButton->isChecked())
+    {
+        c->addLineLayer(DoubleArray(g_FRefArray.buffer,previewCnt));//添加y轴数据
+        c->addText(5, 5, "F/N", "timesbi.ttf", 11, 0xff0000);
     }
 
     c->xAxis()->setLabels(DoubleArray(index,previewCnt));//添加x轴数据，有点类似C里的指针操作
@@ -464,11 +482,13 @@ void MainWindow::ExperimentParamChangeSlot()
 void MainWindow::on_Start_btn_clicked()
 {
 
-    QString msg("start");
-    m_tcpmsgserver->SltMsgToClient(ProtocolSet::COMMAND,msg);
-    //设置状态为开始运行
-    //GlobalData::g_IsRunning = true;
+    //向控制器发送起始帧
+    qint16 cmd = CommandEnum::Start;
+    g_TcpMsgServer->SendMsgToClient(ProtocolSet::COMMAND,&cmd,sizeof(cmd));
+    //设置状态为开始运行并清空全局变量
     g_IsRunning = true;
+    g_PosPeakValue = 0.0;
+    g_AccPeakValue = 0.0;
     HintMsg_LineEdit->setPlaceholderText("试验正在进行.....");
 
 
@@ -478,10 +498,10 @@ void MainWindow::on_Start_btn_clicked()
  */
 void MainWindow::on_Stop_btn_clicked()
 {
-    QString msg("stop");
-    m_tcpmsgserver->SltMsgToClient(ProtocolSet::COMMAND,msg);
 
-    //GlobalData::g_IsRunning = false;
+    //向控制器停止帧
+    qint16 cmd = CommandEnum::Stop;
+    g_TcpMsgServer->SendMsgToClient(ProtocolSet::COMMAND,&cmd,sizeof(cmd));
     g_IsRunning = false;
     //清零计数器
     m_MeasureTime->setHMS(0,0,0);
@@ -603,62 +623,73 @@ void MainWindow::on_action_print_triggered()
  */
 void MainWindow::on_GenerateReport_Action_triggered()
 {
-    QFile *report = new QFile("report.txt");
-    if(!report->open(QIODevice::WriteOnly|QIODevice::Text))
-    {
-        qDebug()<<"Open file failed";
-    }
 
-    QTextStream out(report);
-    out.setCodec("UTF-8");
-    QString ExperimentIDStr = "试验编号";
-    QString ExperimentID = QString::number(g_ExperimentID);
+      QString fileName = QFileDialog::getSaveFileName(this,"保存文件","",
+                                                      "文本文件(*.txt);;CSV文件(*.csv)");
+      if(!ReportGenerator::GenerateCSVReport(fileName,QString(",")))
+      {
+          QMessageBox::warning(this,"提示信息",QString("生成报告失败"),
+                                               QMessageBox::Ok,QMessageBox::Ok);
+          return;
+      }
+      QFileInfo fileInfo(fileName);
 
-    QString WaveFormStr = "波形";
-    QString WaveForm = "正弦波";
+//    QFile *report = new QFile("report.txt");
+//    if(!report->open(QIODevice::WriteOnly|QIODevice::Text))
+//    {
+//        qDebug()<<"Open file failed";
+//    }
 
-    QString ControlStrategyStr = "控制方法";
-    QString ControlStrategy = "PID";
+//    QTextStream out(report);
+//    out.setCodec("UTF-8");
+//    QString ExperimentIDStr = "试验编号";
+//    QString ExperimentID = QString::number(g_ExperimentID);
 
-    QString ControlParamStr = "控制参数";
-    QString P = "P\t0.25";
-    QString I = "I\t0.25";
-    QString D = "D\t0.25";
+//    QString WaveFormStr = "波形";
+//    QString WaveForm = "正弦波";
 
-    QString ExperimentParamStr = "实验参数";
-    QString Amplifier = QString("幅值\t%1%2").arg("25.0").arg("mm");
-    QString Frequncy = QString("频率\t%1%2").arg("1.0").arg("Hz");
-    QString Phase = QString("相位\t%1%2").arg("0.0").arg("");
+//    QString ControlStrategyStr = "控制方法";
+//    QString ControlStrategy = "PID";
+
+//    QString ControlParamStr = "控制参数";
+//    QString P = "P\t0.25";
+//    QString I = "I\t0.25";
+//    QString D = "D\t0.25";
+
+//    QString ExperimentParamStr = "实验参数";
+//    QString Amplifier = QString("幅值\t%1%2").arg("25.0").arg("mm");
+//    QString Frequncy = QString("频率\t%1%2").arg("1.0").arg("Hz");
+//    QString Phase = QString("相位\t%1%2").arg("0.0").arg("");
 
 
-    out <<ExperimentIDStr << endl;
-    out <<ExperimentID << endl;
-    out <<endl<<endl;
+//    out <<ExperimentIDStr << endl;
+//    out <<ExperimentID << endl;
+//    out <<endl<<endl;
 
 
-    out << WaveFormStr <<endl;
-    out << WaveForm <<endl;
-    out <<endl<<endl;
+//    out << WaveFormStr <<endl;
+//    out << WaveForm <<endl;
+//    out <<endl<<endl;
 
-    out << ControlStrategyStr <<endl;
-    out << ControlStrategy << endl;
-    out <<endl<<endl;
+//    out << ControlStrategyStr <<endl;
+//    out << ControlStrategy << endl;
+//    out <<endl<<endl;
 
-    out << ControlParamStr << endl;
-    out << P << endl;
-    out << I << endl;
-    out << D << endl;
-    out <<endl<<endl;
+//    out << ControlParamStr << endl;
+//    out << P << endl;
+//    out << I << endl;
+//    out << D << endl;
+//    out <<endl<<endl;
 
-    out << ExperimentParamStr << endl;
-    out << Amplifier << endl;
-    out << Frequncy << endl;
-    out << Phase << endl;
-    out <<endl<<endl;
+//    out << ExperimentParamStr << endl;
+//    out << Amplifier << endl;
+//    out << Frequncy << endl;
+//    out << Phase << endl;
+//    out <<endl<<endl;
 
-    report->close();
+//    report->close();
 
-    int ret=QMessageBox::information(this,"提示信息","成功生成报告文件",
+    int ret=QMessageBox::information(this,"提示信息",QString("成功生成csv文件:%1").arg(fileInfo.fileName()),
                                      QMessageBox::Ok,QMessageBox::Ok);
 
 }
@@ -685,6 +716,12 @@ void MainWindow::on_RealAccRadioButton_clicked()
 {
     g_DisplayType = ChartDisplayTypeEnum::PlotAcc;
 }
+
+void MainWindow::on_RealFRadioButton_clicked()
+{
+    g_DisplayType = ChartDisplayTypeEnum::PlotF;
+}
+
 
 void MainWindow::on_PreviewWave_PushButton_clicked()
 {
@@ -733,4 +770,11 @@ void MainWindow::on_LoadWave_PushButton_clicked()
         return;
     }
     //使用服务器将参考波形发送至控制器中
+    //参考位移
+    g_TcpMsgServer->SendMsgToClient(ProtocolSet::PosRefData,&g_PosRefArray,g_PosRefArray.dataCnt*sizeof(double));
+    //参考速度
+    g_TcpMsgServer->SendMsgToClient(ProtocolSet::VelRefData,&g_VelRefArray,g_VelRefArray.dataCnt*sizeof(double));
+    //参考加速度
+    g_TcpMsgServer->SendMsgToClient(ProtocolSet::AccRefData,&g_VelRefArray,g_AccRefArray.dataCnt*sizeof(double));
 }
+

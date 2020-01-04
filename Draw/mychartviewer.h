@@ -19,6 +19,7 @@
 #include <QTextBrowser>
 #include <QString>
 #include <QLayout>
+#include <QFileDialog>
 
 #include "qdoublebufferedqueue.h"
 #include "randomwalk.h"

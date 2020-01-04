@@ -39,20 +39,20 @@
       </size>
      </property>
      <property name="title">
-      <string>预实验</string>
+      <string>试验设置</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_8">
       <item row="1" column="0">
        <widget class="QLabel" name="activate">
         <property name="text">
-         <string>响应量级:</string>
+         <string> 静态电压</string>
         </property>
        </widget>
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="start_velociy">
         <property name="text">
-         <string>起动速率 :</string>
+         <string> 控制变量</string>
         </property>
        </widget>
       </item>
@@ -85,13 +85,13 @@
         </property>
         <item>
          <property name="text">
-          <string>%</string>
+          <string>mV</string>
          </property>
         </item>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QLineEdit" name="activate_value">
+       <widget class="QLineEdit" name="StaticVoltage_LineEdit">
         <property name="minimumSize">
          <size>
           <width>51</width>
@@ -106,25 +106,25 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="3">
-       <widget class="QRadioButton" name="slow">
-        <property name="text">
-         <string>慢速</string>
-        </property>
-        <property name="icon">
-         <iconset resource="assets.qrc">
-          <normaloff>:/my_icon/Ressources/48/82.png</normaloff>:/my_icon/Ressources/48/82.png</iconset>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1">
-       <widget class="QRadioButton" name="fast">
+       <widget class="QRadioButton" name="PosVariable_RadioButton">
         <property name="text">
-         <string>快速</string>
+         <string> 位移</string>
         </property>
         <property name="icon">
          <iconset resource="assets.qrc">
           <normaloff>:/my_icon/Ressources/48/83.png</normaloff>:/my_icon/Ressources/48/83.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QRadioButton" name="FVariable_RadioButton">
+        <property name="text">
+         <string>力</string>
+        </property>
+        <property name="icon">
+         <iconset resource="assets.qrc">
+          <normaloff>:/my_icon/Ressources/48/82.png</normaloff>:/my_icon/Ressources/48/82.png</iconset>
         </property>
        </widget>
       </item>

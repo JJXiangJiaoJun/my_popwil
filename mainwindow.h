@@ -31,7 +31,7 @@
 #include "global_setting.h"
 #include "globaldata.h"
 #include "mychartviewer.h"
-
+#include "ReportGenerator.h"
 
 
 namespace Ui {
@@ -150,6 +150,8 @@ private slots:
     void on_tool_bar_Save_File_triggered();
 
     void on_LoadWave_PushButton_clicked();
+
+    void on_RealFRadioButton_clicked();
 
 private:
     void StatusDockInit();

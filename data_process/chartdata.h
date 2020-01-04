@@ -6,7 +6,7 @@
 #include "global_setting.h"
 //#include "myhelper.h"
 #define DEFAULT_DATA 0.0
-#define MAX_DATA_SIZE  100000
+#define MAX_DATA_SIZE  50000
 
 
 class ChartData
@@ -35,9 +35,9 @@ public:
     bool GetCurData(ChartDataType &curData);
     bool GetRunningData(ChartDataType &curData,ChartDataType &refData);
 
-    void Empty();                   //清空ChartData中的所有数据。
-    void EmptyCurDataArray();
-    void EmptyRefDataArray();
+    void Clear();                   //清空ChartData中的所有数据。
+    void ClearCurDataArray();
+    void ClearRefDataArray();
     void ClearDataCount();
 
     //void PushBackToCurDataList(const ChartDataType &value);   //向m_curDataList中添加一条数据

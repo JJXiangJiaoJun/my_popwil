@@ -64,12 +64,12 @@ void MyChartViewer::onMouseUsageChanged(int mouseUsage)
 // The Save button is pressed
 void MyChartViewer::onSave(bool)
 {
-//    QString fileName = QFileDialog::getSaveFileName(m_ChartViewer, "Save", "chartdirector_demo",
-//        "PNG (*.png);;JPG (*.jpg);;GIF (*.gif);;BMP (*.bmp);;SVG (*.svg);;PDF (*.pdf)");
+    QString fileName = QFileDialog::getSaveFileName(m_ChartViewer, "Save", "chartdirector_demo",
+        "PNG (*.png);;JPG (*.jpg);;GIF (*.gif);;BMP (*.bmp);;SVG (*.svg);;PDF (*.pdf)");
 
-    QDateTime currentTime = QDateTime::currentDateTime();
-    QString current = currentTime.toString("yyyyMMdd_hhmmss");
-    QString fileName="E://PopWilCacher//Snapshot//snapshot_"+current+".png";
+//    QDateTime currentTime = QDateTime::currentDateTime();
+//    QString current = currentTime.toString("yyyyMMdd_hhmmss");
+//    QString fileName="E://PopWilCacher//Snapshot//snapshot_"+current+".png";
 
 //    Logger *logger=Logger::getInstance();
 //    QString mess="[info] "+QString("截图")+fileName+QString("保存成功");
@@ -275,9 +275,16 @@ void MyChartViewer::drawChart(QChartViewer *viewer)
         c->addTitle("实时速度", "simsun.ttc", 18);
         c->yAxis()->setTitle("V/mm/s", "arialbd.ttf", 10);
         break;
-    default:
+    case ChartDisplayTypeEnum::PlotAcc:
         c->addTitle("实时加速度", "simsun.ttc", 18);
         c->yAxis()->setTitle("A/g", "arialbd.ttf", 10);
+        break;
+    case ChartDisplayTypeEnum::PlotF:
+        c->addTitle("实时力", "simsun.ttc", 18);
+        c->yAxis()->setTitle("F/N", "arialbd.ttf", 10);
+        break;
+    default:
+        break;
     }
 
     // Configure the y-axis label to be inside the plot area and above the horizontal grid lines
