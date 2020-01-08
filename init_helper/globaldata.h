@@ -21,7 +21,7 @@ extern  PIDParamStruct  g_AccPIDParam;  //用于力的PID
 extern  RefDataStruct     g_PosRefArray;
 extern  RefDataStruct     g_VelRefArray;
 extern  RefDataStruct     g_AccRefArray;
-extern  RefDataStruct   g_FRefArray;
+extern  RefDataStruct     g_FRefArray;
 
 extern RunningDataStruct g_PosRunningData;
 extern RunningDataStruct g_VelRunningData;

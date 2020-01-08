@@ -182,6 +182,10 @@ void ClientSocket::SltReadyRead()
             qDebug()<<"DEBUG: 调试加速度数据帧";
             ProcessPackage::ParseDebugAccDataMsg(package,msg_len-ProtocolSet::FrameFuncLen);
             break;
+        case ProtocolSet::F_DATA:
+            qDebug()<<"DEBUG: 调试力数据帧";
+            ProcessPackage::ParseDebugFDataMsg(package,msg_len-ProtocolSet::FrameFuncLen);
+            break;
 #else
         case ProtocolSet::POS_DATA:
             //绘图读取,传输过来的数据中均为double类型
@@ -196,20 +200,31 @@ void ClientSocket::SltReadyRead()
             qDebug()<<"调试加速度数据帧";
             ProcessPackage::ParseCurAccDataMsg(package,msg_len-ProtocolSet::FrameFuncLen);
             break;
+        case ProtocolSet::F_DATA:
+            qDebug()<<"调试加速度数据帧";
+            ProcessPackage::ParseCurFDataMsg(package,msg_len-ProtocolSet::FrameFuncLen);
+            break;
 #endif
         case ProtocolSet::RuningPosData:
             qDebug()<<"试验过程位移数据帧";
             ProcessPackage::ParseRunningPosDataMsg(package,msg_len - ProtocolSet::FrameFuncLen);
+            break;
         case ProtocolSet::RuningVelData:
             qDebug()<<"试验过程速度数据帧";
             ProcessPackage::ParseRunningVelDataMsg(package,msg_len - ProtocolSet::FrameFuncLen);
+            break;
         case ProtocolSet::RuningAccData:
             qDebug()<<"试验过程加速度数据帧";
             ProcessPackage::ParseRunningAccDataMsg(package,msg_len - ProtocolSet::FrameFuncLen);
+            break;
+        case ProtocolSet::RuningFData:
+            qDebug()<<"试验过程力数据帧";
+            ProcessPackage::ParseRunningFDataMsg(package,msg_len - ProtocolSet::FrameFuncLen);
+            break;
         case ProtocolSet::ECHO:
             qDebug()<<"回复帧";
             ProcessPackage::ParseEchoMsg(package,msg_len - ProtocolSet::FrameFuncLen);
-            break;
+            break;       
         case ProtocolSet::ERR:
             qDebug()<<"错误";
             break;

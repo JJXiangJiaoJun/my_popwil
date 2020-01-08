@@ -61,6 +61,8 @@ private:
                          PIDParamStruct *posPID, PIDParamStruct *accPID);
     void GetPIDParameter(PIDParamStruct *staticPID,
                          PIDParamStruct *posPID, PIDParamStruct *accPID);
+    void SetControlMethod(qint16 ctrlMethod);
+    void SetControlVaribale(qint16 ctrlVariable);
     void GetStaticVoltage(double *staticV);
 private slots:
 
@@ -73,6 +75,8 @@ private slots:
     void on_Cancel_PushButton_clicked();
     void on_PosVariable_RadioButton_clicked();
     void on_FVariable_RadioButton_clicked();
+    void on_WriteConfigFile_PushButton_clicked();
+    void on_SetDefaultConfig_PushButton_clicked();
 };
 
 #endif // CONTROL_PARAM_H

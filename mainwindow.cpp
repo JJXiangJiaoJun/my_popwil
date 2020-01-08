@@ -187,6 +187,7 @@ void MainWindow::slotFuction()
         acc_valid_flag = g_AccData.GetRunningData(cur_acc,ref_acc);
         f_valid_flag = g_FData.GetRunningData(cur_f,ref_f);
     }
+
     if(pos_valid_flag)
         g_CurPos = cur_pos;
     if(vel_valid_flag)
@@ -220,9 +221,13 @@ void MainWindow::slotFuction()
     }
 
     //更新最大值
-    if(g_IsRunning)
+    if(g_IsRunning&&pos_valid_flag)
     {
-        g_AccPeakValue = std::max(g_AccPeakValue,packet.series0);
+        g_PosPeakValue = std::max(g_PosPeakValue,cur_pos);
+    }
+    if(g_IsRunning&&acc_valid_flag)
+    {
+        g_AccPeakValue = std::max(g_AccPeakValue,cur_acc);
     }
 
     //不是正在运行
@@ -372,8 +377,8 @@ void MainWindow::StatusDockInit()
 //    GlobalData::g_AccPeakValue = 1.0755;
 //    GlobalData::g_PosPeakValue = 2.1024;
 
-    g_AccPeakValue = 0.0755;
-    g_PosPeakValue = 0.1204;
+//    g_AccPeakValue = 0.0755;
+//    g_PosPeakValue = 0.1204;
 
     //初始化TextBrowser
     //QString curPosPeakValue = QString::number(GlobalData::g_AccPeakValue,'f',4);
@@ -423,7 +428,7 @@ void MainWindow::StatusUpdateTimerSlot()
         *m_MeasureTime = m_MeasureTime->addMSecs(STATUSUPDATEINTERVAL);
         *m_ReleaveTime = m_ReleaveTime->addMSecs(-STATUSUPDATEINTERVAL);
         //QString curPosPeakValue = QString::number(GlobalData::g_AccPeakValue,'f',4);
-        g_PosPeakValue = g_AccPeakValue + 0.1274;
+//        g_PosPeakValue = g_AccPeakValue + 0.1274;
         QString curPosPeakValue = QString::number(g_PosPeakValue,'f',4);
         PosPeakValue_TextBrowser->setText(curPosPeakValue);
         //QString curAccRMS1 = QString::number(GlobalData::g_AccPeakValue,'f',4);
@@ -486,7 +491,7 @@ void MainWindow::on_Start_btn_clicked()
     qint16 cmd = CommandEnum::Start;
     g_TcpMsgServer->SendMsgToClient(ProtocolSet::COMMAND,&cmd,sizeof(cmd));
     //设置状态为开始运行并清空全局变量
-    g_IsRunning = true;
+    //g_IsRunning = true;
     g_PosPeakValue = 0.0;
     g_AccPeakValue = 0.0;
     HintMsg_LineEdit->setPlaceholderText("试验正在进行.....");
@@ -770,11 +775,14 @@ void MainWindow::on_LoadWave_PushButton_clicked()
         return;
     }
     //使用服务器将参考波形发送至控制器中
-    //参考位移
-    g_TcpMsgServer->SendMsgToClient(ProtocolSet::PosRefData,&g_PosRefArray,g_PosRefArray.dataCnt*sizeof(double));
-    //参考速度
-    g_TcpMsgServer->SendMsgToClient(ProtocolSet::VelRefData,&g_VelRefArray,g_VelRefArray.dataCnt*sizeof(double));
-    //参考加速度
-    g_TcpMsgServer->SendMsgToClient(ProtocolSet::AccRefData,&g_VelRefArray,g_AccRefArray.dataCnt*sizeof(double));
+    //发送正弦波形参数
+    g_TcpMsgServer->SendMsgToClient(ProtocolSet::SineWaveParam,&g_ExperimentParam,sizeof(ExperimentParamStruct));
+
+//    //参考位移
+//    g_TcpMsgServer->SendMsgToClient(ProtocolSet::PosRefData,&g_PosRefArray,g_PosRefArray.dataCnt*sizeof(double));
+//    //参考速度
+//    g_TcpMsgServer->SendMsgToClient(ProtocolSet::VelRefData,&g_VelRefArray,g_VelRefArray.dataCnt*sizeof(double));
+//    //参考加速度
+//    g_TcpMsgServer->SendMsgToClient(ProtocolSet::AccRefData,&g_VelRefArray,g_AccRefArray.dataCnt*sizeof(double));
 }
 

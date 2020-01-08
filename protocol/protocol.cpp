@@ -382,11 +382,11 @@ QByteArray ProtocolSet::ControlVaribleMsg(void *msg, const qint32 msg_len)
     out.setVersion(QDataStream::Qt_5_9);
     out.setByteOrder(QDataStream::BigEndian);
     //构造消息数据包
-    quint16 tot_len = 0;
+    FrameLengthType tot_len = 0;
     out << tot_len << qint16(ControlVarible)  \
         <<controlVar;
     out.device()->seek(0);
-    out << quint16(pbuf.size()-FrameLegthLen);
+    out << FrameLengthType(pbuf.size()-FrameLegthLen);
 
     return pbuf;
 }
@@ -406,11 +406,11 @@ QByteArray ProtocolSet::SineWaveParamMsg(void *msg, const qint32 msg_len)
     out.setVersion(QDataStream::Qt_5_9);
     out.setByteOrder(QDataStream::BigEndian);
     //构造消息数据包
-    quint16 tot_len = 0;
+    FrameLengthType tot_len = 0;
     out << tot_len << qint16(SineWaveParam)  \
         <<double(paramMsg_prt->amplitude) << double(paramMsg_prt->frequency);
     out.device()->seek(0);
-    out << quint16(pbuf.size()-FrameLegthLen);
+    out << FrameLengthType(pbuf.size()-FrameLegthLen);
 
     return pbuf;
 }
@@ -429,11 +429,11 @@ QByteArray ProtocolSet::StaticVoltageMsg(void *msg, const qint32 msg_len)
     out.setVersion(QDataStream::Qt_5_9);
     out.setByteOrder(QDataStream::BigEndian);
     //构造消息数据包
-    quint16 tot_len = 0;
+    FrameLengthType tot_len = 0;
     out << tot_len << qint16(StaticVoltage)  \
         <<staticV;
     out.device()->seek(0);
-    out << quint16(pbuf.size()-FrameLegthLen);
+    out << FrameLengthType(pbuf.size()-FrameLegthLen);
 
     return pbuf;
 }

@@ -48,6 +48,21 @@ void ProcessPackage::ParseDebugAccDataMsg(QDataStream &raw_data, FrameLengthType
     }
 }
 
+void ProcessPackage::ParseDebugFDataMsg(QDataStream &raw_data, FrameLengthType msg_len)
+{
+    ChartDataType data;
+    msg_len /= DATA_SIZE;
+    //qDebug()<<"收到数据为" <<msg_len;
+    for(int i=0;i<msg_len;i++)
+    {
+        //将数据一个个读入缓冲区中
+        raw_data >> data;
+        //GlobalData::g_AccData.PushBack(data);
+        g_FData.PushBackToCurDataArray(data);
+    }
+}
+
+
 void ProcessPackage::ParseCurPosDataMsg(QDataStream &raw_data, FrameLengthType msg_len)
 {
     //将数据填充至绘图中
@@ -93,6 +108,21 @@ void ProcessPackage::ParseCurAccDataMsg(QDataStream &raw_data, FrameLengthType m
         raw_data >> data;
         if(i%PLOT_INTERVAL == 0)
             g_AccData.PushBackToCurDataArray(data);
+    }
+}
+
+
+void ProcessPackage::ParseCurFDataMsg(QDataStream &raw_data, FrameLengthType msg_len)
+{
+    ChartDataType data;
+    msg_len /= DATA_SIZE;
+    //qDebug()<<"收到数据为" <<msg_len;
+    for(int i=0;i<msg_len;i++)
+    {
+        //将数据一个个读入缓冲区中
+        raw_data >> data;
+        if(i%PLOT_INTERVAL == 0)
+            g_FData.PushBackToCurDataArray(data);
     }
 }
 
@@ -169,6 +199,28 @@ void ProcessPackage::ParseRunningAccDataMsg(QDataStream &raw_data, FrameLengthTy
 }
 
 
+void ProcessPackage::ParseRunningFDataMsg(QDataStream &raw_data, FrameLengthType msg_len)
+{
+    ChartDataType refF;
+    ChartDataType curF;
+    msg_len /=DATA_SIZE;
+    FrameLengthType dataCnt = msg_len / 2;
+    //需要保存到Running全局数组中
+    for(int i=0;i<dataCnt;i++)
+    {
+        //一次读取一组数据
+        raw_data >> refF >> curF;
+        //加入到全局数组中进行保存
+        g_FRunningData.push(refF,curF);
+        //加入到绘图数组
+        if(i%PLOT_INTERVAL == 0)
+        {
+            g_FData.PushBackToRefDataArray(refF);
+            g_FData.PushBackToCurDataArray(curF);
+        }
+    }
+}
+
 void ProcessPackage::ParseCommandMsg(QDataStream &raw_data, FrameLengthType msg_len)
 {
 
@@ -184,10 +236,12 @@ void ProcessPackage::ParseEchoMsg(QDataStream &raw_data, FrameLengthType msg_len
     if(msg_len!=sizeof(qint16))
     {
         qDebug()<<"回复数据的类型不对 qint16";
+        return;
     }
     qint16 echoMsg;
     raw_data >> echoMsg;
     qDebug()<<"接收到回复消息:"<<g_EchoStringList[echoMsg];
+
     switch (echoMsg) {
     case EchoMessageEnum::ReceiveRefData:
 
@@ -197,21 +251,25 @@ void ProcessPackage::ParseEchoMsg(QDataStream &raw_data, FrameLengthType msg_len
         g_PosData.Clear();
         g_VelData.Clear();
         g_AccData.Clear();
+        g_FData.Clear();
 
         g_PosRunningData.Clear();
         g_VelRunningData.Clear();
         g_AccRunningData.Clear();
+        g_FRunningData.Clear();
 
         g_IsRunning = true;
         g_PosPeakValue = 0.0;
         g_AccPeakValue = 0.0;
 
-        g_PosRunningData = 0.0;
-        g_AccRunningData = 0.0;
-        g_VelRunningData = 0.0;
+        g_CurPos = 0.0;
+        g_CurVel = 0.0;
+        g_CurAcc = 0.0;
+        g_CurF = 0.0;
         break;
     case EchoMessageEnum::ExperimentStop:
         g_IsRunning = false;
+        break;
     default:
         break;
     }

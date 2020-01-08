@@ -32,12 +32,27 @@ struct RunningDataStruct
         totalRunningTime = 0.0;
     }
 
+    double GetCur(qint32 idx)
+    {
+        if(idx>=dataCnt)
+            return -1.0;
+        return CurBuffer[idx];
+    }
+
+    double GetRef(qint32 idx)
+    {
+        if(idx>=dataCnt)
+            return -1.0;
+        return RefBuffer[idx];
+    }
+
     void push(double refData,double curData)
     {
         if(dataCnt >= MAX_POINT)
             dataCnt *= 0.8;
         RefBuffer[dataCnt] = refData;
         CurBuffer[dataCnt] = curData;
+        dataCnt++;
     }
 
 };

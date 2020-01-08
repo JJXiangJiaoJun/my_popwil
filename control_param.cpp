@@ -108,6 +108,38 @@ void control_param::SetPIDParameter(PIDParamStruct *staticPID, PIDParamStruct *p
     D_AccControl_LineEdit->setText(QString::number(accPID->D));
 }
 
+void control_param::SetControlVaribale(qint16 ctrlVariable)
+{
+    switch(ctrlVariable)
+    {
+        case ControlVariableEnum::Pos:
+            PosVariable_RadioButton->setChecked(true);
+            break;
+        case ControlVariableEnum::F:
+            FVariable_RadioButton->setChecked(true);
+            break;
+        default:
+            break;
+    }
+}
+
+void control_param::SetControlMethod(qint16 ctrlMethod)
+{
+    switch (ctrlMethod) {
+    case ControlMethodEnum::PID:
+        PID_RadioButton->setChecked(true);
+        break;
+    case ControlMethodEnum::TVC:
+        TVC_RadioButton->setChecked(true);
+    case ControlMethodEnum::ThreePID:
+        ThreePID_RadioButton->setChecked(true);
+    case ControlMethodEnum::IterativeControl:
+        IterativeControl_RadioButton->setChecked(true);
+    default:
+        break;
+    }
+}
+
 
 void control_param::GetPIDParameter(PIDParamStruct *staticPID, PIDParamStruct *posPID, PIDParamStruct *accPID)
 {
@@ -179,18 +211,43 @@ void control_param::on_ReadConfigFile_PushButton_clicked()
     PIDParamStruct *posPID = new PIDParamStruct;
     PIDParamStruct *accPID = new PIDParamStruct;
 
-    if(!myHelper::ReadFromPIDParamIni(fileName,staticPID,posPID,accPID))
+    if(!myHelper::ReadFromPIDParamIni(fileName,staticPID,posPID,accPID)||!myHelper::ReadFromControlMethodIni(fileName,&ControlMethod)
+            ||!myHelper::ReadFromControlVariableIni(fileName,&ControlVariable))
     {
         QMessageBox::warning(this,"警告","无法读取参数!",QMessageBox::Ok|QMessageBox::Cancel,QMessageBox::Ok);
         return;
     }
     SetPIDParameter(staticPID,posPID,accPID);
+    SetControlMethod(ControlMethod);
+    SetControlVaribale(ControlVariable);
     delete staticPID;
     delete posPID;
     delete accPID;
 
 }
 
+/**
+ * @brief control_param::on_WriteConfigFile_PushButton_clicked
+ * 将当前参数写入ini文件中
+ */
+void control_param::on_WriteConfigFile_PushButton_clicked()
+{
+    QString fileName = QFileDialog::getSaveFileName(this,"保存文件","",
+                                                    "INI(*.ini)");
+    PIDParamStruct *staticPID = new PIDParamStruct;
+    PIDParamStruct *posPID = new PIDParamStruct;
+    PIDParamStruct *accPID = new PIDParamStruct;
+    GetPIDParameter(staticPID,posPID,accPID);
+    if(!myHelper::WriteToPIDParamIni(fileName,staticPID,posPID,accPID)||!myHelper::WriteToControlMethodIni(fileName,&ControlMethod)
+            ||!myHelper::WriteToControlVariableIni(fileName,&ControlVariable))
+    {
+        QMessageBox::warning(this,"警告","无法写入参数!",QMessageBox::Ok|QMessageBox::Cancel,QMessageBox::Ok);
+        return;
+    }
+    delete staticPID;
+    delete posPID;
+    delete accPID;
+}
 
 /**
  * @brief control_param::on_OK_PushButton_clicked
@@ -232,4 +289,11 @@ void control_param::on_PosVariable_RadioButton_clicked()
 void control_param::on_FVariable_RadioButton_clicked()
 {
     ControlVariable = ControlVariableEnum::F;
+}
+
+
+
+void control_param::on_SetDefaultConfig_PushButton_clicked()
+{
+
 }

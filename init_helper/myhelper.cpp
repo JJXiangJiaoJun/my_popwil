@@ -71,11 +71,129 @@ bool myHelper::ReadFromPIDParamIni(QString fileName, PIDParamStruct *staticPID,
     posPID->D = PIDSettingReader.value(QString("PosPID_D")).toDouble();
 
     accPID->P = PIDSettingReader.value(QString("AccPID_P")).toDouble();
-    accPID->I = PIDSettingReader.value(QString("PosPID_I")).toDouble();
-    accPID->D = PIDSettingReader.value(QString("PosPID_D")).toDouble();
+    accPID->I = PIDSettingReader.value(QString("AccPID_I")).toDouble();
+    accPID->D = PIDSettingReader.value(QString("AccPID_D")).toDouble();
 
     PIDSettingReader.endGroup();
     return true;
 }
 
+bool myHelper::WriteToPIDParamIni(QString fileName, PIDParamStruct *staticPID,
+                                  PIDParamStruct *posPID, PIDParamStruct *accPID)
+{
+    if(fileName==NULL||fileName=="")
+    {
+          QMessageBox::information(NULL,"警告","文件名为空,请重新输入",QMessageBox::Ok|QMessageBox::Cancel);
+          qDebug()<<"Ini文件名为空";
+          return false;
+    }
+    QSettings PIDSettingWriter(fileName,QSettings::IniFormat);
+    PIDSettingWriter.beginGroup(QString("PIDParam"));
+    PIDSettingWriter.setValue("staticPID_P",staticPID->P);
+    PIDSettingWriter.setValue("staticPID_I",staticPID->I);
+    PIDSettingWriter.setValue("staticPID_D",staticPID->D);
 
+    PIDSettingWriter.setValue("PosPID_P",posPID->P);
+    PIDSettingWriter.setValue("PosPID_I",posPID->I);
+    PIDSettingWriter.setValue("PosPID_D",posPID->D);
+
+    PIDSettingWriter.setValue("AccPID_P",accPID->P);
+    PIDSettingWriter.setValue("AccPID_I",accPID->I);
+    PIDSettingWriter.setValue("AccPID_D",accPID->D);
+
+    PIDSettingWriter.endGroup();
+    return true;
+}
+
+
+bool myHelper::ReadFromStaticVoltageIni(QString fileName, double *staticV)
+{
+    if(fileName==NULL||fileName=="")
+    {
+          QMessageBox::information(NULL,"警告","文件名为空,请重新输入",QMessageBox::Ok|QMessageBox::Cancel);
+          qDebug()<<"Ini文件名为空";
+          return false;
+    }
+    QSettings StaticVSettingReader(fileName,QSettings::IniFormat);
+    StaticVSettingReader.beginGroup(QString("StaticVoltage"));
+    *staticV = StaticVSettingReader.value("StaticV").toDouble();
+    StaticVSettingReader.endGroup();
+    return true;
+}
+
+
+bool myHelper::WriteToStaticVoltageIni(QString fileName, double *staticV)
+{
+    if(fileName==NULL||fileName=="")
+    {
+          QMessageBox::information(NULL,"警告","文件名为空,请重新输入",QMessageBox::Ok|QMessageBox::Cancel);
+          qDebug()<<"Ini文件名为空";
+          return false;
+    }
+    QSettings StaticVSettingWriter(fileName,QSettings::IniFormat);
+    StaticVSettingWriter.beginGroup(QString("StaticVoltage"));
+    StaticVSettingWriter.setValue("StaticV",*staticV);
+    StaticVSettingWriter.endGroup();
+    return true;
+}
+
+bool myHelper::ReadFromControlMethodIni(QString fileName, qint16 *controlMethod)
+{
+    if(fileName==NULL||fileName=="")
+    {
+          QMessageBox::information(NULL,"警告","文件名为空,请重新输入",QMessageBox::Ok|QMessageBox::Cancel);
+          qDebug()<<"Ini文件名为空";
+          return false;
+    }
+    QSettings ControlMethodSettingReader(fileName,QSettings::IniFormat);
+    ControlMethodSettingReader.beginGroup(QString("ControlMethod"));
+    *controlMethod = ControlMethodSettingReader.value("ctrlMethod").toInt();
+    ControlMethodSettingReader.endGroup();
+    return true;
+}
+
+bool myHelper::WriteToControlMethodIni(QString fileName, qint16 *controlMethod)
+{
+    if(fileName==NULL||fileName=="")
+    {
+          QMessageBox::information(NULL,"警告","文件名为空,请重新输入",QMessageBox::Ok|QMessageBox::Cancel);
+          qDebug()<<"Ini文件名为空";
+          return false;
+    }
+    QSettings ControlMethodSettingWriter(fileName,QSettings::IniFormat);
+    ControlMethodSettingWriter.beginGroup(QString("ControlMethod"));
+    ControlMethodSettingWriter.setValue("ctrlMethod",*controlMethod);
+    ControlMethodSettingWriter.endGroup();
+    return true;
+}
+
+bool myHelper::ReadFromControlVariableIni(QString fileName, qint16 *controlVariable)
+{
+    if(fileName==NULL||fileName=="")
+    {
+          QMessageBox::information(NULL,"警告","文件名为空,请重新输入",QMessageBox::Ok|QMessageBox::Cancel);
+          qDebug()<<"Ini文件名为空";
+          return false;
+    }
+    QSettings ControlVariableSettingReader(fileName,QSettings::IniFormat);
+    ControlVariableSettingReader.beginGroup(QString("ControlVariable"));
+    *controlVariable = ControlVariableSettingReader.value("ctrlVariable").toInt();
+    ControlVariableSettingReader.endGroup();
+    return true;
+}
+
+
+bool myHelper::WriteToControlVariableIni(QString fileName, qint16 *controlVariable)
+{
+    if(fileName==NULL||fileName=="")
+    {
+          QMessageBox::information(NULL,"警告","文件名为空,请重新输入",QMessageBox::Ok|QMessageBox::Cancel);
+          qDebug()<<"Ini文件名为空";
+          return false;
+    }
+    QSettings ControlVariableSettingWriter(fileName,QSettings::IniFormat);
+    ControlVariableSettingWriter.beginGroup(QString("ControlVariable"));
+    ControlVariableSettingWriter.setValue("ctrlVariable",*controlVariable);
+    ControlVariableSettingWriter.endGroup();
+    return true;
+}

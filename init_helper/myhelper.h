@@ -51,6 +51,17 @@ public:
 
     static bool ReadFromPIDParamIni(QString fileName,PIDParamStruct *staticPID,
                                       PIDParamStruct *posPID,PIDParamStruct *accPID);
+    static bool WriteToPIDParamIni(QString fileName,PIDParamStruct *staticPID,
+                                   PIDParamStruct *posPID,PIDParamStruct *accPID);
+    static bool ReadFromStaticVoltageIni(QString fileName,double *staticV);
+    static bool WriteToStaticVoltageIni(QString fileName,double *staticV);
+
+    static bool ReadFromControlMethodIni(QString fileName,qint16 *controlMethod);
+    static bool WriteToControlMethodIni(QString fileName,qint16 *controlMethod);
+
+    static bool ReadFromControlVariableIni(QString fileName,qint16 *controlVariable);
+    static bool WriteToControlVariableIni(QString fileName,qint16 *controlVariable);
+
 signals:
 
 public slots:
