@@ -31,7 +31,8 @@ PosPeakValueType g_PosPeakValue;
 //加速度峰值
 AccPeakValueType g_AccPeakValue;
 
-bool g_IsRunning=false;
+bool g_IsRunning= false;
+bool g_SendRef = false;
 int g_ConnectedClientCount=0;
 qint16 g_ControlMethod=ControlMethodEnum::PID;
 qint16 g_ControlVariable = ControlVariableEnum::Pos;

@@ -46,6 +46,10 @@ void TcpServerAbstract::incomingConnection(qintptr handle)
    connect(thread,SIGNAL(SignalDisconnectToHost(QString,int,int)),this,SLOT(SltDisConnected(QString,int,int)));
    ///该线程退出后，删除该线程
    connect(thread,SIGNAL(finished()),thread,SLOT(deleteLater()));
+   //connect(thread,SIGNAL(SignalFinished(QThread*)),this,SLOT(delThread(QThread*)));
+
+   ////
+   //connect(thread,SIGNAL(SignalDisconnectToHost(QString,int,int)),thread,SIGNAL(finished()));
    //线程开始
    qDebug()<<"线程开始";
    thread->start();
@@ -93,6 +97,10 @@ void TcpServerAbstract::CloseListen()
  }
 
 
+ void TcpServerAbstract::AppendNewSocket(ClientSocket *socket)
+ {
+     m_clients.append(socket);
+ }
 
  /**
  * @brief TcpMsgServer::TcpMsgServer
@@ -138,10 +146,18 @@ void TcpMsgServer::SltNewConnection()
 /**
  * @brief TcpMsgServer::SltConnected
  */
-void TcpMsgServer::SltConnected()
+void TcpMsgServer::SltConnected(QString ip,int port)
 {
-    qDebug()<<"服务器与客户端建立连接";
+    qDebug()<<"服务器与客户端建立连接"<<"ip:"<<"port"<<port;
 }
+
+
+//void TcpMsgServer::delThread(QThread* thread)
+//{
+//    thread->quit();
+//    thread->wait();
+//    qDebug()<<"线程完成删除线程!!!!!";
+//}
 
 /**
  * @brief TcpMsgServer::SltDisConnected 客户端断开连接函数

@@ -7,6 +7,7 @@
 #include <QtGlobal>
 #include <QString>
 #include <QByteArray>
+#include <QThread>
 
 #include "protocol.h"
 #include "process_package.h"

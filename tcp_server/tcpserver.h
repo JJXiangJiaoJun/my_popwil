@@ -5,6 +5,7 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QList>
+#include <QThread>
 
 #include "protocol.h"
 #include "clientsocket.h"
@@ -34,6 +35,7 @@ public:
 
     //获取当前服务器套接字连接列表的引用
     QList<ClientSocket *> &get_ConnectClients();
+    void AppendNewSocket(ClientSocket * socket);
 
 protected:
     //重写此函数，在此函数中开启多线程
@@ -61,9 +63,9 @@ public slots:
 protected slots:
     //继承的虚函数
     virtual void SltNewConnection()=0;
-    virtual void SltConnected()=0;
+    virtual void SltConnected(QString ip,int port)=0;
     virtual void SltDisConnected(const QString &ip,const int &port,const int disconnId)=0;
-
+    //virtual void delThread(QThread* thread)=0;
     //待实现，子类通过实现该函数从而实现自己的发送数据功能。
 
     //virtual void sendMsg();
@@ -94,8 +96,10 @@ public slots:
 //重写的虚函数
 private slots:
     void SltNewConnection();
-    void SltConnected();
+    void SltConnected(QString ip,int port);
     void SltDisConnected(const QString &ip,const int &port,const int disconnId);
+
+    //void delThread(QThread* thread);
 };
 
 

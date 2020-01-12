@@ -486,12 +486,20 @@ void MainWindow::ExperimentParamChangeSlot()
  */
 void MainWindow::on_Start_btn_clicked()
 {
+//    if(g_SendRef == false)
+//    {
+//        QMessageBox::warning(this,"提示信息","请载入参考信号",
+//                                             QMessageBox::Ok|QMessageBox::Cancel,QMessageBox::Ok);
+//        return;
+//    }
 
     //向控制器发送起始帧
     qint16 cmd = CommandEnum::Start;
     g_TcpMsgServer->SendMsgToClient(ProtocolSet::COMMAND,&cmd,sizeof(cmd));
     //设置状态为开始运行并清空全局变量
+
     //g_IsRunning = true;
+
     g_PosPeakValue = 0.0;
     g_AccPeakValue = 0.0;
     HintMsg_LineEdit->setPlaceholderText("试验正在进行.....");

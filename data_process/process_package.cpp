@@ -244,7 +244,7 @@ void ProcessPackage::ParseEchoMsg(QDataStream &raw_data, FrameLengthType msg_len
 
     switch (echoMsg) {
     case EchoMessageEnum::ReceiveRefData:
-
+        g_SendRef = true;
         break;
     case EchoMessageEnum::ExperimentStart:
         //清除原始数据进行重新绘图

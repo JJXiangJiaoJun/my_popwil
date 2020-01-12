@@ -46,6 +46,8 @@ extern PosPeakValueType g_PosPeakValue;
 extern AccPeakValueType g_AccPeakValue;
 
 extern bool g_IsRunning;
+extern bool g_SendRef;
+
 extern int g_ConnectedClientCount;
 extern qint16 g_ControlMethod;
 extern qint16 g_ControlVariable;

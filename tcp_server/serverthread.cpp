@@ -11,10 +11,12 @@ serverThread::serverThread(qintptr socketDesc, QObject *parent):
 
     //新建套接字
     m_socket = new ClientSocket(this,socketDescriptor);
-
+    //m_socket->moveToThread(this);
     //将新连接的套接字加入服务器的连接中
     TcpServerAbstract *connect_server = (TcpServerAbstract*) parent;
-    connect_server->get_ConnectClients().append(m_socket);
+    //connect_server->get_ConnectClients().append(m_socket);
+    connect_server->AppendNewSocket(m_socket);
+    isDisConnected = false;
 }
 
 /**
@@ -67,13 +69,18 @@ void serverThread::run()
     connect(this,SIGNAL(SignalSendMsgToHost(ProtocolSet::MessageTypeEnum&,QString&)),\
             m_socket,SLOT(SltSendMessage(ProtocolSet::MessageTypeEnum&,QString&)));
 
-     //断开连接的话退出该线程
-   connect(m_socket,SIGNAL(signalConnected(QString,int)),this,SLOT(quit()));
+   //断开连接的话退出该线程
+    //connect(m_socket,SIGNAL(signalDisConnected(QString,int,int)),this,SIGNAL(finished()));
 
      //发送新连接信号
-   emit SignalNewconnection(cur_ip,cur_port);
+    emit SignalNewconnection(cur_ip,cur_port);
     //线程开始运行
     exec();
+//    while(1)
+//    {
+//        if(isDisConnected)
+//            return;
+//    }
 }
 
 /**
@@ -81,9 +88,15 @@ void serverThread::run()
  */
 void serverThread::SltDisconnectToHost()
 {
-   m_socket->Disconnect();
-   emit SignalDisconnectToHost(m_socket->getIP(),m_socket->getPort(),m_socket->getId());
-
+    m_socket->Disconnect();
+    emit SignalDisconnectToHost(m_socket->getIP(),m_socket->getPort(),m_socket->getId());
+    //关闭线程
+    //emit SignalFinished((QThread*)this);
+    //isDisConnected = true;
+    //this->quit();
+    //this->wait(0);
+    //this->exit();
+    //this->quit();
 }
 
 /**

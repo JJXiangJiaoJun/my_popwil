@@ -23,6 +23,7 @@ private:
     qint32 curDataArrayLen;
     qint32 refDataArrayLen;
 
+
     qint32 curCount;
 
     ChartDataType m_lastData;

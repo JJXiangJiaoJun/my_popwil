@@ -27,11 +27,13 @@ private:
     qintptr         socketDescriptor;
     //当前连接的Socket指针对象
     ClientSocket    *m_socket;
+    bool isDisConnected;
 
 signals:
     void SignalDisconnectToHost(QString ip,int port,int disconnId);
     void SignalNewconnection(QString ip,int port);
     void SignalSendMsgToHost(ProtocolSet::MessageTypeEnum &type,QString &data);
+    //void SignalFinished(QThread *thread);
 
 private slots:
     void SltDisconnectToHost();

@@ -103,6 +103,7 @@ void ClientSocket::SltReadyRead()
 {
     //从缓冲区获取数据
     QByteArray recv_msg = m_tcpSocket->readAll();
+    //qDebug()<<"当前线程ID"<<QThread::currentThreadId();
 //#define COMM_DEBUG
 #ifdef COMM_DEBUG
     //下面是解析消息的函数

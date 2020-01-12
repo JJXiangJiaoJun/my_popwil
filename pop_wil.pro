@@ -98,8 +98,8 @@ include($$PWD/Draw/Draw.pri)
 #qcharview动态链接库
 
 LIBS += -lwinmm  #PerformanceTimer required
-win32:LIBS += ../pop_wil/lib/chartdir60.lib
-win32:QMAKE_POST_LINK = copy /Y ..\\pop_wil\\lib\\chartdir60.dll $(DESTDIR)
+win32:LIBS += ../pop_wil/lib32/chartdir60.lib
+win32:QMAKE_POST_LINK = copy /Y ..\\pop_wil\\lib32\\chartdir60.dll $(DESTDIR)
 
 macx:LIBS += -L./lib -lchartdir
 macx:QMAKE_POST_LINK += mkdir -p \"`dirname $(TARGET)`/../Frameworks\";
