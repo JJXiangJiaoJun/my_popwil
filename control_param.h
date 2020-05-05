@@ -32,6 +32,7 @@ public:
 private:
     qint16 ControlMethod;
     qint16 ControlVariable;
+    double StaticVoltage;
 
     Ui::control_param *ui;
     QLineEdit *P_StaticControl_LineEdit;
@@ -64,6 +65,7 @@ private:
     void SetControlMethod(qint16 ctrlMethod);
     void SetControlVaribale(qint16 ctrlVariable);
     void GetStaticVoltage(double *staticV);
+    void SetStaticVoltage(double *staticV);
 private slots:
 
     void on_PID_RadioButton_clicked();

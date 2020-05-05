@@ -90,6 +90,7 @@ void control_param::SetDefaultParameter()
 
     ControlMethod = g_ControlMethod;
     ControlVariable = g_ControlVariable;
+    StaticVoltage = g_StaticVoltage;
 }
 
 
@@ -153,9 +154,14 @@ void control_param::GetPIDParameter(PIDParamStruct *staticPID, PIDParamStruct *p
 
     accPID->P = P_AccControl_LineEdit->text().toDouble();
     accPID->I = I_AccControl_LineEdit->text().toDouble();
-    accPID->I = D_AccControl_LineEdit->text().toDouble();
+    accPID->D = D_AccControl_LineEdit->text().toDouble();
 
 
+}
+
+void control_param::SetStaticVoltage(double *staticV)
+{
+    StaticVoltage_LineEdit->setText(QString::number(*staticV,'f',1));
 }
 
 void control_param::GetStaticVoltage(double *staticV)
@@ -212,7 +218,8 @@ void control_param::on_ReadConfigFile_PushButton_clicked()
     PIDParamStruct *accPID = new PIDParamStruct;
 
     if(!myHelper::ReadFromPIDParamIni(fileName,staticPID,posPID,accPID)||!myHelper::ReadFromControlMethodIni(fileName,&ControlMethod)
-            ||!myHelper::ReadFromControlVariableIni(fileName,&ControlVariable))
+            ||!myHelper::ReadFromControlVariableIni(fileName,&ControlVariable)
+            ||!myHelper::ReadFromStaticVoltageIni(fileName,&StaticVoltage))
     {
         QMessageBox::warning(this,"警告","无法读取参数!",QMessageBox::Ok|QMessageBox::Cancel,QMessageBox::Ok);
         return;
@@ -220,6 +227,8 @@ void control_param::on_ReadConfigFile_PushButton_clicked()
     SetPIDParameter(staticPID,posPID,accPID);
     SetControlMethod(ControlMethod);
     SetControlVaribale(ControlVariable);
+    SetStaticVoltage(&StaticVoltage);
+
     delete staticPID;
     delete posPID;
     delete accPID;
@@ -238,8 +247,10 @@ void control_param::on_WriteConfigFile_PushButton_clicked()
     PIDParamStruct *posPID = new PIDParamStruct;
     PIDParamStruct *accPID = new PIDParamStruct;
     GetPIDParameter(staticPID,posPID,accPID);
+    GetStaticVoltage(&StaticVoltage);
     if(!myHelper::WriteToPIDParamIni(fileName,staticPID,posPID,accPID)||!myHelper::WriteToControlMethodIni(fileName,&ControlMethod)
-            ||!myHelper::WriteToControlVariableIni(fileName,&ControlVariable))
+            ||!myHelper::WriteToControlVariableIni(fileName,&ControlVariable)
+            ||!myHelper::WriteToStaticVoltageIni(fileName,&StaticVoltage))
     {
         QMessageBox::warning(this,"警告","无法写入参数!",QMessageBox::Ok|QMessageBox::Cancel,QMessageBox::Ok);
         return;

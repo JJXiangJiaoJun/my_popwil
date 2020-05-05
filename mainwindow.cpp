@@ -454,9 +454,9 @@ void MainWindow::StatusUpdateTimerSlot()
     Ampli_LineEdit->setText(QString::number(g_ExperimentParam.amplitude));
     Frequency_LineEdit->setText(QString::number(g_ExperimentParam.frequency));
     ControlMethod_LineEdit->setText(g_ControlMethodStringList[g_ControlMethod]);
-    CurPos_LineEdit->setText(QString::number(g_CurPos));
-    CurVel_LineEdit->setText(QString::number(g_CurVel));
-    CurAcc_LineEdit->setText(QString::number(g_CurAcc));
+    CurPos_LineEdit->setText(QString::number(g_CurPos,'f',3));
+    CurVel_LineEdit->setText(QString::number(g_CurVel,'f',3));
+    CurAcc_LineEdit->setText(QString::number(g_CurAcc,'f',3));
 
 
     //qDebug()<<curTime;

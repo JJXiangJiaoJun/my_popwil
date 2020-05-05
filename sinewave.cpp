@@ -39,8 +39,8 @@ sinewave::sinewave(QWidget *parent) :
     RepeatCount_LineEdit = ui->RepeatCount_LineEdit;
 
 
-    QDoubleValidator *pAmplitude_Validator = new QDoubleValidator(-180.0,180.0,4,Amplitude_LineEdit);
-    QDoubleValidator *pFrequency_Validator = new QDoubleValidator(-180.0,180.0,4,Frequency_LineEdit);
+    QDoubleValidator *pAmplitude_Validator = new QDoubleValidator(-10000.0,100000.0,4,Amplitude_LineEdit);
+    QDoubleValidator *pFrequency_Validator = new QDoubleValidator(0.0,100000.0,4,Frequency_LineEdit);
     QDoubleValidator *pMid_Validator = new QDoubleValidator(-180.0,180.0,4,Mid_LineEdit);
     QIntValidator    *pSamplePeriod_Validator = new QIntValidator(0,1000,SamplePeriod_LineEdit);
     QIntValidator    *pRpeatCount_Validator = new QIntValidator(0,10000,RepeatCount_LineEdit);

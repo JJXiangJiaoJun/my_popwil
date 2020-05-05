@@ -408,7 +408,7 @@ QByteArray ProtocolSet::SineWaveParamMsg(void *msg, const qint32 msg_len)
     //构造消息数据包
     FrameLengthType tot_len = 0;
     out << tot_len << qint16(SineWaveParam)  \
-        <<double(paramMsg_prt->amplitude) << double(paramMsg_prt->frequency);
+        <<double(paramMsg_prt->frequency) << double(paramMsg_prt->amplitude);
     out.device()->seek(0);
     out << FrameLengthType(pbuf.size()-FrameLegthLen);
 
